@@ -1,5 +1,6 @@
 package dev.thiagooliveira.bankhub.util;
 
+import dev.thiagooliveira.bankhub.domain.dto.CreateBankInput;
 import dev.thiagooliveira.bankhub.domain.dto.CreateCategoryInput;
 import dev.thiagooliveira.bankhub.domain.dto.CreateOrganizationInput;
 import dev.thiagooliveira.bankhub.domain.model.CategoryType;
@@ -14,5 +15,9 @@ public class TestUtil {
   public static CreateCategoryInput createCategoryInput(
       UUID organizationId, CategoryType categoryType) {
     return new CreateCategoryInput(organizationId, "Category " + categoryType.name(), categoryType);
+  }
+
+  public static CreateBankInput createBankInput(UUID organizationId) {
+    return new CreateBankInput(organizationId, "Bank " + UUID.randomUUID());
   }
 }
