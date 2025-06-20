@@ -1,6 +1,6 @@
 package dev.thiagooliveira.bankhub.infra.persistence.entity;
 
-import dev.thiagooliveira.bankhub.domain.dto.UserRegistrationInput;
+import dev.thiagooliveira.bankhub.domain.dto.CreateUserInput;
 import dev.thiagooliveira.bankhub.domain.model.User;
 import jakarta.persistence.*;
 import java.util.UUID;
@@ -29,7 +29,7 @@ public class UserEntity {
     this.organizationId = organizationId;
   }
 
-  public static UserEntity from(UserRegistrationInput input) {
+  public static UserEntity from(CreateUserInput input) {
     UserEntity userEntity = new UserEntity();
     userEntity.id = UUID.randomUUID();
     userEntity.email = input.email();

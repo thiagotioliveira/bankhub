@@ -1,9 +1,9 @@
 package dev.thiagooliveira.bankhub.infra.service;
 
+import static dev.thiagooliveira.bankhub.util.TestUtil.createOrganizationInput;
 import static org.junit.jupiter.api.Assertions.*;
 
 import dev.thiagooliveira.bankhub.TestcontainersConfiguration;
-import dev.thiagooliveira.bankhub.domain.dto.OrganizationRegistrationInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +20,8 @@ class OrganizationServiceIT {
   void setUp() {}
 
   @Test
-  void register() {
-    var output =
-        this.organizationService.register(
-            new OrganizationRegistrationInput("Jack Bauer", "j.bauer@bankhub.app"));
+  void create() {
+    var output = this.organizationService.create(createOrganizationInput());
     assertNotNull(output);
     assertNotNull(output.id());
     assertNotNull(output.createdAt());

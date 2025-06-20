@@ -1,6 +1,6 @@
 package dev.thiagooliveira.bankhub.infra.persistence.entity;
 
-import dev.thiagooliveira.bankhub.domain.dto.OrganizationRegistrationInput;
+import dev.thiagooliveira.bankhub.domain.dto.CreateOrganizationInput;
 import dev.thiagooliveira.bankhub.domain.model.Organization;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,7 +29,7 @@ public class OrganizationEntity {
     this.emailOwner = emailOwner;
   }
 
-  public static OrganizationEntity from(OrganizationRegistrationInput input) {
+  public static OrganizationEntity from(CreateOrganizationInput input) {
     OrganizationEntity entity = new OrganizationEntity();
     entity.setId(UUID.randomUUID());
     entity.setCreatedAt(OffsetDateTime.now());

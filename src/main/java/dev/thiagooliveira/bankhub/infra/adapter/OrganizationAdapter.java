@@ -1,6 +1,6 @@
 package dev.thiagooliveira.bankhub.infra.adapter;
 
-import dev.thiagooliveira.bankhub.domain.dto.OrganizationRegistrationInput;
+import dev.thiagooliveira.bankhub.domain.dto.CreateOrganizationInput;
 import dev.thiagooliveira.bankhub.domain.model.Organization;
 import dev.thiagooliveira.bankhub.domain.port.OrganizationPort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.OrganizationEntity;
@@ -17,7 +17,7 @@ public class OrganizationAdapter implements OrganizationPort {
   }
 
   @Override
-  public Organization create(OrganizationRegistrationInput input) {
+  public Organization create(CreateOrganizationInput input) {
     return this.organizationRepository.save(OrganizationEntity.from(input)).toDomain();
   }
 }

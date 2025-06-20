@@ -1,6 +1,6 @@
 package dev.thiagooliveira.bankhub.infra.adapter;
 
-import dev.thiagooliveira.bankhub.domain.dto.UserRegistrationInput;
+import dev.thiagooliveira.bankhub.domain.dto.CreateUserInput;
 import dev.thiagooliveira.bankhub.domain.model.User;
 import dev.thiagooliveira.bankhub.domain.port.UserPort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.UserEntity;
@@ -17,7 +17,7 @@ public class UserAdapter implements UserPort {
   }
 
   @Override
-  public User create(UserRegistrationInput input) {
+  public User create(CreateUserInput input) {
     return this.userRepository.save(UserEntity.from(input)).toDomain();
   }
 }
