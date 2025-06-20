@@ -1,4 +1,4 @@
-package dev.thiagooliveira.bankhub.domain;
+package dev.thiagooliveira.bankhub.domain.model;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
