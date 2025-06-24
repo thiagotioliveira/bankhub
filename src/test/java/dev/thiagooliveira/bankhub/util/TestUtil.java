@@ -1,12 +1,11 @@
 package dev.thiagooliveira.bankhub.util;
 
-import dev.thiagooliveira.bankhub.domain.dto.CreateAccountInput;
-import dev.thiagooliveira.bankhub.domain.dto.CreateBankInput;
-import dev.thiagooliveira.bankhub.domain.dto.CreateCategoryInput;
-import dev.thiagooliveira.bankhub.domain.dto.CreateOrganizationInput;
+import dev.thiagooliveira.bankhub.domain.dto.*;
 import dev.thiagooliveira.bankhub.domain.model.CategoryType;
 import dev.thiagooliveira.bankhub.domain.model.Currency;
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 public class TestUtil {
@@ -16,7 +15,7 @@ public class TestUtil {
   }
 
   public static CreateCategoryInput createCategoryInput(
-      UUID organizationId, CategoryType categoryType) {
+      Optional<UUID> organizationId, CategoryType categoryType) {
     return new CreateCategoryInput(organizationId, "Category " + categoryType.name(), categoryType);
   }
 
@@ -28,5 +27,10 @@ public class TestUtil {
       UUID organizationId, UUID bankId, BigDecimal balance, Currency currency) {
     return new CreateAccountInput(
         "Account " + UUID.randomUUID(), bankId, organizationId, balance, currency);
+  }
+
+  public static CreateTransactionInput createTransactionInput(
+      UUID accountId, OffsetDateTime dateTime, BigDecimal amount) {
+    return new CreateTransactionInput(accountId, dateTime, UUID.randomUUID().toString(), amount);
   }
 }

@@ -5,4 +5,4 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public record CreateAccountInput(
-    String name, UUID bankId, UUID organizationId, BigDecimal balance, Currency currency) {}
+    String name, UUID bankId, UUID organizationId, BigDecimal initialBalance, Currency currency) {}

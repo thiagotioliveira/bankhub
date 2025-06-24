@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import dev.thiagooliveira.bankhub.TestcontainersConfiguration;
 import dev.thiagooliveira.bankhub.domain.model.Category;
 import dev.thiagooliveira.bankhub.domain.model.CategoryType;
+import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,10 +34,11 @@ class CategoryServiceIT {
   @Test
   void create() {
     Category category =
-        this.categoryService.create(createCategoryInput(this.organizationId, CategoryType.CREDIT));
+        this.categoryService.create(
+            createCategoryInput(Optional.of(this.organizationId), CategoryType.CREDIT));
     assertNotNull(category);
     assertNotNull(category.name());
-    assertEquals(this.organizationId, category.organizationId());
+    assertEquals(this.organizationId, category.organizationId().get());
     assertEquals(CategoryType.CREDIT, category.type());
   }
 }

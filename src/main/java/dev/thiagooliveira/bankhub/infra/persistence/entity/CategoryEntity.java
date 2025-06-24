@@ -4,6 +4,7 @@ import dev.thiagooliveira.bankhub.domain.dto.CreateCategoryInput;
 import dev.thiagooliveira.bankhub.domain.model.Category;
 import dev.thiagooliveira.bankhub.domain.model.CategoryType;
 import jakarta.persistence.*;
+import java.util.Optional;
 import java.util.UUID;
 
 @Entity
@@ -11,8 +12,7 @@ import java.util.UUID;
 public class CategoryEntity {
   @Id private UUID id;
 
-  @Column(nullable = false)
-  private UUID organizationId;
+  @Column private UUID organizationId;
 
   @Column(nullable = false)
   private String name;
@@ -33,14 +33,14 @@ public class CategoryEntity {
   public static CategoryEntity from(CreateCategoryInput input) {
     CategoryEntity categoryEntity = new CategoryEntity();
     categoryEntity.id = UUID.randomUUID();
-    categoryEntity.organizationId = input.organizationId();
+    categoryEntity.organizationId = input.organizationId().orElse(null);
     categoryEntity.name = input.name();
     categoryEntity.type = input.type();
     return categoryEntity;
   }
 
   public Category toDomain() {
-    return new Category(id, organizationId, name, type);
+    return new Category(id, Optional.ofNullable(organizationId), name, type);
   }
 
   public UUID getId() {

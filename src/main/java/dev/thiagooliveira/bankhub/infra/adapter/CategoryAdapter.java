@@ -2,9 +2,11 @@ package dev.thiagooliveira.bankhub.infra.adapter;
 
 import dev.thiagooliveira.bankhub.domain.dto.CreateCategoryInput;
 import dev.thiagooliveira.bankhub.domain.model.Category;
+import dev.thiagooliveira.bankhub.domain.model.CategoryType;
 import dev.thiagooliveira.bankhub.domain.port.CategoryPort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.CategoryEntity;
 import dev.thiagooliveira.bankhub.infra.persistence.repository.CategoryRepository;
+import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,5 +21,12 @@ public class CategoryAdapter implements CategoryPort {
   @Override
   public Category create(CreateCategoryInput input) {
     return this.categoryRepository.save(CategoryEntity.from(input)).toDomain();
+  }
+
+  @Override
+  public Optional<Category> findByType(CategoryType type) {
+    return this.categoryRepository
+        .findByTypeAndOrganizationIdIsNull(type)
+        .map(CategoryEntity::toDomain);
   }
 }

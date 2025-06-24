@@ -9,5 +9,5 @@ public record Transaction(
     UUID accountId,
     OffsetDateTime dateTime,
     String description,
-    Category category,
+    UUID categoryId,
     BigDecimal amount) {}

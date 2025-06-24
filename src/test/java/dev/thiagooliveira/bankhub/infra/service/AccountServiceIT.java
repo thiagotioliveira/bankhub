@@ -4,6 +4,7 @@ import static dev.thiagooliveira.bankhub.util.TestUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import dev.thiagooliveira.bankhub.TestcontainersConfiguration;
+import dev.thiagooliveira.bankhub.domain.dto.GetTransactionPageable;
 import dev.thiagooliveira.bankhub.domain.model.Currency;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -22,6 +23,8 @@ class AccountServiceIT {
   @Autowired private OrganizationService organizationService;
 
   @Autowired private BankService bankService;
+
+  @Autowired private TransactionService transactionService;
 
   private UUID organizationId;
 
@@ -43,5 +46,10 @@ class AccountServiceIT {
     assertEquals(this.bankId, account.bankId());
     assertEquals(Currency.EUR, account.currency());
     assertEquals(BigDecimal.TEN, account.balance());
+
+    var pageTransactions =
+        this.transactionService.findByAccountId(new GetTransactionPageable(account.id(), 0, 10));
+    assertNotNull(pageTransactions);
+    assertFalse(pageTransactions.content().isEmpty());
   }
 }

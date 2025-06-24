@@ -4,6 +4,7 @@ import dev.thiagooliveira.bankhub.application.usecase.CreateAccount;
 import dev.thiagooliveira.bankhub.domain.dto.CreateAccountInput;
 import dev.thiagooliveira.bankhub.domain.model.Account;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AccountService {
@@ -14,6 +15,7 @@ public class AccountService {
     this.createAccount = createAccount;
   }
 
+  @Transactional
   public Account create(CreateAccountInput input) {
     return this.createAccount.create(input);
   }

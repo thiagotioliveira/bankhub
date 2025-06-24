@@ -52,7 +52,7 @@ public class AccountEntity {
     entity.organizationId = input.organizationId();
     entity.name = input.name();
     entity.bankId = input.bankId();
-    entity.balance = input.balance();
+    entity.balance = input.initialBalance();
     entity.currency = input.currency();
     return entity;
   }
