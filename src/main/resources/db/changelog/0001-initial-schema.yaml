@@ -253,3 +253,105 @@ databaseChangeLog:
               - column:
                   name: organization_id
                   value: null
+  - changeSet:
+      id: 008-create-payables-receivables
+      author: thiago
+      changes:
+        - createTable:
+            tableName: payables_receivables
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: due_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: numeric(10,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: installment_number
+                  type: int
+                  constraints:
+                    nullable: true
+              - column:
+                  name: installment_total
+                  type: int
+                  constraints:
+                    nullable: true
+              - column:
+                  name: parent_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+              - column:
+                  name: account_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_recurring
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: frequency
+                  type: varchar(20)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: recurrence_day
+                  type: smallint
+                  constraints:
+                    nullable: true
+              - column:
+                  name: transaction_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+        - addForeignKeyConstraint:
+            baseTableName: payables_receivables
+            baseColumnNames: account_id
+            referencedTableName: accounts
+            referencedColumnNames: id
+            constraintName: fk_payables_receivables_accounts
+        - addForeignKeyConstraint:
+            baseTableName: payables_receivables
+            baseColumnNames: category_id
+            referencedTableName: categories
+            referencedColumnNames: id
+            constraintName: fk_payables_receivables_categories
+        - addForeignKeyConstraint:
+            baseTableName: payables_receivables
+            baseColumnNames: transaction_id
+            referencedTableName: transactions
+            referencedColumnNames: id
+            constraintName: fk_payables_receivables_transaction

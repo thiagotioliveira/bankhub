@@ -4,6 +4,7 @@ import dev.thiagooliveira.bankhub.domain.model.Category;
 import dev.thiagooliveira.bankhub.domain.model.CategoryType;
 import dev.thiagooliveira.bankhub.domain.port.CategoryPort;
 import java.util.Optional;
+import java.util.UUID;
 
 public class GetCategory {
 
@@ -15,5 +16,9 @@ public class GetCategory {
 
   public Optional<Category> findByType(CategoryType type) {
     return this.categoryPort.findByType(type);
+  }
+
+  public Optional<Category> findById(UUID id) {
+    return this.categoryPort.findById(id);
   }
 }
