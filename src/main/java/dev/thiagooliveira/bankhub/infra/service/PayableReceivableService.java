@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ReceivableService {
+public class PayableReceivableService {
 
   private final CreatePayableReceivable createPayableReceivable;
   private final CategoryService categoryService;
 
-  public ReceivableService(
+  public PayableReceivableService(
       CreatePayableReceivable createPayableReceivable, CategoryService categoryService) {
     this.createPayableReceivable = createPayableReceivable;
     this.categoryService = categoryService;

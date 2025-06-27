@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import dev.thiagooliveira.bankhub.IntegrationTest;
 import dev.thiagooliveira.bankhub.domain.dto.GetTransactionPageable;
+import dev.thiagooliveira.bankhub.domain.dto.Pageable;
 import dev.thiagooliveira.bankhub.domain.model.Currency;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -44,7 +45,8 @@ class AccountServiceIT extends IntegrationTest {
     assertEquals(BigDecimal.TEN, account.balance());
 
     var pageTransactions =
-        this.transactionService.findByAccountId(new GetTransactionPageable(account.id(), 0, 10));
+        this.transactionService.findByAccountId(
+            new GetTransactionPageable(account.id(), Pageable.of(0, 10)));
     assertNotNull(pageTransactions);
     assertFalse(pageTransactions.content().isEmpty());
   }

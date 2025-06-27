@@ -24,7 +24,7 @@ class PayableReceivableServiceIT extends IntegrationTest {
 
   @Autowired private CategoryService categoryService;
 
-  @Autowired private ReceivableService receivableService;
+  @Autowired private PayableReceivableService payableReceivableService;
 
   private UUID accountId;
   private UUID creditCategoryId;
@@ -46,7 +46,7 @@ class PayableReceivableServiceIT extends IntegrationTest {
   void createPayableRecurringByMonth() {
     LocalDate dueDate = LocalDate.now().plusDays(5);
     var receivables =
-        this.receivableService.create(
+        this.payableReceivableService.create(
             new CreatePayableReceivableInput(
                 PayableReceivableType.PAYABLE,
                 this.accountId,
@@ -81,7 +81,7 @@ class PayableReceivableServiceIT extends IntegrationTest {
   void createPayableInstallments() {
     LocalDate dueDate = LocalDate.now().plusDays(5);
     var receivables =
-        this.receivableService.create(
+        this.payableReceivableService.create(
             new CreatePayableReceivableInput(
                 PayableReceivableType.PAYABLE,
                 this.accountId,
@@ -116,7 +116,7 @@ class PayableReceivableServiceIT extends IntegrationTest {
   void createReceivableRecurringByMonth() {
     LocalDate dueDate = LocalDate.now().plusDays(5);
     var receivables =
-        this.receivableService.create(
+        this.payableReceivableService.create(
             new CreatePayableReceivableInput(
                 PayableReceivableType.RECEIVABLE,
                 this.accountId,
@@ -151,7 +151,7 @@ class PayableReceivableServiceIT extends IntegrationTest {
   void createReceivableInstallments() {
     LocalDate dueDate = LocalDate.now().plusDays(5);
     var receivables =
-        this.receivableService.create(
+        this.payableReceivableService.create(
             new CreatePayableReceivableInput(
                 PayableReceivableType.RECEIVABLE,
                 this.accountId,

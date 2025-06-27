@@ -1,6 +1,8 @@
 package dev.thiagooliveira.bankhub.infra.adapter;
 
 import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableEnrichedInput;
+import dev.thiagooliveira.bankhub.domain.dto.Page;
+import dev.thiagooliveira.bankhub.domain.dto.Pageable;
 import dev.thiagooliveira.bankhub.domain.dto.PayableReceivable;
 import dev.thiagooliveira.bankhub.domain.port.PayableReceivablePort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.PayableReceivableEntity;
@@ -31,5 +33,10 @@ public class PayableReceivableAdapter implements PayableReceivablePort {
     return entitiesSaved.stream()
         .map(PayableReceivableEntity::toReceivableOutput)
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public Page<PayableReceivable> findByAccountId(Long accountId, Pageable pageable) {
+    return null;
   }
 }

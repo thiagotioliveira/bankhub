@@ -10,5 +10,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public interface TransactionRepository
     extends JpaRepository<TransactionEntity, UUID>,
         PagingAndSortingRepository<TransactionEntity, UUID> {
-  Page<TransactionEntity> findByAccountId(UUID accountId, Pageable pageable);
+  Page<TransactionEntity> findByAccountIdOrderByDateTimeDesc(UUID accountId, Pageable pageable);
 }

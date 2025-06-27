@@ -13,6 +13,6 @@ public class GetTransaction {
   }
 
   public Page<Transaction> findByAccountId(GetTransactionPageable pageable) {
-    return this.transactionPort.findByAccountId(pageable);
+    return this.transactionPort.findByAccountIdOrderByDateTimeDesc(pageable);
   }
 }

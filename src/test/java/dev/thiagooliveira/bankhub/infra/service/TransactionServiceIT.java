@@ -4,6 +4,8 @@ import static dev.thiagooliveira.bankhub.util.TestUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import dev.thiagooliveira.bankhub.IntegrationTest;
+import dev.thiagooliveira.bankhub.domain.dto.GetTransactionPageable;
+import dev.thiagooliveira.bankhub.domain.dto.Pageable;
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.domain.model.Currency;
 import java.math.BigDecimal;
@@ -46,6 +48,27 @@ class TransactionServiceIT extends IntegrationTest {
     assertNotNull(transaction.description());
     assertEquals(this.accountId, transaction.accountId());
     assertEquals(BigDecimal.TEN, transaction.amount());
+  }
+
+  @Test
+  void getTransactionsByAccountId() {
+    var transaction1 =
+        this.transactionService.create(
+            createTransactionInput(this.accountId, OffsetDateTime.now(), BigDecimal.TEN));
+    var transaction2 =
+        this.transactionService.create(
+            createTransactionInput(this.accountId, OffsetDateTime.now(), BigDecimal.ONE));
+    var page =
+        this.transactionService.findByAccountId(
+            new GetTransactionPageable(this.accountId, Pageable.of(0, 10)));
+    assertNotNull(page);
+    assertEquals(3, page.totalElements());
+    assertEquals(1, page.totalPages());
+    assertTrue(page.first());
+    assertTrue(page.last());
+
+    assertEquals(transaction2.id(), page.content().get(0).id());
+    assertEquals(transaction1.id(), page.content().get(1).id());
   }
 
   @Test

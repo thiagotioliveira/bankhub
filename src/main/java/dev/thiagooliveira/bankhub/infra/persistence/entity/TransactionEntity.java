@@ -52,7 +52,7 @@ public class TransactionEntity {
   public static TransactionEntity from(
       CreateTransactionInput input, CreateTransactionInputExtraInfo extraInfo) {
     TransactionEntity entity = new TransactionEntity();
-    entity.id = input.accountId();
+    entity.id = UUID.randomUUID();
     entity.dateTime = input.dateTime();
     entity.accountId = input.accountId();
     entity.categoryId = extraInfo.categoryId();

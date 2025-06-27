@@ -8,8 +8,7 @@ import dev.thiagooliveira.bankhub.domain.model.Transaction;
 
 public interface TransactionPort {
 
-  public Transaction create(
-      CreateTransactionInput input, CreateTransactionInputExtraInfo extraInfo);
+  Transaction create(CreateTransactionInput input, CreateTransactionInputExtraInfo extraInfo);
 
-  public Page<Transaction> findByAccountId(GetTransactionPageable pageable);
+  Page<Transaction> findByAccountIdOrderByDateTimeDesc(GetTransactionPageable param);
 }

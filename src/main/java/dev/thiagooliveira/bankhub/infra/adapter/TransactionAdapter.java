@@ -27,10 +27,11 @@ public class TransactionAdapter implements TransactionPort {
   }
 
   @Override
-  public Page<Transaction> findByAccountId(GetTransactionPageable pageable) {
+  public Page<Transaction> findByAccountIdOrderByDateTimeDesc(GetTransactionPageable param) {
     var page =
-        this.transactionRepository.findByAccountId(
-            pageable.accountId(), PageRequest.of(pageable.pageNumber(), pageable.pageSize()));
+        this.transactionRepository.findByAccountIdOrderByDateTimeDesc(
+            param.accountId(),
+            PageRequest.of(param.pageable().pageNumber(), param.pageable().pageSize()));
     return new Page<Transaction>(
         page.getContent().stream().map(TransactionEntity::toDomain).toList(),
         page.getNumber(),
