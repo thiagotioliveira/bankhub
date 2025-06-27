@@ -1,10 +1,10 @@
 package dev.thiagooliveira.bankhub.domain.port;
 
-import dev.thiagooliveira.bankhub.domain.dto.CreateReceivableEnrichedInput;
-import dev.thiagooliveira.bankhub.domain.dto.Receivable;
+import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableEnrichedInput;
+import dev.thiagooliveira.bankhub.domain.dto.PayableReceivable;
 import java.util.List;
 
 public interface PayableReceivablePort {
 
-  List<Receivable> createReceivable(CreateReceivableEnrichedInput input);
+  List<PayableReceivable> create(CreatePayableReceivableEnrichedInput input);
 }

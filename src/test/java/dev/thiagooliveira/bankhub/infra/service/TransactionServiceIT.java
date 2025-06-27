@@ -3,7 +3,7 @@ package dev.thiagooliveira.bankhub.infra.service;
 import static dev.thiagooliveira.bankhub.util.TestUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import dev.thiagooliveira.bankhub.TestcontainersConfiguration;
+import dev.thiagooliveira.bankhub.IntegrationTest;
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.domain.model.Currency;
 import java.math.BigDecimal;
@@ -12,12 +12,8 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 
-@Import(TestcontainersConfiguration.class)
-@SpringBootTest
-class TransactionServiceIT {
+class TransactionServiceIT extends IntegrationTest {
 
   @Autowired private TransactionService transactionService;
 

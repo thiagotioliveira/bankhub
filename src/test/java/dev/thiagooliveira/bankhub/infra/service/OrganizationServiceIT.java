@@ -3,16 +3,12 @@ package dev.thiagooliveira.bankhub.infra.service;
 import static dev.thiagooliveira.bankhub.util.TestUtil.createOrganizationInput;
 import static org.junit.jupiter.api.Assertions.*;
 
-import dev.thiagooliveira.bankhub.TestcontainersConfiguration;
+import dev.thiagooliveira.bankhub.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 
-@Import(TestcontainersConfiguration.class)
-@SpringBootTest
-class OrganizationServiceIT {
+class OrganizationServiceIT extends IntegrationTest {
 
   @Autowired private OrganizationService organizationService;
 

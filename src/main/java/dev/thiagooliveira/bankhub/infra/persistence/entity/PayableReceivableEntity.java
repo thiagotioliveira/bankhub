@@ -1,7 +1,7 @@
 package dev.thiagooliveira.bankhub.infra.persistence.entity;
 
-import dev.thiagooliveira.bankhub.domain.dto.CreateReceivableEnrichedInput;
-import dev.thiagooliveira.bankhub.domain.dto.Receivable;
+import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableEnrichedInput;
+import dev.thiagooliveira.bankhub.domain.dto.PayableReceivable;
 import dev.thiagooliveira.bankhub.domain.model.Frequency;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivableStatus;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivableType;
@@ -92,7 +92,7 @@ public class PayableReceivableEntity {
     this.transactionId = transactionId;
   }
 
-  public static List<PayableReceivableEntity> from(CreateReceivableEnrichedInput input) {
+  public static List<PayableReceivableEntity> from(CreatePayableReceivableEnrichedInput input) {
     boolean hasFrequency = input.frequency().isPresent();
     boolean isRecurring = input.recurring();
 
@@ -133,7 +133,7 @@ public class PayableReceivableEntity {
   }
 
   private static PayableReceivableEntity mapToEntity(
-      CreateReceivableEnrichedInput input,
+      CreatePayableReceivableEnrichedInput input,
       LocalDate dueDate,
       Optional<Integer> installmentNumber,
       BigDecimal amount) {
@@ -151,7 +151,7 @@ public class PayableReceivableEntity {
             + (input.frequency().isPresent() && input.installmentTotal().isPresent()
                 ? " (%d/%d)".formatted(installmentNumber.orElse(1), input.installmentTotal().get())
                 : "");
-    entity.type = PayableReceivableType.RECEIVABLE;
+    entity.type = input.type();
     entity.status = PayableReceivableStatus.PENDING;
     entity.recurrenceDay = dueDate.getDayOfMonth();
     entity.parentId = null;
@@ -159,14 +159,15 @@ public class PayableReceivableEntity {
     return entity;
   }
 
-  public Receivable toReceivableOutput() {
-    return new Receivable(
+  public PayableReceivable toReceivableOutput() {
+    return new PayableReceivable(
         this.id,
         this.accountId,
         this.categoryId,
         this.description,
         this.amount,
         this.dueDate,
+        this.type,
         this.status,
         Optional.ofNullable(this.installmentNumber),
         Optional.ofNullable(this.installmentTotal),

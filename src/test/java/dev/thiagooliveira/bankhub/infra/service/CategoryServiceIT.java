@@ -5,7 +5,7 @@ import static dev.thiagooliveira.bankhub.util.TestUtil.createOrganizationInput;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import dev.thiagooliveira.bankhub.TestcontainersConfiguration;
+import dev.thiagooliveira.bankhub.IntegrationTest;
 import dev.thiagooliveira.bankhub.domain.model.Category;
 import dev.thiagooliveira.bankhub.domain.model.CategoryType;
 import java.util.Optional;
@@ -13,12 +13,8 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 
-@Import(TestcontainersConfiguration.class)
-@SpringBootTest
-class CategoryServiceIT {
+class CategoryServiceIT extends IntegrationTest {
 
   @Autowired private CategoryService categoryService;
 

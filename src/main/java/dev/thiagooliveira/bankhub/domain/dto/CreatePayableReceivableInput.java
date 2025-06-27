@@ -3,12 +3,14 @@ package dev.thiagooliveira.bankhub.domain.dto;
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.domain.model.Category;
 import dev.thiagooliveira.bankhub.domain.model.Frequency;
+import dev.thiagooliveira.bankhub.domain.model.PayableReceivableType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
-public record CreateReceivableInput(
+public record CreatePayableReceivableInput(
+    PayableReceivableType type,
     UUID accountId,
     UUID categoryId,
     String description,
@@ -17,7 +19,7 @@ public record CreateReceivableInput(
     boolean recurring,
     Optional<Frequency> frequency,
     Optional<Integer> installmentTotal) {
-  public CreateReceivableInput {
+  public CreatePayableReceivableInput {
     if (amount.compareTo(BigDecimal.ZERO) < 0)
       throw new BusinessLogicException("amount must be positive");
     if (LocalDate.now().isAfter(dueDate))
@@ -30,8 +32,9 @@ public record CreateReceivableInput(
     }
   }
 
-  public CreateReceivableEnrichedInput enrichWith(Category category) {
-    return new CreateReceivableEnrichedInput(
+  public CreatePayableReceivableEnrichedInput enrichWith(Category category) {
+    return new CreatePayableReceivableEnrichedInput(
+        this.type,
         this.accountId,
         category,
         this.description,

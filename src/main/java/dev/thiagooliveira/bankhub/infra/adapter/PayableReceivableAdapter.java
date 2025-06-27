@@ -1,7 +1,7 @@
 package dev.thiagooliveira.bankhub.infra.adapter;
 
-import dev.thiagooliveira.bankhub.domain.dto.CreateReceivableEnrichedInput;
-import dev.thiagooliveira.bankhub.domain.dto.Receivable;
+import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableEnrichedInput;
+import dev.thiagooliveira.bankhub.domain.dto.PayableReceivable;
 import dev.thiagooliveira.bankhub.domain.port.PayableReceivablePort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.PayableReceivableEntity;
 import dev.thiagooliveira.bankhub.infra.persistence.repository.PayableReceivableRepository;
@@ -22,7 +22,7 @@ public class PayableReceivableAdapter implements PayableReceivablePort {
 
   @Override
   @Transactional
-  public List<Receivable> createReceivable(CreateReceivableEnrichedInput input) {
+  public List<PayableReceivable> create(CreatePayableReceivableEnrichedInput input) {
     List<PayableReceivableEntity> entities = PayableReceivableEntity.from(input);
     List<PayableReceivableEntity> entitiesSaved = new ArrayList<>();
     for (PayableReceivableEntity entity : entities) {
