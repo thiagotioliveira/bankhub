@@ -7,7 +7,6 @@ import dev.thiagooliveira.bankhub.domain.model.PayableReceivableStatus;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivableType;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -92,68 +91,20 @@ public class PayableReceivableEntity {
     this.transactionId = transactionId;
   }
 
-  public static List<PayableReceivableEntity> from(CreatePayableReceivableEnrichedInput input) {
-    boolean hasFrequency = input.frequency().isPresent();
-    boolean isRecurring = input.recurring();
-
-    if (!hasFrequency || isRecurring) {
-      PayableReceivableEntity entity =
-          mapToEntity(input, input.dueDate(), Optional.empty(), input.amount());
-      return List.of(entity);
-    }
-
-    int totalInstallments = input.installmentTotal().orElse(1);
-    BigDecimal totalAmount = input.amount();
-    BigDecimal[] division = totalAmount.divideAndRemainder(BigDecimal.valueOf(totalInstallments));
-    BigDecimal baseAmount = division[0].setScale(2, RoundingMode.DOWN);
-    BigDecimal remainder = division[1];
-
-    List<PayableReceivableEntity> entities = new ArrayList<>();
-    LocalDate dueDate = input.dueDate();
-    Frequency frequency = input.frequency().get();
-
-    for (int i = 1; i <= totalInstallments; i++) {
-      BigDecimal amount = baseAmount;
-      if (i == totalInstallments) {
-        amount = baseAmount.add(remainder);
-      }
-
-      entities.add(mapToEntity(input, dueDate, Optional.of(i), amount));
-
-      dueDate =
-          switch (frequency) {
-            case DAILY -> dueDate.plusDays(1);
-            case WEEKLY -> dueDate.plusWeeks(1);
-            case MONTHLY -> dueDate.plusMonths(1);
-            case YEARLY -> dueDate.plusYears(1);
-          };
-    }
-
-    return List.copyOf(entities);
-  }
-
-  private static PayableReceivableEntity mapToEntity(
-      CreatePayableReceivableEnrichedInput input,
-      LocalDate dueDate,
-      Optional<Integer> installmentNumber,
-      BigDecimal amount) {
+  public static PayableReceivableEntity from(CreatePayableReceivableEnrichedInput input) {
     var entity = new PayableReceivableEntity();
     entity.id = UUID.randomUUID();
     entity.accountId = input.accountId();
     entity.categoryId = input.category().id();
-    entity.amount = amount;
-    entity.dueDate = dueDate;
+    entity.amount = input.amount();
+    entity.dueDate = input.dueDate();
     entity.frequency = input.frequency().orElse(null);
-    entity.installmentNumber = installmentNumber.orElse(null);
+    entity.installmentNumber = input.installmentNumber().orElse(null);
     entity.installmentTotal = input.installmentTotal().orElse(null);
-    entity.description =
-        input.description()
-            + (input.frequency().isPresent() && input.installmentTotal().isPresent()
-                ? " (%d/%d)".formatted(installmentNumber.orElse(1), input.installmentTotal().get())
-                : "");
+    entity.description = input.description();
     entity.type = input.type();
     entity.status = PayableReceivableStatus.PENDING;
-    entity.recurrenceDay = dueDate.getDayOfMonth();
+    entity.recurrenceDay = input.dueDate().getDayOfMonth();
     entity.parentId = null;
     entity.transactionId = null;
     return entity;

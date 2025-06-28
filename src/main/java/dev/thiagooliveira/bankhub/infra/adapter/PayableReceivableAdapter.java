@@ -1,17 +1,11 @@
 package dev.thiagooliveira.bankhub.infra.adapter;
 
-import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableEnrichedInput;
-import dev.thiagooliveira.bankhub.domain.dto.Page;
-import dev.thiagooliveira.bankhub.domain.dto.Pageable;
-import dev.thiagooliveira.bankhub.domain.dto.PayableReceivable;
+import dev.thiagooliveira.bankhub.domain.dto.*;
+import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.domain.port.PayableReceivablePort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.PayableReceivableEntity;
 import dev.thiagooliveira.bankhub.infra.persistence.repository.PayableReceivableRepository;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class PayableReceivableAdapter implements PayableReceivablePort {
@@ -23,20 +17,22 @@ public class PayableReceivableAdapter implements PayableReceivablePort {
   }
 
   @Override
-  @Transactional
-  public List<PayableReceivable> create(CreatePayableReceivableEnrichedInput input) {
-    List<PayableReceivableEntity> entities = PayableReceivableEntity.from(input);
-    List<PayableReceivableEntity> entitiesSaved = new ArrayList<>();
-    for (PayableReceivableEntity entity : entities) {
-      entitiesSaved.add(this.payableReceivableRepository.save(entity));
-    }
-    return entitiesSaved.stream()
-        .map(PayableReceivableEntity::toReceivableOutput)
-        .collect(Collectors.toList());
+  public PayableReceivable create(CreatePayableReceivableEnrichedInput input) {
+    PayableReceivableEntity entity = PayableReceivableEntity.from(input);
+    return this.payableReceivableRepository.save(entity).toReceivableOutput();
   }
 
   @Override
   public Page<PayableReceivable> findByAccountId(Long accountId, Pageable pageable) {
+    return null;
+  }
+
+  @Override
+  public PayableReceivable maskAsPaid(CreatePaymentInput input) {
+    var payableReceivable =
+        this.payableReceivableRepository
+            .findById(input.payableReceivableId())
+            .orElseThrow(() -> new BusinessLogicException("payable/receivable not found"));
     return null;
   }
 }

@@ -42,6 +42,7 @@ public record CreatePayableReceivableInput(
         this.dueDate,
         this.recurring,
         this.frequency,
+        Optional.empty(),
         this.installmentTotal);
   }
 }
