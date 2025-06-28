@@ -7,6 +7,4 @@ public interface PayableReceivablePort {
   PayableReceivable create(CreatePayableReceivableEnrichedInput input);
 
   Page<PayableReceivable> findByAccountId(Long accountId, Pageable pageable);
-
-  PayableReceivable maskAsPaid(CreatePaymentInput input);
 }
