@@ -24,13 +24,13 @@ public class TestUtil {
   }
 
   public static CreateAccountInput createAccountInput(
-      UUID organizationId, UUID bankId, BigDecimal balance, Currency currency) {
-    return new CreateAccountInput(
-        "Account " + UUID.randomUUID(), bankId, organizationId, balance, currency);
+      UUID organizationId, UUID bankId, Currency currency) {
+    return new CreateAccountInput("Account " + UUID.randomUUID(), bankId, organizationId, currency);
   }
 
   public static CreateTransactionInput createTransactionInput(
-      UUID accountId, OffsetDateTime dateTime, BigDecimal amount) {
-    return new CreateTransactionInput(accountId, dateTime, UUID.randomUUID().toString(), amount);
+      UUID accountId, UUID organizationId, OffsetDateTime dateTime, BigDecimal amount) {
+    return new CreateTransactionInput(
+        accountId, organizationId, dateTime, UUID.randomUUID().toString(), amount);
   }
 }

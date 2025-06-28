@@ -5,4 +5,14 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 public record CreateTransactionInput(
-    UUID accountId, OffsetDateTime dateTime, String description, BigDecimal amount) {}
+    UUID accountId,
+    UUID organizationId,
+    OffsetDateTime dateTime,
+    String description,
+    BigDecimal amount) {
+
+  public CreateTransactionEnrichedInput enrichWith(UUID categoryId) {
+    return new CreateTransactionEnrichedInput(
+        accountId, organizationId, dateTime, description, amount, categoryId);
+  }
+}

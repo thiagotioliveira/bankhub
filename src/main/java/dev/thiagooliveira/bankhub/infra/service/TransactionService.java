@@ -9,6 +9,7 @@ import dev.thiagooliveira.bankhub.domain.model.Transaction;
 import org.springframework.stereotype.Service;
 
 @Service
+@Deprecated
 public class TransactionService {
 
   private final CreateTransaction createTransaction;

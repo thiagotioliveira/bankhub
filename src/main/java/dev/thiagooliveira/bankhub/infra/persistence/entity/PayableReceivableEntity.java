@@ -110,7 +110,26 @@ public class PayableReceivableEntity {
     return entity;
   }
 
-  public PayableReceivable toReceivableOutput() {
+  public static PayableReceivableEntity from(PayableReceivable payableReceivable) {
+    var entity = new PayableReceivableEntity();
+    entity.id = payableReceivable.id();
+    entity.accountId = payableReceivable.accountId();
+    entity.categoryId = payableReceivable.categoryId();
+    entity.amount = payableReceivable.amount();
+    entity.dueDate = payableReceivable.dueDate();
+    entity.frequency = payableReceivable.frequency().orElse(null);
+    entity.installmentNumber = payableReceivable.installmentNumber().orElse(null);
+    entity.installmentTotal = payableReceivable.installmentTotal().orElse(null);
+    entity.description = payableReceivable.description();
+    entity.type = payableReceivable.type();
+    entity.status = payableReceivable.status();
+    entity.recurrenceDay = payableReceivable.dueDate().getDayOfMonth();
+    entity.parentId = null;
+    entity.transactionId = payableReceivable.transactionId().orElse(null);
+    return entity;
+  }
+
+  public PayableReceivable toDomain() {
     return new PayableReceivable(
         this.id,
         this.accountId,
@@ -120,6 +139,7 @@ public class PayableReceivableEntity {
         this.dueDate,
         this.type,
         this.status,
+        Optional.ofNullable(this.frequency),
         Optional.ofNullable(this.installmentNumber),
         Optional.ofNullable(this.installmentTotal),
         Optional.ofNullable(this.transactionId));

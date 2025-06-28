@@ -1,6 +1,7 @@
 package dev.thiagooliveira.bankhub.infra.persistence.repository;
 
 import dev.thiagooliveira.bankhub.infra.persistence.entity.PayableReceivableEntity;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,4 +12,6 @@ public interface PayableReceivableRepository
     extends JpaRepository<PayableReceivableEntity, UUID>,
         PagingAndSortingRepository<PayableReceivableEntity, UUID> {
   Page<PayableReceivableEntity> findByAccountId(UUID accountId, Pageable pageable);
+
+  Optional<PayableReceivableEntity> findByIdAndAccountId(UUID id, UUID accountId);
 }

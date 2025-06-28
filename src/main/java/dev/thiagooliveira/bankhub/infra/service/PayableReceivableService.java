@@ -1,6 +1,8 @@
 package dev.thiagooliveira.bankhub.infra.service;
 
+import dev.thiagooliveira.bankhub.application.usecase.ConfirmPayment;
 import dev.thiagooliveira.bankhub.application.usecase.CreatePayableReceivable;
+import dev.thiagooliveira.bankhub.domain.dto.ConfirmPaymentInput;
 import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableInput;
 import dev.thiagooliveira.bankhub.domain.dto.PayableReceivable;
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
@@ -12,11 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class PayableReceivableService {
 
   private final CreatePayableReceivable createPayableReceivable;
+  private final ConfirmPayment confirmPayment;
   private final CategoryService categoryService;
 
   public PayableReceivableService(
-      CreatePayableReceivable createPayableReceivable, CategoryService categoryService) {
+      CreatePayableReceivable createPayableReceivable,
+      ConfirmPayment confirmPayment,
+      CategoryService categoryService) {
     this.createPayableReceivable = createPayableReceivable;
+    this.confirmPayment = confirmPayment;
     this.categoryService = categoryService;
   }
 
@@ -27,5 +33,9 @@ public class PayableReceivableService {
             .findById(input.categoryId())
             .orElseThrow(() -> BusinessLogicException.notFound("category not found"));
     return this.createPayableReceivable.create(input.enrichWith(category));
+  }
+
+  public PayableReceivable pay(ConfirmPaymentInput input) {
+    return this.confirmPayment.pay(input);
   }
 }

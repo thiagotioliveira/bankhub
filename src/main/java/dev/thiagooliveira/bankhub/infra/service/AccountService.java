@@ -3,6 +3,7 @@ package dev.thiagooliveira.bankhub.infra.service;
 import dev.thiagooliveira.bankhub.application.usecase.CreateAccount;
 import dev.thiagooliveira.bankhub.domain.dto.CreateAccountInput;
 import dev.thiagooliveira.bankhub.domain.model.Account;
+import java.math.BigDecimal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,7 @@ public class AccountService {
   }
 
   @Transactional
-  public Account create(CreateAccountInput input) {
-    return this.createAccount.create(input);
+  public Account create(CreateAccountInput input, BigDecimal initialBalance) {
+    return this.createAccount.create(input, initialBalance);
   }
 }

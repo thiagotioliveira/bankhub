@@ -22,7 +22,7 @@ public class CreateAccount {
     this.createTransaction = createTransaction;
   }
 
-  public Account create(CreateAccountInput input) {
+  public Account create(CreateAccountInput input, BigDecimal initialBalance) {
     if (!this.getBank.existsByIdAndOrganizationId(input.bankId(), input.organizationId())) {
       throw BusinessLogicException.notFound("bank not found");
     }
@@ -30,12 +30,20 @@ public class CreateAccount {
         input.name(), input.organizationId())) {
       throw BusinessLogicException.badRequest("the name already exists");
     }
+
     var account = this.accountPort.create(input);
-    if (!Objects.equals(account.balance(), BigDecimal.ZERO)) {
+
+    if (!Objects.equals(initialBalance, BigDecimal.ZERO)) {
       this.createTransaction.create(
           new CreateTransactionInput(
-              account.id(), OffsetDateTime.now(), "initial balance", account.balance()));
+              account.id(),
+              account.organizationId(),
+              OffsetDateTime.now(),
+              "initial balance",
+              initialBalance));
     }
-    return account;
+    return accountPort
+        .findByIdAndOrganizationId(account.id(), account.organizationId())
+        .orElseThrow();
   }
 }

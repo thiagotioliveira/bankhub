@@ -1,5 +1,6 @@
 package dev.thiagooliveira.bankhub.domain.dto;
 
+import dev.thiagooliveira.bankhub.domain.model.Frequency;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivableStatus;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivableType;
 import java.math.BigDecimal;
@@ -16,6 +17,24 @@ public record PayableReceivable(
     LocalDate dueDate,
     PayableReceivableType type,
     PayableReceivableStatus status,
+    Optional<Frequency> frequency,
     Optional<Integer> installmentNumber,
     Optional<Integer> installmentTotal,
-    Optional<UUID> transactionId) {}
+    Optional<UUID> transactionId) {
+
+  public PayableReceivable markAsPaid(UUID transactionId) {
+    return new PayableReceivable(
+        this.id,
+        this.accountId,
+        this.categoryId,
+        this.description,
+        this.amount,
+        this.dueDate,
+        this.type,
+        PayableReceivableStatus.PAID,
+        this.frequency,
+        this.installmentNumber,
+        this.installmentTotal,
+        Optional.of(transactionId));
+  }
+}

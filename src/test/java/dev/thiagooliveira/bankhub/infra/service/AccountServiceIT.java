@@ -37,7 +37,7 @@ class AccountServiceIT extends IntegrationTest {
   void create() {
     var account =
         this.accountService.create(
-            createAccountInput(this.organizationId, this.bankId, BigDecimal.TEN, Currency.EUR));
+            createAccountInput(this.organizationId, this.bankId, Currency.EUR), BigDecimal.TEN);
     assertNotNull(account);
     assertEquals(this.organizationId, account.organizationId());
     assertEquals(this.bankId, account.bankId());

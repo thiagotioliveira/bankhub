@@ -4,6 +4,7 @@ import static dev.thiagooliveira.bankhub.util.TestUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import dev.thiagooliveira.bankhub.IntegrationTest;
+import dev.thiagooliveira.bankhub.domain.dto.ConfirmPaymentInput;
 import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableInput;
 import dev.thiagooliveira.bankhub.domain.model.*;
 import java.math.BigDecimal;
@@ -26,26 +27,59 @@ class PayableReceivableServiceIT extends IntegrationTest {
 
   @Autowired private PayableReceivableService payableReceivableService;
 
+  private UUID organizationId;
   private UUID accountId;
   private UUID creditCategoryId;
   private UUID debitCategoryId;
 
   @BeforeEach
   void setUp() {
-    var organizationId = this.organizationService.create(createOrganizationInput()).id();
+    this.organizationId = this.organizationService.create(createOrganizationInput()).id();
     var bankId = this.bankService.create(createBankInput(organizationId)).id();
     this.creditCategoryId = this.categoryService.findByType(CategoryType.CREDIT).get().id();
     this.debitCategoryId = this.categoryService.findByType(CategoryType.DEBIT).get().id();
     this.accountId =
         this.accountService
-            .create(createAccountInput(organizationId, bankId, BigDecimal.ZERO, Currency.EUR))
+            .create(createAccountInput(organizationId, bankId, Currency.EUR), BigDecimal.ZERO)
             .id();
+  }
+
+  @Test
+  void pay() {
+    var payables =
+        this.payableReceivableService.create(
+            new CreatePayableReceivableInput(
+                PayableReceivableType.PAYABLE,
+                this.accountId,
+                this.debitCategoryId,
+                "Rent Apartment",
+                new BigDecimal("100"),
+                LocalDate.now().plusDays(5),
+                false,
+                Optional.empty(),
+                Optional.empty()));
+
+    assertNotNull(payables);
+    assertEquals(1, payables.size());
+
+    var payablePaid =
+        this.payableReceivableService.pay(
+            new ConfirmPaymentInput(
+                payables.get(0).id(),
+                this.accountId,
+                this.organizationId,
+                Optional.empty(),
+                Optional.empty()));
+
+    assertNotNull(payablePaid);
+    assertEquals(PayableReceivableStatus.PAID, payablePaid.status());
+    assertTrue(payablePaid.transactionId().isPresent());
   }
 
   @Test
   void createPayableRecurringByMonth() {
     LocalDate dueDate = LocalDate.now().plusDays(5);
-    var receivables =
+    var payables =
         this.payableReceivableService.create(
             new CreatePayableReceivableInput(
                 PayableReceivableType.PAYABLE,
@@ -58,10 +92,10 @@ class PayableReceivableServiceIT extends IntegrationTest {
                 Optional.of(Frequency.MONTHLY),
                 Optional.empty()));
 
-    assertNotNull(receivables);
-    assertEquals(1, receivables.size());
+    assertNotNull(payables);
+    assertEquals(1, payables.size());
 
-    receivables.forEach(
+    payables.forEach(
         receivable -> {
           assertNotNull(receivable);
           assertNotNull(receivable.id());

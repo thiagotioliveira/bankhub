@@ -1,7 +1,6 @@
 package dev.thiagooliveira.bankhub.infra.persistence.entity;
 
-import dev.thiagooliveira.bankhub.domain.dto.CreateTransactionInput;
-import dev.thiagooliveira.bankhub.domain.dto.CreateTransactionInputExtraInfo;
+import dev.thiagooliveira.bankhub.domain.dto.CreateTransactionEnrichedInput;
 import dev.thiagooliveira.bankhub.domain.model.Transaction;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -49,13 +48,12 @@ public class TransactionEntity {
     this.amount = amount;
   }
 
-  public static TransactionEntity from(
-      CreateTransactionInput input, CreateTransactionInputExtraInfo extraInfo) {
+  public static TransactionEntity from(CreateTransactionEnrichedInput input) {
     TransactionEntity entity = new TransactionEntity();
     entity.id = UUID.randomUUID();
     entity.dateTime = input.dateTime();
     entity.accountId = input.accountId();
-    entity.categoryId = extraInfo.categoryId();
+    entity.categoryId = input.categoryId();
     entity.description = input.description();
     entity.amount = input.amount();
     return entity;

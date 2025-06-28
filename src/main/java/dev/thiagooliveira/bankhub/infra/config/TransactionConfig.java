@@ -1,8 +1,7 @@
 package dev.thiagooliveira.bankhub.infra.config;
 
-import dev.thiagooliveira.bankhub.application.usecase.CreateTransaction;
-import dev.thiagooliveira.bankhub.application.usecase.GetCategory;
-import dev.thiagooliveira.bankhub.application.usecase.GetTransaction;
+import dev.thiagooliveira.bankhub.application.usecase.*;
+import dev.thiagooliveira.bankhub.domain.port.AccountPort;
 import dev.thiagooliveira.bankhub.domain.port.TransactionPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +11,11 @@ public class TransactionConfig {
 
   @Bean
   public CreateTransaction createTransaction(
-      TransactionPort transactionPort, GetCategory getCategory) {
-    return new CreateTransaction(transactionPort, getCategory);
+      TransactionPort transactionPort,
+      AccountPort accountPort,
+      GetCategory getCategory,
+      GetAccount getAccount) {
+    return new CreateTransaction(transactionPort, accountPort, getCategory, getAccount);
   }
 
   @Bean

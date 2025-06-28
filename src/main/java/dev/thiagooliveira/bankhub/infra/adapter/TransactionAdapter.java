@@ -1,7 +1,6 @@
 package dev.thiagooliveira.bankhub.infra.adapter;
 
-import dev.thiagooliveira.bankhub.domain.dto.CreateTransactionInput;
-import dev.thiagooliveira.bankhub.domain.dto.CreateTransactionInputExtraInfo;
+import dev.thiagooliveira.bankhub.domain.dto.CreateTransactionEnrichedInput;
 import dev.thiagooliveira.bankhub.domain.dto.GetTransactionPageable;
 import dev.thiagooliveira.bankhub.domain.dto.Page;
 import dev.thiagooliveira.bankhub.domain.model.Transaction;
@@ -21,9 +20,8 @@ public class TransactionAdapter implements TransactionPort {
   }
 
   @Override
-  public Transaction create(
-      CreateTransactionInput input, CreateTransactionInputExtraInfo extraInfo) {
-    return this.transactionRepository.save(TransactionEntity.from(input, extraInfo)).toDomain();
+  public Transaction create(CreateTransactionEnrichedInput input) {
+    return this.transactionRepository.save(TransactionEntity.from(input)).toDomain();
   }
 
   @Override
