@@ -16,4 +16,6 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, UUID> 
   @Transactional
   @Query("DELETE FROM CategoryEntity c WHERE c.organizationId IS NOT NULL")
   void deleteAllWhereOrganizationIdIsNotNull();
+
+  boolean existsByNameIgnoreCaseAndOrganizationId(String name, UUID organizationId);
 }

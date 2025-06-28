@@ -25,12 +25,12 @@ public class CreateTransaction {
       category =
           getCategory
               .findByType(CategoryType.CREDIT)
-              .orElseThrow(() -> new BusinessLogicException("credit category not found"));
+              .orElseThrow(() -> BusinessLogicException.notFound("credit category not found"));
     } else if (input.amount().compareTo(BigDecimal.ZERO) < 0) {
       category =
           getCategory
               .findByType(CategoryType.DEBIT)
-              .orElseThrow(() -> new BusinessLogicException("debit category not found"));
+              .orElseThrow(() -> BusinessLogicException.notFound("debit category not found"));
     } else throw new BusinessLogicException("invalid transaction amount given");
     return this.transactionPort.create(input, new CreateTransactionInputExtraInfo(category.id()));
   }

@@ -13,4 +13,6 @@ public interface CategoryPort {
   Optional<Category> findByType(CategoryType type);
 
   Optional<Category> findById(UUID id);
+
+  boolean existsByNameIgnoreCaseAndOrganizationId(String name, UUID organizationId);
 }

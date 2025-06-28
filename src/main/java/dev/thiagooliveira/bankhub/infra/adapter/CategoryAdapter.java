@@ -35,4 +35,9 @@ public class CategoryAdapter implements CategoryPort {
   public Optional<Category> findById(UUID id) {
     return this.categoryRepository.findById(id).map(CategoryEntity::toDomain);
   }
+
+  @Override
+  public boolean existsByNameIgnoreCaseAndOrganizationId(String name, UUID organizationId) {
+    return this.categoryRepository.existsByNameIgnoreCaseAndOrganizationId(name, organizationId);
+  }
 }

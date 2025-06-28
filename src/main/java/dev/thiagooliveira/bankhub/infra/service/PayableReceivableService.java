@@ -25,7 +25,7 @@ public class PayableReceivableService {
     var category =
         this.categoryService
             .findById(input.categoryId())
-            .orElseThrow(() -> new BusinessLogicException("category not found"));
+            .orElseThrow(() -> BusinessLogicException.notFound("category not found"));
     return this.createPayableReceivable.create(input.enrichWith(category));
   }
 }

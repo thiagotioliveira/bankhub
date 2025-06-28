@@ -5,6 +5,7 @@ import dev.thiagooliveira.bankhub.domain.model.Account;
 import dev.thiagooliveira.bankhub.domain.port.AccountPort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.AccountEntity;
 import dev.thiagooliveira.bankhub.infra.persistence.repository.AccountRepository;
+import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,5 +20,10 @@ public class AccountAdapter implements AccountPort {
   @Override
   public Account create(CreateAccountInput input) {
     return this.accountRepository.save(AccountEntity.from(input)).toDomain();
+  }
+
+  @Override
+  public boolean existsByNameIgnoreCaseAndOrganizationId(String name, UUID organizationId) {
+    return this.accountRepository.existsByNameIgnoreCaseAndOrganizationId(name, organizationId);
   }
 }
