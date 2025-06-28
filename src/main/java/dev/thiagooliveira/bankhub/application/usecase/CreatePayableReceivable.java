@@ -25,7 +25,7 @@ public class CreatePayableReceivable {
     return items.stream().map(this.port::create).collect(Collectors.toList());
   }
 
-  public static List<CreatePayableReceivableEnrichedInput> splitIntoMultiple(
+  private static List<CreatePayableReceivableEnrichedInput> splitIntoMultiple(
       CreatePayableReceivableEnrichedInput input) {
     boolean hasFrequency = input.frequency().isPresent();
     boolean isRecurring = input.recurring();
