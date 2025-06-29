@@ -1,0 +1,48 @@
+openapi: 3.0.3
+info:
+  title: Organization API
+  version: 1.0.0
+  description: API to list organizations
+
+tags:
+  - name: Organizations
+    description: Endpoints related to organizations
+
+paths:
+  /api/organizations:
+    get:
+      tags:
+        - Organizations
+      summary: Retrieve all organizations
+      operationId: listOrganizations
+      responses:
+        '200':
+          description: List of organizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizationResponseBody'
+
+components:
+  schemas:
+    OrganizationResponseBody:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        createdAt:
+          type: string
+          format: date-time
+          example: 2025-06-29T23:00:00Z
+        emailOwner:
+          type: string
+          format: email
+          example: owner@example.com
+      required:
+        - id
+        - createdAt
+        - emailOwner
