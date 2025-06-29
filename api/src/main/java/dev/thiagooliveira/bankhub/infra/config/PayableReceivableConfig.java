@@ -10,8 +10,8 @@ public class PayableReceivableConfig {
 
   @Bean
   public CreatePayableReceivable createReceivable(
-      PayableReceivablePort port, GetCategory getCategory) {
-    return new CreatePayableReceivable(port, getCategory);
+      PayableReceivablePort port, GetCategory getCategory, GetAccount getAccount) {
+    return new CreatePayableReceivable(port, getCategory, getAccount);
   }
 
   @Bean

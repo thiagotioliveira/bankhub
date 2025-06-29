@@ -16,21 +16,27 @@ import java.util.stream.Collectors;
 
 public class CreatePayableReceivable {
 
-  private final PayableReceivablePort port;
+  private final PayableReceivablePort payableReceivablePort;
   private final GetCategory getCategory;
+  private final GetAccount getAccount;
 
-  public CreatePayableReceivable(PayableReceivablePort port, GetCategory getCategory) {
-    this.port = port;
+  public CreatePayableReceivable(
+      PayableReceivablePort payableReceivablePort, GetCategory getCategory, GetAccount getAccount) {
+    this.payableReceivablePort = payableReceivablePort;
     this.getCategory = getCategory;
+    this.getAccount = getAccount;
   }
 
   public List<PayableReceivable> create(CreatePayableReceivableInput input) {
     var category =
         this.getCategory
-            .findById(input.categoryId())
+            .findById(input.categoryId(), input.organizationId())
             .orElseThrow(() -> BusinessLogicException.notFound("category not found"));
+    this.getAccount
+        .findByIdAndOrganizationId(input.accountId(), input.organizationId())
+        .orElseThrow(() -> BusinessLogicException.notFound("account not found"));
     var items = splitIntoMultiple(input.enrichWith(category));
-    return items.stream().map(this.port::create).collect(Collectors.toList());
+    return items.stream().map(this.payableReceivablePort::create).collect(Collectors.toList());
   }
 
   private static List<CreatePayableReceivableEnrichedInput> splitIntoMultiple(

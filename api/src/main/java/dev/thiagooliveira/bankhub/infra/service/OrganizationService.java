@@ -6,6 +6,7 @@ import dev.thiagooliveira.bankhub.domain.dto.CreateOrganizationInput;
 import dev.thiagooliveira.bankhub.domain.dto.CreateOrganizationOutput;
 import dev.thiagooliveira.bankhub.domain.model.Organization;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,5 +30,9 @@ public class OrganizationService {
 
   public List<Organization> list(UUID organizationId) {
     return this.getOrganization.list(organizationId);
+  }
+
+  public Optional<Organization> get(UUID organizationId) {
+    return this.getOrganization.findById(organizationId);
   }
 }

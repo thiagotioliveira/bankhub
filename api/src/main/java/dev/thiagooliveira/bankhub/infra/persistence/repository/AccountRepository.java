@@ -2,12 +2,15 @@ package dev.thiagooliveira.bankhub.infra.persistence.repository;
 
 import dev.thiagooliveira.bankhub.domain.dto.projection.AccountEnriched;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.AccountEntity;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface AccountRepository extends JpaRepository<AccountEntity, UUID> {
+
+  List<AccountEntity> findByOrganizationId(UUID organizationId);
 
   Optional<AccountEntity> findByIdAndOrganizationId(UUID id, UUID organizationId);
 

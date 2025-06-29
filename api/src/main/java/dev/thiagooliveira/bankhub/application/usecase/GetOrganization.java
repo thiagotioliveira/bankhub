@@ -3,6 +3,7 @@ package dev.thiagooliveira.bankhub.application.usecase;
 import dev.thiagooliveira.bankhub.domain.model.Organization;
 import dev.thiagooliveira.bankhub.domain.port.OrganizationPort;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class GetOrganization {
@@ -14,6 +15,10 @@ public class GetOrganization {
   }
 
   public List<Organization> list(UUID organizationId) {
-    return this.organizationPort.list(organizationId);
+    return this.organizationPort.findById(organizationId).map(List::of).orElseGet(List::of);
+  }
+
+  public Optional<Organization> findById(UUID organizationId) {
+    return this.organizationPort.findById(organizationId);
   }
 }

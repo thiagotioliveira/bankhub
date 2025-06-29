@@ -50,6 +50,7 @@ class PayableReceivableServiceIT extends IntegrationTest {
         this.payableReceivableService.create(
             new CreatePayableReceivableInput(
                 PayableReceivableType.PAYABLE,
+                this.organizationId,
                 this.accountId,
                 this.debitCategoryId,
                 "Rent Apartment",
@@ -83,6 +84,7 @@ class PayableReceivableServiceIT extends IntegrationTest {
         this.payableReceivableService.create(
             new CreatePayableReceivableInput(
                 PayableReceivableType.PAYABLE,
+                this.organizationId,
                 this.accountId,
                 this.debitCategoryId,
                 "Rent Apartment",
@@ -118,6 +120,7 @@ class PayableReceivableServiceIT extends IntegrationTest {
         this.payableReceivableService.create(
             new CreatePayableReceivableInput(
                 PayableReceivableType.PAYABLE,
+                this.organizationId,
                 this.accountId,
                 this.debitCategoryId,
                 "Payment of any purchase in installments",
@@ -153,6 +156,7 @@ class PayableReceivableServiceIT extends IntegrationTest {
         this.payableReceivableService.create(
             new CreatePayableReceivableInput(
                 PayableReceivableType.RECEIVABLE,
+                this.organizationId,
                 this.accountId,
                 this.creditCategoryId,
                 "Salary",
@@ -188,6 +192,7 @@ class PayableReceivableServiceIT extends IntegrationTest {
         this.payableReceivableService.create(
             new CreatePayableReceivableInput(
                 PayableReceivableType.RECEIVABLE,
+                this.organizationId,
                 this.accountId,
                 this.creditCategoryId,
                 "Payment of any receivable in installments",

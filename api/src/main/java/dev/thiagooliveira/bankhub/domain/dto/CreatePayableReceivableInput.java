@@ -11,6 +11,7 @@ import java.util.UUID;
 
 public record CreatePayableReceivableInput(
     PayableReceivableType type,
+    UUID organizationId,
     UUID accountId,
     UUID categoryId,
     String description,

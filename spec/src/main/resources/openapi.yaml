@@ -1,12 +1,18 @@
 openapi: 3.0.3
 info:
-  title: Organization API
+  title: Bankhub API
   version: 1.0.0
-  description: API to list organizations
+  description: Bankhub API
 
 tags:
   - name: Organizations
     description: Endpoints related to organizations
+  - name: Categories
+    description: Endpoints related to financial categories
+  - name: Banks
+    description: Endpoints related to banks
+  - name: Accounts
+    description: Endpoints related to bank accounts
 
 paths:
   /api/organizations:
@@ -25,6 +31,225 @@ paths:
                 items:
                   $ref: '#/components/schemas/GetOrganizationsResponseBody'
 
+  /api/organizations/{id}:
+    get:
+      tags:
+        - Organizations
+      summary: Retrieve an organization by its ID
+      operationId: getOrganizationById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Organization found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOrganizationsResponseBody'
+        '404':
+          description: Organization not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/categories:
+    get:
+      tags:
+        - Categories
+      summary: Retrieve all categories
+      operationId: listCategories
+      responses:
+        '200':
+          description: List of categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetCategoryResponseBody'
+
+    post:
+      tags:
+        - Categories
+      summary: Create a new category
+      operationId: createCategory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostCategoryRequestBody'
+      responses:
+        '201':
+          description: Category created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCategoryResponseBody'
+
+  /api/categories/{id}:
+    get:
+      tags:
+        - Categories
+      summary: Retrieve category by ID
+      operationId: getCategoryById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Category found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCategoryResponseBody'
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/banks:
+    get:
+      tags:
+        - Banks
+      summary: Retrieve all banks
+      operationId: listBanks
+      responses:
+        '200':
+          description: List of banks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetBankResponseBody'
+
+    post:
+      tags:
+        - Banks
+      summary: Create a new bank
+      operationId: createBank
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostBankRequestBody'
+      responses:
+        '201':
+          description: Bank created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBankResponseBody'
+
+  /api/banks/{id}:
+    get:
+      tags:
+        - Banks
+      summary: Retrieve a bank by ID
+      operationId: getBankById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Bank found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBankResponseBody'
+        '404':
+          description: Bank not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/accounts:
+    get:
+      tags:
+        - Accounts
+      summary: Retrieve all accounts
+      operationId: listAccounts
+      responses:
+        '200':
+          description: List of accounts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetAccountsResponseBody'
+
+    post:
+      tags:
+        - Accounts
+      summary: Create a new account
+      operationId: createAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostAccountRequestBody'
+      responses:
+        '201':
+          description: Account created successfully
+          headers:
+            Location:
+              description: URI of the created account
+              schema:
+                type: string
+                example: /api/accounts/123e4567-e89b-12d3-a456-426614174000
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAccountsResponseBody'
+
+  /api/accounts/{id}:
+    get:
+      tags:
+        - Accounts
+      summary: Retrieve account by ID
+      operationId: getAccountById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Account found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAccountResponseBody'
+        '404':
+          description: Account not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   schemas:
     GetOrganizationsResponseBody:
@@ -33,16 +258,151 @@ components:
         id:
           type: string
           format: uuid
-          example: d290f1ee-6c54-4b01-90e6-d701748f0851
         createdAt:
           type: string
           format: date-time
-          example: 2025-06-29T23:00:00Z
         emailOwner:
           type: string
           format: email
-          example: owner@example.com
       required:
         - id
         - createdAt
         - emailOwner
+
+    GetCategoryResponseBody:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/CategoryType'
+      required:
+        - id
+        - name
+        - type
+
+    PostCategoryRequestBody:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/CategoryType'
+      required:
+        - name
+        - type
+
+    CategoryType:
+      type: string
+      enum: [CREDIT, DEBIT]
+
+    PostBankRequestBody:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+
+    GetBankResponseBody:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+      required:
+        - id
+        - name
+
+    PostAccountRequestBody:
+      type: object
+      properties:
+        name:
+          type: string
+        bankId:
+          type: string
+          format: uuid
+        initialBalance:
+          type: number
+          format: decimal
+        currency:
+          $ref: '#/components/schemas/Currency'
+      required:
+        - name
+        - bankId
+        - organizationId
+        - currency
+
+    GetAccountsResponseBody:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        bankId:
+          type: string
+          format: uuid
+        balance:
+          type: number
+          format: decimal
+        currency:
+          $ref: '#/components/schemas/Currency'
+      required:
+        - id
+        - name
+        - bank
+        - currency
+
+    GetAccountResponseBody:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        bank:
+          $ref: '#/components/schemas/GetBankResponseBody'
+        balance:
+          type: number
+          format: decimal
+        currency:
+          $ref: '#/components/schemas/Currency'
+      required:
+        - id
+        - name
+        - bank
+        - currency
+
+    Currency:
+      type: string
+      example: EUR
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      required:
+        - code
+        - message
+
+  securitySchemes:
+    ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: ''
+          scopes: {}
+
+security:
+  - ClientCredentials: []

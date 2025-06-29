@@ -5,6 +5,7 @@ import dev.thiagooliveira.bankhub.application.usecase.GetCategory;
 import dev.thiagooliveira.bankhub.domain.dto.CreateCategoryInput;
 import dev.thiagooliveira.bankhub.domain.model.Category;
 import dev.thiagooliveira.bankhub.domain.model.CategoryType;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,11 @@ public class CategoryService {
     return getCategory.findByType(type);
   }
 
-  public Optional<Category> findById(UUID id) {
-    return getCategory.findById(id);
+  public Optional<Category> findById(UUID id, UUID organisationId) {
+    return getCategory.findById(id, organisationId);
+  }
+
+  public List<Category> findAll(UUID organisationId) {
+    return getCategory.findAll(organisationId);
   }
 }

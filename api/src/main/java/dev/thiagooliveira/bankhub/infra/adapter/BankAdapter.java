@@ -5,6 +5,7 @@ import dev.thiagooliveira.bankhub.domain.model.Bank;
 import dev.thiagooliveira.bankhub.domain.port.BankPort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.BankEntity;
 import dev.thiagooliveira.bankhub.infra.persistence.repository.BankRepository;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Component;
@@ -24,8 +25,17 @@ public class BankAdapter implements BankPort {
   }
 
   @Override
-  public Optional<Bank> findById(UUID id) {
-    return this.bankRepository.findById(id).map(BankEntity::toDomain);
+  public Optional<Bank> findById(UUID id, UUID organizationId) {
+    return this.bankRepository
+        .findByIdAndOrganizationId(id, organizationId)
+        .map(BankEntity::toDomain);
+  }
+
+  @Override
+  public List<Bank> findByOrganizationId(UUID organizationId) {
+    return this.bankRepository.findByOrganizationId(organizationId).stream()
+        .map(BankEntity::toDomain)
+        .toList();
   }
 
   @Override

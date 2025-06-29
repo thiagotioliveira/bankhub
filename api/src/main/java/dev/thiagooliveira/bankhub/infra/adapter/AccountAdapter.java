@@ -7,6 +7,7 @@ import dev.thiagooliveira.bankhub.domain.port.AccountPort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.AccountEntity;
 import dev.thiagooliveira.bankhub.infra.persistence.repository.AccountRepository;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,13 @@ public class AccountAdapter implements AccountPort {
 
   public AccountAdapter(AccountRepository accountRepository) {
     this.accountRepository = accountRepository;
+  }
+
+  @Override
+  public List<Account> findByOrganizationId(UUID organizationId) {
+    return this.accountRepository.findByOrganizationId(organizationId).stream()
+        .map(AccountEntity::toDomain)
+        .toList();
   }
 
   @Override

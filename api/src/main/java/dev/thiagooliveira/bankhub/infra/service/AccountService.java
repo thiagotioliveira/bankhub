@@ -6,6 +6,7 @@ import dev.thiagooliveira.bankhub.domain.dto.CreateAccountInput;
 import dev.thiagooliveira.bankhub.domain.dto.projection.AccountEnriched;
 import dev.thiagooliveira.bankhub.domain.model.Account;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,9 @@ public class AccountService {
 
   public Optional<AccountEnriched> findByIdAndOrganizationIdEnriched(UUID id, UUID organizationId) {
     return this.getAccount.findByIdAndOrganizationIdEnriched(id, organizationId);
+  }
+
+  public List<Account> findByOrganizationId(UUID organizationId) {
+    return this.getAccount.findByOrganizationId(organizationId);
   }
 }

@@ -3,6 +3,7 @@ package dev.thiagooliveira.bankhub.application.usecase;
 import dev.thiagooliveira.bankhub.domain.dto.projection.AccountEnriched;
 import dev.thiagooliveira.bankhub.domain.model.Account;
 import dev.thiagooliveira.bankhub.domain.port.AccountPort;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,5 +21,9 @@ public class GetAccount {
 
   public Optional<AccountEnriched> findByIdAndOrganizationIdEnriched(UUID id, UUID organizationId) {
     return this.accountPort.findByIdAndOrganizationIdEnriched(id, organizationId);
+  }
+
+  public List<Account> findByOrganizationId(UUID organizationId) {
+    return this.accountPort.findByOrganizationId(organizationId);
   }
 }

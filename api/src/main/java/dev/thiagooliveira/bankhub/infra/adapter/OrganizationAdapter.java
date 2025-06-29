@@ -6,6 +6,7 @@ import dev.thiagooliveira.bankhub.domain.port.OrganizationPort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.OrganizationEntity;
 import dev.thiagooliveira.bankhub.infra.persistence.repository.OrganizationRepository;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Component;
 
@@ -28,5 +29,10 @@ public class OrganizationAdapter implements OrganizationPort {
     var organization =
         this.organizationRepository.findById(organizationId).map(OrganizationEntity::toDomain);
     return organization.map(List::of).orElseGet(List::of);
+  }
+
+  @Override
+  public Optional<Organization> findById(UUID organizationId) {
+    return this.organizationRepository.findById(organizationId).map(OrganizationEntity::toDomain);
   }
 }

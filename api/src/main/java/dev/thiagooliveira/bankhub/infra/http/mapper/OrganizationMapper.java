@@ -1,4 +1,4 @@
-package dev.thiagooliveira.bankhub.infra.mapper;
+package dev.thiagooliveira.bankhub.infra.http.mapper;
 
 import dev.thiagooliveira.bankhub.domain.model.Organization;
 import dev.thiagooliveira.bankhub.http.dto.GetOrganizationsResponseBody;

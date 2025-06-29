@@ -6,6 +6,7 @@ import dev.thiagooliveira.bankhub.domain.model.CategoryType;
 import dev.thiagooliveira.bankhub.domain.port.CategoryPort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.CategoryEntity;
 import dev.thiagooliveira.bankhub.infra.persistence.repository.CategoryRepository;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Component;
@@ -32,8 +33,18 @@ public class CategoryAdapter implements CategoryPort {
   }
 
   @Override
-  public Optional<Category> findById(UUID id) {
+  public Optional<Category> findByIdAndOrganizationIdOrOrganizationIdIsNull(
+      UUID id, UUID organizationId) {
     return this.categoryRepository.findById(id).map(CategoryEntity::toDomain);
+  }
+
+  @Override
+  public List<Category> findByOrganizationIdOrOrganizationIdIsNull(UUID organizationId) {
+    return this.categoryRepository
+        .findByOrganizationIdOrOrganizationIdIsNull(organizationId)
+        .stream()
+        .map(CategoryEntity::toDomain)
+        .toList();
   }
 
   @Override
