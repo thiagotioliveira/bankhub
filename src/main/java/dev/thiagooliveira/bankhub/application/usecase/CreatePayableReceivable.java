@@ -1,7 +1,9 @@
 package dev.thiagooliveira.bankhub.application.usecase;
 
 import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableEnrichedInput;
+import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableInput;
 import dev.thiagooliveira.bankhub.domain.dto.PayableReceivable;
+import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.domain.model.Frequency;
 import dev.thiagooliveira.bankhub.domain.port.PayableReceivablePort;
 import java.math.BigDecimal;
@@ -15,13 +17,19 @@ import java.util.stream.Collectors;
 public class CreatePayableReceivable {
 
   private final PayableReceivablePort port;
+  private final GetCategory getCategory;
 
-  public CreatePayableReceivable(PayableReceivablePort port) {
+  public CreatePayableReceivable(PayableReceivablePort port, GetCategory getCategory) {
     this.port = port;
+    this.getCategory = getCategory;
   }
 
-  public List<PayableReceivable> create(CreatePayableReceivableEnrichedInput input) {
-    var items = splitIntoMultiple(input);
+  public List<PayableReceivable> create(CreatePayableReceivableInput input) {
+    var category =
+        this.getCategory
+            .findById(input.categoryId())
+            .orElseThrow(() -> BusinessLogicException.notFound("category not found"));
+    var items = splitIntoMultiple(input.enrichWith(category));
     return items.stream().map(this.port::create).collect(Collectors.toList());
   }
 
