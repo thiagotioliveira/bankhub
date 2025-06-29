@@ -23,11 +23,11 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/OrganizationResponseBody'
+                  $ref: '#/components/schemas/GetOrganizationsResponseBody'
 
 components:
   schemas:
-    OrganizationResponseBody:
+    GetOrganizationsResponseBody:
       type: object
       properties:
         id:
