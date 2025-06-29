@@ -1,9 +1,13 @@
 package dev.thiagooliveira.bankhub.infra.service;
 
 import dev.thiagooliveira.bankhub.application.usecase.CreateAccount;
+import dev.thiagooliveira.bankhub.application.usecase.GetAccount;
 import dev.thiagooliveira.bankhub.domain.dto.CreateAccountInput;
+import dev.thiagooliveira.bankhub.domain.dto.projection.AccountEnriched;
 import dev.thiagooliveira.bankhub.domain.model.Account;
 import java.math.BigDecimal;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,13 +15,19 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccountService {
 
   private final CreateAccount createAccount;
+  private final GetAccount getAccount;
 
-  public AccountService(CreateAccount createAccount) {
+  public AccountService(CreateAccount createAccount, GetAccount getAccount) {
     this.createAccount = createAccount;
+    this.getAccount = getAccount;
   }
 
   @Transactional
   public Account create(CreateAccountInput input, BigDecimal initialBalance) {
     return this.createAccount.create(input, initialBalance);
+  }
+
+  public Optional<AccountEnriched> findByIdAndOrganizationIdEnriched(UUID id, UUID organizationId) {
+    return this.getAccount.findByIdAndOrganizationIdEnriched(id, organizationId);
   }
 }

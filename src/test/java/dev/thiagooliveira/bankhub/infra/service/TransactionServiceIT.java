@@ -7,6 +7,7 @@ import dev.thiagooliveira.bankhub.IntegrationTest;
 import dev.thiagooliveira.bankhub.domain.dto.GetTransactionPageable;
 import dev.thiagooliveira.bankhub.domain.dto.Pageable;
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
+import dev.thiagooliveira.bankhub.domain.model.CategoryType;
 import dev.thiagooliveira.bankhub.domain.model.Currency;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -72,7 +73,20 @@ class TransactionServiceIT extends IntegrationTest {
     assertTrue(page.last());
 
     assertEquals(transaction2.id(), page.content().get(0).id());
+    // assertEquals(transaction2.dateTime(), page.content().get(0).dateTime()); TODO
+    assertEquals(transaction2.description(), page.content().get(0).description());
+    assertEquals(0, transaction2.amount().compareTo(page.content().get(0).amount()));
+    assertEquals(transaction2.categoryId(), page.content().get(0).category().id());
+    assertNotNull(page.content().get(0).category().name());
+    assertEquals(CategoryType.CREDIT, page.content().get(0).category().type());
+
     assertEquals(transaction1.id(), page.content().get(1).id());
+    // assertEquals(transaction1.dateTime(), page.content().get(1).dateTime()); TODO
+    assertEquals(transaction1.description(), page.content().get(1).description());
+    assertEquals(0, transaction1.amount().compareTo(page.content().get(1).amount()));
+    assertEquals(transaction1.categoryId(), page.content().get(1).category().id());
+    assertNotNull(page.content().get(1).category().name());
+    assertEquals(CategoryType.CREDIT, page.content().get(1).category().type());
   }
 
   @Test

@@ -34,6 +34,25 @@ class AccountServiceIT extends IntegrationTest {
   }
 
   @Test
+  void getAccounts() {
+    var account =
+        this.accountService.create(
+            createAccountInput(this.organizationId, this.bankId, Currency.EUR), BigDecimal.TEN);
+
+    var enriched =
+        this.accountService
+            .findByIdAndOrganizationIdEnriched(account.id(), account.organizationId())
+            .orElseThrow();
+    assertNotNull(enriched);
+    assertEquals(account.id(), enriched.id());
+    assertEquals(account.name(), enriched.name());
+    assertEquals(0, account.balance().compareTo(enriched.balance()));
+    assertEquals(account.currency(), enriched.currency());
+    assertEquals(account.bankId(), enriched.bank().id());
+    assertNotNull(enriched.bank().name());
+  }
+
+  @Test
   void create() {
     var account =
         this.accountService.create(

@@ -1,6 +1,7 @@
 package dev.thiagooliveira.bankhub.infra.adapter;
 
 import dev.thiagooliveira.bankhub.domain.dto.CreateAccountInput;
+import dev.thiagooliveira.bankhub.domain.dto.projection.AccountEnriched;
 import dev.thiagooliveira.bankhub.domain.model.Account;
 import dev.thiagooliveira.bankhub.domain.port.AccountPort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.AccountEntity;
@@ -24,6 +25,11 @@ public class AccountAdapter implements AccountPort {
     return this.accountRepository
         .findByIdAndOrganizationId(id, organizationId)
         .map(AccountEntity::toDomain);
+  }
+
+  @Override
+  public Optional<AccountEnriched> findByIdAndOrganizationIdEnriched(UUID id, UUID organizationId) {
+    return this.accountRepository.findByIdAndOrganizationIdEnriched(id, organizationId);
   }
 
   @Override

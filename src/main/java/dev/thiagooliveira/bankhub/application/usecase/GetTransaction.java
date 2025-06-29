@@ -2,7 +2,7 @@ package dev.thiagooliveira.bankhub.application.usecase;
 
 import dev.thiagooliveira.bankhub.domain.dto.GetTransactionPageable;
 import dev.thiagooliveira.bankhub.domain.dto.Page;
-import dev.thiagooliveira.bankhub.domain.model.Transaction;
+import dev.thiagooliveira.bankhub.domain.dto.projection.TransactionEnriched;
 import dev.thiagooliveira.bankhub.domain.port.TransactionPort;
 
 public class GetTransaction {
@@ -12,7 +12,7 @@ public class GetTransaction {
     this.transactionPort = transactionPort;
   }
 
-  public Page<Transaction> findByAccountId(GetTransactionPageable pageable) {
+  public Page<TransactionEnriched> findByAccountId(GetTransactionPageable pageable) {
     return this.transactionPort.findByAccountIdOrderByDateTimeDesc(pageable);
   }
 }

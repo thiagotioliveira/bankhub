@@ -29,7 +29,7 @@ public class ConfirmPayment {
             .orElseThrow(() -> BusinessLogicException.notFound("payable/receivable not found"));
     this.getAccount
         .findByIdAndOrganizationId(target.accountId(), input.organizationId())
-        .orElseThrow(() -> BusinessLogicException.notFound("payable/organization not found"));
+        .orElseThrow(() -> BusinessLogicException.notFound("account not found"));
 
     var transaction =
         this.createTransaction.create(

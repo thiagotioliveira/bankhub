@@ -5,11 +5,11 @@ import dev.thiagooliveira.bankhub.application.usecase.GetTransaction;
 import dev.thiagooliveira.bankhub.domain.dto.CreateTransactionInput;
 import dev.thiagooliveira.bankhub.domain.dto.GetTransactionPageable;
 import dev.thiagooliveira.bankhub.domain.dto.Page;
+import dev.thiagooliveira.bankhub.domain.dto.projection.TransactionEnriched;
 import dev.thiagooliveira.bankhub.domain.model.Transaction;
 import org.springframework.stereotype.Service;
 
 @Service
-@Deprecated
 public class TransactionService {
 
   private final CreateTransaction createTransaction;
@@ -20,11 +20,12 @@ public class TransactionService {
     this.getTransaction = getTransaction;
   }
 
+  @Deprecated
   public Transaction create(CreateTransactionInput input) {
     return this.createTransaction.create(input);
   }
 
-  public Page<Transaction> findByAccountId(GetTransactionPageable pageable) {
+  public Page<TransactionEnriched> findByAccountId(GetTransactionPageable pageable) {
     return this.getTransaction.findByAccountId(pageable);
   }
 }

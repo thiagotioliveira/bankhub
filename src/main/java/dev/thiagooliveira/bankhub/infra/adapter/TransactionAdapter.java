@@ -3,6 +3,7 @@ package dev.thiagooliveira.bankhub.infra.adapter;
 import dev.thiagooliveira.bankhub.domain.dto.CreateTransactionEnrichedInput;
 import dev.thiagooliveira.bankhub.domain.dto.GetTransactionPageable;
 import dev.thiagooliveira.bankhub.domain.dto.Page;
+import dev.thiagooliveira.bankhub.domain.dto.projection.TransactionEnriched;
 import dev.thiagooliveira.bankhub.domain.model.Transaction;
 import dev.thiagooliveira.bankhub.domain.port.TransactionPort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.TransactionEntity;
@@ -25,13 +26,14 @@ public class TransactionAdapter implements TransactionPort {
   }
 
   @Override
-  public Page<Transaction> findByAccountIdOrderByDateTimeDesc(GetTransactionPageable param) {
+  public Page<TransactionEnriched> findByAccountIdOrderByDateTimeDesc(
+      GetTransactionPageable param) {
     var page =
-        this.transactionRepository.findByAccountIdOrderByDateTimeDesc(
+        this.transactionRepository.findByAccountIdOrderByDateTimeDescEnriched(
             param.accountId(),
             PageRequest.of(param.pageable().pageNumber(), param.pageable().pageSize()));
-    return new Page<Transaction>(
-        page.getContent().stream().map(TransactionEntity::toDomain).toList(),
+    return new Page<TransactionEnriched>(
+        page.getContent(),
         page.getNumber(),
         page.getSize(),
         page.getTotalElements(),
