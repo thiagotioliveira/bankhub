@@ -7,6 +7,7 @@ import dev.thiagooliveira.bankhub.domain.model.Account;
 import dev.thiagooliveira.bankhub.domain.model.CategoryType;
 import dev.thiagooliveira.bankhub.domain.port.AccountPort;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
@@ -16,16 +17,19 @@ public class CreateAccount {
   private final GetBank getBank;
   private final CreateTransaction createTransaction;
   private final GetCategory getCategory;
+  private final CreateAccountBalanceSnapshot createAccountBalanceSnapshot;
 
   public CreateAccount(
       AccountPort accountPort,
       GetBank getBank,
       CreateTransaction createTransaction,
-      GetCategory getCategory) {
+      GetCategory getCategory,
+      CreateAccountBalanceSnapshot createAccountBalanceSnapshot) {
     this.accountPort = accountPort;
     this.getBank = getBank;
     this.createTransaction = createTransaction;
     this.getCategory = getCategory;
+    this.createAccountBalanceSnapshot = createAccountBalanceSnapshot;
   }
 
   public Account create(CreateAccountInput input, BigDecimal initialBalance) {
@@ -38,7 +42,9 @@ public class CreateAccount {
     }
 
     var account = this.accountPort.create(input);
-
+    var now = LocalDate.now();
+    this.createAccountBalanceSnapshot.create(
+        account.id(), now.minusMonths(1).withDayOfMonth(now.lengthOfMonth()), initialBalance);
     if (!Objects.equals(initialBalance, BigDecimal.ZERO)) {
       var categoryType = initialBalance.signum() > 0 ? CategoryType.CREDIT : CategoryType.DEBIT;
       var category = this.getCategory.findByType(categoryType).orElseThrow();

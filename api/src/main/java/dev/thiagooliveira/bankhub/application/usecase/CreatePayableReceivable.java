@@ -82,7 +82,7 @@ public class CreatePayableReceivable {
 
   private static CreatePayableReceivableEnrichedInput split(
       CreatePayableReceivableEnrichedInput input,
-      LocalDate dueDate,
+      LocalDate startDate,
       Optional<Integer> installmentNumber,
       BigDecimal amount) {
     return new CreatePayableReceivableEnrichedInput(
@@ -94,7 +94,7 @@ public class CreatePayableReceivable {
                 ? " (%d/%d)".formatted(installmentNumber.orElse(1), input.installmentTotal().get())
                 : ""),
         amount,
-        dueDate,
+        startDate,
         input.recurring(),
         input.frequency(),
         installmentNumber,

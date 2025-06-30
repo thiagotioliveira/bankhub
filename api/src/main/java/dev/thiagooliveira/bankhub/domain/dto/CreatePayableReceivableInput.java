@@ -16,15 +16,15 @@ public record CreatePayableReceivableInput(
     UUID categoryId,
     String description,
     BigDecimal amount,
-    LocalDate dueDate,
+    LocalDate startDate,
     boolean recurring,
     Optional<Frequency> frequency,
     Optional<Integer> installmentTotal) {
   public CreatePayableReceivableInput {
     if (amount.compareTo(BigDecimal.ZERO) < 0)
       throw new BusinessLogicException("amount must be positive");
-    if (LocalDate.now().isAfter(dueDate))
-      throw new BusinessLogicException("due date cannot be before now");
+    if (LocalDate.now().isAfter(startDate))
+      throw new BusinessLogicException("start date cannot be before now");
     if (recurring) {
       if (frequency.isEmpty())
         throw new BusinessLogicException("frequency need to be set when recurring");
@@ -40,7 +40,7 @@ public record CreatePayableReceivableInput(
         category,
         this.description,
         this.amount,
-        this.dueDate,
+        this.startDate,
         this.recurring,
         this.frequency,
         Optional.empty(),

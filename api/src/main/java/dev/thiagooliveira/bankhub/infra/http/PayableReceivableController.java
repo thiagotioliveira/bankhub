@@ -6,9 +6,8 @@ import dev.thiagooliveira.bankhub.infra.config.AppProps;
 import dev.thiagooliveira.bankhub.infra.http.mapper.PayableReceivableMapper;
 import dev.thiagooliveira.bankhub.infra.service.PayableReceivableService;
 import dev.thiagooliveira.bankhub.spec.http.controllers.PayableReceivableApi;
-import dev.thiagooliveira.bankhub.spec.http.dto.GetPayableReceivableResponseBody;
-import dev.thiagooliveira.bankhub.spec.http.dto.PostPayableReceivableRequestBody;
-import dev.thiagooliveira.bankhub.spec.http.dto.PostPayableReceivableResponseBody;
+import dev.thiagooliveira.bankhub.spec.http.dto.*;
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
@@ -49,6 +48,18 @@ public class PayableReceivableController implements PayableReceivableApi {
                 .getPayableReceivable(id, this.appProps.getOrganizationId())
                 .orElseThrow(
                     () -> BusinessLogicException.notFound("payable/receivable not found"))));
+  }
+
+  @Override
+  public ResponseEntity<PostPayableReceivablePaidResponseBody> payById(
+      UUID id, PostPayableReceivablePaidRequestBody postPayableReceivablePaidRequestBody) {
+    var paid =
+        this.payableReceivableService.pay(
+            this.payableReceivableMapper.map(
+                id, this.appProps.getOrganizationId(), postPayableReceivablePaidRequestBody));
+    return ResponseEntity.created(
+            URI.create(String.format("/api/payable-receivable/%s", paid.id())))
+        .body(this.payableReceivableMapper.mapToPostPayableReceivablePaidResponseBody(paid));
   }
 
   @Override

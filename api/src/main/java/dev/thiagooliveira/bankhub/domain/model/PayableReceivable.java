@@ -1,5 +1,6 @@
 package dev.thiagooliveira.bankhub.domain.model;
 
+import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -20,6 +21,9 @@ public record PayableReceivable(
     Optional<UUID> transactionId) {
 
   public PayableReceivable markAsPaid(UUID transactionId) {
+    if (this.status == PayableReceivableStatus.PAID) {
+      throw BusinessLogicException.badRequest("payable/receivable already paid");
+    }
     return new PayableReceivable(
         this.id,
         this.accountId,

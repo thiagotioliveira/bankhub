@@ -413,7 +413,7 @@ paths:
                   $ref: '#/components/schemas/GetPayableReceivableResponseBody'
   /api/payable-receivable/{id}:
     get:
-      summary: List all payables and receivables
+      summary: Get payables and receivables by ID
       operationId: getPayableReceivableById
       parameters:
         - name: id
@@ -431,6 +431,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetPayableReceivableResponseBody'
+  /api/payable-receivable/{id}/pay:
+    post:
+      summary: Pay a payable/receivable
+      operationId: payById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      tags:
+        - Payable/Receivable
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostPayableReceivablePaidRequestBody'
+      responses:
+        '201':
+          description: paid with success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostPayableReceivablePaidResponseBody'
 components:
   schemas:
     GetOrganizationsResponseBody:
@@ -741,7 +767,7 @@ components:
         amount:
           type: number
           format: double
-        dueDate:
+        startDate:
           type: string
           format: date
         recurring:
@@ -840,7 +866,6 @@ components:
           enum:
             - PENDING
             - PAID
-            - OVERDUE
         frequency:
           $ref: '#/components/schemas/Frequency'
         installmentNumber:
@@ -849,6 +874,31 @@ components:
           type: integer
         recurrenceDay:
           type: integer
+        transactionId:
+          type: string
+          format: uuid
+    PostPayableReceivablePaidRequestBody:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+          nullable: true
+        dateTime:
+          type: string
+          format: date-time
+          nullable: true
+        description:
+          type: string
+          nullable: true
+    PostPayableReceivablePaidResponseBody:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - PENDING
+            - PAID
         transactionId:
           type: string
           format: uuid

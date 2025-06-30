@@ -355,3 +355,37 @@ databaseChangeLog:
             referencedTableName: transactions
             referencedColumnNames: id
             constraintName: fk_payables_receivables_transaction
+  - changeSet:
+      id: 009-create-account-balance-snapshots
+      author: thiago
+      changes:
+        - createTable:
+            tableName: account_balance_snapshots
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: account_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: at_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: balance
+                  type: numeric(10,2)
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: account_balance_snapshots
+            baseColumnNames: account_id
+            referencedTableName: accounts
+            referencedColumnNames: id
+            constraintName: fk_account_balance_snapshots_accounts

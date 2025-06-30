@@ -13,12 +13,19 @@ public class AccountConfig {
       AccountPort accountPort,
       GetBank getBank,
       CreateTransaction createTransaction,
-      GetCategory getCategory) {
-    return new CreateAccount(accountPort, getBank, createTransaction, getCategory);
+      GetCategory getCategory,
+      CreateAccountBalanceSnapshot createAccountBalanceSnapshot) {
+    return new CreateAccount(
+        accountPort, getBank, createTransaction, getCategory, createAccountBalanceSnapshot);
   }
 
   @Bean
   public GetAccount getAccount(AccountPort accountPort) {
     return new GetAccount(accountPort);
+  }
+
+  @Bean
+  public CreateAccountBalanceSnapshot createAccountBalanceSnapshot(AccountPort accountPort) {
+    return new CreateAccountBalanceSnapshot(accountPort);
   }
 }

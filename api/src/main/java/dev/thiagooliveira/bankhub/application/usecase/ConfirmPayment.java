@@ -37,9 +37,12 @@ public class ConfirmPayment {
                 input.accountId(),
                 input.organizationId(),
                 input.dateTime().orElse(OffsetDateTime.now()),
-                input.description().orElse("it have been paid"),
+                input
+                    .description()
+                    .map(d -> String.format("%s was paid - %s", target.description(), d))
+                    .orElse(String.format("%s was paid", target.description())),
                 target.categoryId(),
-                target.amount()));
+                input.amount().orElse(target.amount())));
 
     return this.payableReceivablePort.update(target.markAsPaid(transaction.id()));
   }

@@ -13,6 +13,7 @@ public class IntegrationTest {
   @Autowired private OrganizationRepository organizationRepository;
   @Autowired private UserRepository userRepository;
   @Autowired private AccountRepository accountRepository;
+  @Autowired private AccountBalanceSnapshotRepository accountBalanceSnapshotRepository;
   @Autowired private TransactionRepository transactionRepository;
   @Autowired private BankRepository bankRepository;
   @Autowired private CategoryRepository categoryRepository;
@@ -22,6 +23,7 @@ public class IntegrationTest {
   void tearDown() {
     this.payableReceivableRepository.deleteAll();
     this.transactionRepository.deleteAll();
+    this.accountBalanceSnapshotRepository.deleteAll();
     this.accountRepository.deleteAll();
     this.bankRepository.deleteAll();
     this.userRepository.deleteAll();
