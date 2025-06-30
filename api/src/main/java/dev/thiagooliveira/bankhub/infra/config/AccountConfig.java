@@ -10,8 +10,11 @@ public class AccountConfig {
 
   @Bean
   public CreateAccount createAccount(
-      AccountPort accountPort, GetBank getBank, CreateTransaction createTransaction) {
-    return new CreateAccount(accountPort, getBank, createTransaction);
+      AccountPort accountPort,
+      GetBank getBank,
+      CreateTransaction createTransaction,
+      GetCategory getCategory) {
+    return new CreateAccount(accountPort, getBank, createTransaction, getCategory);
   }
 
   @Bean

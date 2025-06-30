@@ -16,7 +16,7 @@ public class GetCategory {
   }
 
   public Optional<Category> findByType(CategoryType type) {
-    return this.categoryPort.findByType(type);
+    return this.categoryPort.findByTypeAndOrganizationIdIsNull(type);
   }
 
   public Optional<Category> findById(UUID id, UUID organisationId) {

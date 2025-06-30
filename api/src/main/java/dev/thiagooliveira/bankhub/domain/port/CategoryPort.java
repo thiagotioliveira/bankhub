@@ -11,7 +11,7 @@ public interface CategoryPort {
 
   Category create(CreateCategoryInput input);
 
-  Optional<Category> findByType(CategoryType type);
+  Optional<Category> findByTypeAndOrganizationIdIsNull(CategoryType type);
 
   Optional<Category> findByIdAndOrganizationIdOrOrganizationIdIsNull(UUID id, UUID organizationId);
 

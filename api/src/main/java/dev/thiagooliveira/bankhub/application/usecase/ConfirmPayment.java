@@ -6,7 +6,6 @@ import dev.thiagooliveira.bankhub.domain.dto.PayableReceivable;
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.domain.port.PayableReceivablePort;
 import java.time.OffsetDateTime;
-import java.util.Optional;
 
 public class ConfirmPayment {
 
@@ -39,7 +38,7 @@ public class ConfirmPayment {
                 input.organizationId(),
                 input.dateTime().orElse(OffsetDateTime.now()),
                 input.description().orElse("it have been paid"),
-                Optional.of(target.categoryId()),
+                target.categoryId(),
                 target.amount()));
 
     return this.payableReceivablePort.update(target.markAsPaid(transaction.id()));

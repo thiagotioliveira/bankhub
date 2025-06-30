@@ -26,12 +26,16 @@ class TransactionServiceIT extends IntegrationTest {
 
   @Autowired private BankService bankService;
 
+  @Autowired private CategoryService categoryService;
+
   private UUID organizationId;
   private UUID accountId;
+  private UUID categoryId;
 
   @BeforeEach
   void setUp() {
     this.organizationId = this.organizationService.create(createOrganizationInput()).id();
+    this.categoryId = this.categoryService.findByType(CategoryType.CREDIT).orElseThrow().id();
     var bankId = this.bankService.create(createBankInput(organizationId)).id();
     this.accountId =
         this.accountService
@@ -44,7 +48,11 @@ class TransactionServiceIT extends IntegrationTest {
     var transaction =
         this.transactionService.create(
             createTransactionInput(
-                this.accountId, this.organizationId, OffsetDateTime.now(), BigDecimal.TEN));
+                this.accountId,
+                this.organizationId,
+                OffsetDateTime.now(),
+                categoryId,
+                BigDecimal.TEN));
     assertNotNull(transaction);
     assertNotNull(transaction.id());
     assertNotNull(transaction.dateTime());
@@ -58,11 +66,19 @@ class TransactionServiceIT extends IntegrationTest {
     var transaction1 =
         this.transactionService.create(
             createTransactionInput(
-                this.accountId, this.organizationId, OffsetDateTime.now(), BigDecimal.TEN));
+                this.accountId,
+                this.organizationId,
+                OffsetDateTime.now(),
+                categoryId,
+                BigDecimal.TEN));
     var transaction2 =
         this.transactionService.create(
             createTransactionInput(
-                this.accountId, this.organizationId, OffsetDateTime.now(), BigDecimal.ONE));
+                this.accountId,
+                this.organizationId,
+                OffsetDateTime.now(),
+                categoryId,
+                BigDecimal.ONE));
     var page =
         this.transactionService.findByAccountId(
             new GetTransactionPageable(this.accountId, Pageable.of(0, 10)));
@@ -96,6 +112,10 @@ class TransactionServiceIT extends IntegrationTest {
         () ->
             this.transactionService.create(
                 createTransactionInput(
-                    this.accountId, this.organizationId, OffsetDateTime.now(), BigDecimal.ZERO)));
+                    this.accountId,
+                    this.organizationId,
+                    OffsetDateTime.now(),
+                    categoryId,
+                    BigDecimal.ZERO)));
   }
 }

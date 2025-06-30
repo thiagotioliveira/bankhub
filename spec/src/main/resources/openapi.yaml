@@ -13,6 +13,8 @@ tags:
     description: Endpoints related to banks
   - name: Accounts
     description: Endpoints related to bank accounts
+  - name: Transactions
+    description: Endpoints related to account transactions
 
 paths:
   /api/organizations:
@@ -249,6 +251,45 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /api/transactions/deposit:
+    post:
+      summary: Create a deposit transaction
+      operationId: createDeposit
+      tags:
+        - Transactions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostDepositRequestBody'
+      responses:
+        '201':
+          description: Deposit created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostDepositResponseBody'
+
+  /api/transactions/withdrawal:
+    post:
+      summary: Create a withdrawal transaction
+      operationId: createWithdrawal
+      tags:
+        - Transactions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostWithdrawalRequestBody'
+      responses:
+        '201':
+          description: Withdrawal created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostWithdrawalResponseBody'
 
 components:
   schemas:
@@ -336,6 +377,7 @@ components:
         - name
         - bankId
         - organizationId
+        - initialBalance
         - currency
 
     GetAccountsResponseBody:
@@ -357,7 +399,8 @@ components:
       required:
         - id
         - name
-        - bank
+        - bankId
+        - balance
         - currency
 
     GetAccountResponseBody:
@@ -379,7 +422,78 @@ components:
         - id
         - name
         - bank
+        - balance
         - currency
+
+    PostDepositRequestBody:
+      type: object
+      properties:
+        accountId:
+          type: string
+          format: uuid
+        dateTime:
+          type: string
+          format: date-time
+        description:
+          type: string
+        categoryId:
+          type: string
+          format: uuid
+        amount:
+          type: number
+          format: double
+      required:
+        - accountId
+        - amount
+        - categoryId
+
+    PostWithdrawalRequestBody:
+      type: object
+      properties:
+        accountId:
+          type: string
+          format: uuid
+        dateTime:
+          type: string
+          format: date-time
+        description:
+          type: string
+        categoryId:
+          type: string
+          format: uuid
+        amount:
+          type: number
+          format: double
+      required:
+        - accountId
+        - amount
+        - categoryId
+
+    PostDepositResponseBody:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        dateTime:
+          type: string
+          format: date-time
+      required:
+        - id
+        - dateTime
+
+    PostWithdrawalResponseBody:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        dateTime:
+          type: string
+          format: date-time
+      required:
+        - id
+        - dateTime
 
     Currency:
       type: object

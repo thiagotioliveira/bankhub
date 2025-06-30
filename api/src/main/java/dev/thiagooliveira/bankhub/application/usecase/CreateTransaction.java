@@ -3,7 +3,6 @@ package dev.thiagooliveira.bankhub.application.usecase;
 import dev.thiagooliveira.bankhub.domain.dto.CreateTransactionInput;
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.domain.model.Category;
-import dev.thiagooliveira.bankhub.domain.model.CategoryType;
 import dev.thiagooliveira.bankhub.domain.model.Transaction;
 import dev.thiagooliveira.bankhub.domain.port.AccountPort;
 import dev.thiagooliveira.bankhub.domain.port.TransactionPort;
@@ -30,38 +29,28 @@ public class CreateTransaction {
     int amountSign = input.amount().signum();
 
     if (amountSign == 0) {
-      throw new BusinessLogicException("Invalid transaction amount: cannot be zero");
+      throw BusinessLogicException.badRequest("invalid transaction amount: cannot be zero");
     }
 
-    Category category = resolveCategory(input, amountSign);
+    Category category = resolveCategory(input);
 
     var account =
         getAccount
             .findByIdAndOrganizationId(input.accountId(), input.organizationId())
             .orElseThrow(() -> BusinessLogicException.notFound("account not found"));
 
-    accountPort.update(account.id(), account.balance().add(input.amount()));
+    accountPort.update(
+        account.id(),
+        category.isCredit()
+            ? account.balance().add(input.amount())
+            : account.balance().subtract(input.amount()));
 
     return transactionPort.create(input.enrichWith(category.id()));
   }
 
-  private Category resolveCategory(CreateTransactionInput input, int amountSign) {
-    return input
-        .categoryId()
-        .map(
-            id ->
-                getCategory
-                    .findById(id, input.organizationId())
-                    .orElseThrow(() -> BusinessLogicException.notFound("category not found")))
-        .orElseGet(
-            () -> {
-              CategoryType type = (amountSign > 0) ? CategoryType.CREDIT : CategoryType.DEBIT;
-              return getCategory
-                  .findByType(type)
-                  .orElseThrow(
-                      () ->
-                          BusinessLogicException.notFound(
-                              type.name().toLowerCase() + " category not found"));
-            });
+  private Category resolveCategory(CreateTransactionInput input) {
+    return getCategory
+        .findById(input.categoryId(), input.organizationId())
+        .orElseThrow(() -> BusinessLogicException.notFound("category not found"));
   }
 }

@@ -26,7 +26,7 @@ public class CategoryAdapter implements CategoryPort {
   }
 
   @Override
-  public Optional<Category> findByType(CategoryType type) {
+  public Optional<Category> findByTypeAndOrganizationIdIsNull(CategoryType type) {
     return this.categoryRepository
         .findByTypeAndOrganizationIdIsNull(type)
         .map(CategoryEntity::toDomain);

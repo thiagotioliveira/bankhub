@@ -117,8 +117,8 @@
                                 <useTags>true</useTags>
                                 <hideGenerationTimestamp>true</hideGenerationTimestamp>
                                 <dateLibrary>java8</dateLibrary>
-                                <useOptional>false</useOptional>
-                                <bigDecimalAsString>true</bigDecimalAsString>
+                                <useOptional>true</useOptional>
+                                <bigDecimalAsString>false</bigDecimalAsString>
                                 <apiPackage>${codegen.api.package.name}</apiPackage>
                                 <modelPackage>${codegen.model.page.name}</modelPackage>
                             </configOptions>
