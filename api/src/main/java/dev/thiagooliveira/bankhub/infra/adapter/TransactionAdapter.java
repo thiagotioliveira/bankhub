@@ -26,11 +26,14 @@ public class TransactionAdapter implements TransactionPort {
   }
 
   @Override
-  public Page<TransactionEnriched> findByAccountIdOrderByDateTimeDesc(
+  public Page<TransactionEnriched> findEnrichedByFiltersOrderByDateTime(
       GetTransactionPageable param) {
     var page =
-        this.transactionRepository.findByAccountIdOrderByDateTimeDescEnriched(
-            param.accountId(),
+        this.transactionRepository.findEnrichedByFiltersOrderByDateTime(
+            param.accountIds(),
+            param.organizationId(),
+            param.startDateTime(),
+            param.endDateTime(),
             PageRequest.of(param.pageable().pageNumber(), param.pageable().pageSize()));
     return new Page<TransactionEnriched>(
         page.getContent(),

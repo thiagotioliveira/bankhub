@@ -10,5 +10,5 @@ public interface TransactionPort {
 
   Transaction create(CreateTransactionEnrichedInput input);
 
-  Page<TransactionEnriched> findByAccountIdOrderByDateTimeDesc(GetTransactionPageable param);
+  Page<TransactionEnriched> findEnrichedByFiltersOrderByDateTime(GetTransactionPageable param);
 }

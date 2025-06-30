@@ -2,6 +2,8 @@ package dev.thiagooliveira.bankhub.infra.persistence.repository;
 
 import dev.thiagooliveira.bankhub.domain.dto.projection.TransactionEnriched;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.TransactionEntity;
+import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,7 @@ public interface TransactionRepository
           """
         SELECT
             t.id AS id,
+            t.account_id as accountId,
             t.date_time AS dateTime,
             t.description AS description,
             c.id AS categoryId,
@@ -27,7 +30,11 @@ public interface TransactionRepository
             t.amount AS amount
         FROM transactions t
         JOIN categories c ON t.category_id = c.id
-        WHERE t.account_id = :accountId
+        JOIN accounts a ON a.id = t.account_id
+        WHERE t.account_id IN :accountIds
+          AND a.organization_id = :organizationId
+          AND (t.date_time >= :startDateTime)
+          AND (t.date_time <= :endDateTime)
         ORDER BY t.date_time DESC
         """,
       countQuery =
@@ -35,9 +42,17 @@ public interface TransactionRepository
         SELECT COUNT(*)
         FROM transactions t
         JOIN categories c ON t.category_id = c.id
-        WHERE t.account_id = :accountId
+        JOIN accounts a ON a.id = t.account_id
+        WHERE t.account_id IN :accountIds
+          AND a.organization_id = :organizationId
+          AND (t.date_time >= :startDateTime)
+          AND (t.date_time <= :endDateTime)
         """,
       nativeQuery = true)
-  Page<TransactionEnriched> findByAccountIdOrderByDateTimeDescEnriched(
-      @Param("accountId") UUID accountId, Pageable pageable);
+  Page<TransactionEnriched> findEnrichedByFiltersOrderByDateTime(
+      @Param("accountIds") List<UUID> accountIds,
+      @Param("organizationId") UUID organizationId,
+      @Param("startDateTime") OffsetDateTime startDateTime,
+      @Param("endDateTime") OffsetDateTime endDateTime,
+      Pageable pageable);
 }

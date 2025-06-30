@@ -251,6 +251,67 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
+  /api/transactions:
+    get:
+      summary: List transactions with optional filters
+      operationId: getByFiltersOrderByDateTime
+      tags:
+        - Transactions
+      description: Returns a paginated list of transactions enriched with category data. Results can be filtered by account and time range.
+      parameters:
+        - name: accountIds
+          in: query
+          description: List of account UUIDs to filter by
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+
+        - name: start
+          in: query
+          description: Start of the date/time range filter (inclusive)
+          required: false
+          schema:
+            type: string
+            format: date-time
+
+        - name: end
+          in: query
+          description: End of the date/time range filter (inclusive)
+          required: false
+          schema:
+            type: string
+            format: date-time
+
+        - name: page
+          in: query
+          description: Page number (0-based index)
+          required: false
+          schema:
+            type: integer
+            default: 0
+
+        - name: size
+          in: query
+          description: Number of records per page
+          required: false
+          schema:
+            type: integer
+            default: 20
+
+      responses:
+        '200':
+          description: Paginated list of enriched transactions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTransactionsResponseBody'
+
   /api/transactions/deposit:
     post:
       summary: Create a deposit transaction
@@ -372,7 +433,7 @@ components:
           type: number
           format: decimal
         currency:
-          $ref: '#/components/schemas/Currency'
+          type: string
       required:
         - name
         - bankId
@@ -434,8 +495,10 @@ components:
         dateTime:
           type: string
           format: date-time
+          nullable: true
         description:
           type: string
+          nullable: true
         categoryId:
           type: string
           format: uuid
@@ -456,8 +519,10 @@ components:
         dateTime:
           type: string
           format: date-time
+          nullable: true
         description:
           type: string
+          nullable: true
         categoryId:
           type: string
           format: uuid
@@ -505,7 +570,69 @@ components:
       required:
         - name
         - symbol
-
+    GetTransactionsResponseBody:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              accountId:
+                type: string
+                format: uuid
+              dateTime:
+                type: string
+                format: date-time
+              description:
+                type: string
+              category:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                  type:
+                    type: string
+                required:
+                  - id
+                  - name
+                  - type
+              amount:
+                type: number
+                format: double
+            required:
+              - id
+              - dateTime
+              - description
+              - category
+              - amount
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+        first:
+          type: boolean
+        last:
+          type: boolean
+      required:
+        - content
+        - pageNumber
+        - pageSize
+        - totalElements
+        - totalPages
+        - first
+        - last
     Error:
       type: object
       properties:

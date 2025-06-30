@@ -1,11 +1,10 @@
 package dev.thiagooliveira.bankhub.infra.http.mapper;
 
 import dev.thiagooliveira.bankhub.domain.dto.CreateTransactionInput;
+import dev.thiagooliveira.bankhub.domain.dto.Page;
+import dev.thiagooliveira.bankhub.domain.dto.projection.TransactionEnriched;
 import dev.thiagooliveira.bankhub.domain.model.Transaction;
-import dev.thiagooliveira.bankhub.spec.http.dto.PostDepositRequestBody;
-import dev.thiagooliveira.bankhub.spec.http.dto.PostDepositResponseBody;
-import dev.thiagooliveira.bankhub.spec.http.dto.PostWithdrawalRequestBody;
-import dev.thiagooliveira.bankhub.spec.http.dto.PostWithdrawalResponseBody;
+import dev.thiagooliveira.bankhub.spec.http.dto.*;
 import java.util.UUID;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -37,4 +36,6 @@ public interface TransactionMapper {
       UUID organizationId, PostWithdrawalRequestBody postWithdrawalRequestBody);
 
   PostWithdrawalResponseBody mapToPostWithdrawalResponseBody(Transaction transaction);
+
+  GetTransactionsResponseBody map(Page<TransactionEnriched> transactions);
 }

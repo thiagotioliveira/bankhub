@@ -25,7 +25,8 @@ public class TransactionService {
     return this.createTransaction.create(input);
   }
 
-  public Page<TransactionEnriched> findByAccountId(GetTransactionPageable pageable) {
-    return this.getTransaction.findByAccountId(pageable);
+  public Page<TransactionEnriched> findEnrichedByFiltersOrderByDateTime(
+      GetTransactionPageable pageable) {
+    return this.getTransaction.findEnrichedByFiltersOrderByDateTime(pageable);
   }
 }

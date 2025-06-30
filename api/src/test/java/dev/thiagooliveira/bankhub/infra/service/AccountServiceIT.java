@@ -8,6 +8,8 @@ import dev.thiagooliveira.bankhub.domain.dto.GetTransactionPageable;
 import dev.thiagooliveira.bankhub.domain.dto.Pageable;
 import dev.thiagooliveira.bankhub.domain.model.Currency;
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,8 +66,13 @@ class AccountServiceIT extends IntegrationTest {
     assertEquals(BigDecimal.TEN, account.balance());
 
     var pageTransactions =
-        this.transactionService.findByAccountId(
-            new GetTransactionPageable(account.id(), Pageable.of(0, 10)));
+        this.transactionService.findEnrichedByFiltersOrderByDateTime(
+            new GetTransactionPageable(
+                List.of(account.id()),
+                this.organizationId,
+                OffsetDateTime.now().minusDays(1),
+                OffsetDateTime.now(),
+                Pageable.of(0, 10)));
     assertNotNull(pageTransactions);
     assertFalse(pageTransactions.content().isEmpty());
   }
