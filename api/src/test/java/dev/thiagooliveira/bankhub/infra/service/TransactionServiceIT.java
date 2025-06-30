@@ -47,7 +47,7 @@ class TransactionServiceIT extends IntegrationTest {
   @Test
   void create() {
     var transaction =
-        this.transactionService.create(
+        this.transactionService.createDeposit(
             createTransactionInput(
                 this.accountId,
                 this.organizationId,
@@ -65,7 +65,7 @@ class TransactionServiceIT extends IntegrationTest {
   @Test
   void getTransactionsByAccountId() {
     var transaction1 =
-        this.transactionService.create(
+        this.transactionService.createDeposit(
             createTransactionInput(
                 this.accountId,
                 this.organizationId,
@@ -73,7 +73,7 @@ class TransactionServiceIT extends IntegrationTest {
                 categoryId,
                 BigDecimal.TEN));
     var transaction2 =
-        this.transactionService.create(
+        this.transactionService.createDeposit(
             createTransactionInput(
                 this.accountId,
                 this.organizationId,
@@ -116,7 +116,7 @@ class TransactionServiceIT extends IntegrationTest {
     assertThrows(
         BusinessLogicException.class,
         () ->
-            this.transactionService.create(
+            this.transactionService.createDeposit(
                 createTransactionInput(
                     this.accountId,
                     this.organizationId,

@@ -6,6 +6,7 @@ import dev.thiagooliveira.bankhub.domain.dto.CreateTransactionInput;
 import dev.thiagooliveira.bankhub.domain.dto.GetTransactionPageable;
 import dev.thiagooliveira.bankhub.domain.dto.Page;
 import dev.thiagooliveira.bankhub.domain.dto.projection.TransactionEnriched;
+import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.domain.model.Transaction;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +15,38 @@ public class TransactionService {
 
   private final CreateTransaction createTransaction;
   private final GetTransaction getTransaction;
+  private final CategoryService categoryService;
 
-  public TransactionService(CreateTransaction createTransaction, GetTransaction getTransaction) {
+  public TransactionService(
+      CreateTransaction createTransaction,
+      GetTransaction getTransaction,
+      CategoryService categoryService) {
     this.createTransaction = createTransaction;
     this.getTransaction = getTransaction;
+    this.categoryService = categoryService;
   }
 
-  @Deprecated
-  public Transaction create(CreateTransactionInput input) {
+  public Transaction createDeposit(CreateTransactionInput input) {
+    categoryService
+        .findById(input.categoryId(), input.organizationId())
+        .ifPresent(
+            c -> {
+              if (!c.isCredit()) {
+                throw BusinessLogicException.badRequest("category needs to be credit");
+              }
+            });
+    return this.createTransaction.create(input);
+  }
+
+  public Transaction createWithdrawal(CreateTransactionInput input) {
+    categoryService
+        .findById(input.categoryId(), input.organizationId())
+        .ifPresent(
+            c -> {
+              if (!c.isDebit()) {
+                throw BusinessLogicException.badRequest("category needs to be debit");
+              }
+            });
     return this.createTransaction.create(input);
   }
 

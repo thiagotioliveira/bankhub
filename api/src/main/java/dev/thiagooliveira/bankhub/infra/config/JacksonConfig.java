@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class JacksonConfig {
 
-    @Bean
-    public com.fasterxml.jackson.databind.Module jsonNullableModule() {
-        return new JsonNullableModule();
-    }
+  @Bean
+  public com.fasterxml.jackson.databind.Module jsonNullableModule() {
+    return new JsonNullableModule();
+  }
 }
