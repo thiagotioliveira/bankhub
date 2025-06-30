@@ -1,12 +1,12 @@
 package dev.thiagooliveira.bankhub.infra.http;
 
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
-import dev.thiagooliveira.bankhub.spec.http.controllers.BanksApi;
-import dev.thiagooliveira.bankhub.spec.http.dto.GetBankResponseBody;
-import dev.thiagooliveira.bankhub.spec.http.dto.PostBankRequestBody;
 import dev.thiagooliveira.bankhub.infra.config.AppProps;
 import dev.thiagooliveira.bankhub.infra.http.mapper.BankMapper;
 import dev.thiagooliveira.bankhub.infra.service.BankService;
+import dev.thiagooliveira.bankhub.spec.http.controllers.BanksApi;
+import dev.thiagooliveira.bankhub.spec.http.dto.GetBankResponseBody;
+import dev.thiagooliveira.bankhub.spec.http.dto.PostBankRequestBody;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;

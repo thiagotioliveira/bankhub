@@ -31,6 +31,11 @@ public class TestUtil {
   public static CreateTransactionInput createTransactionInput(
       UUID accountId, UUID organizationId, OffsetDateTime dateTime, BigDecimal amount) {
     return new CreateTransactionInput(
-        accountId, organizationId, dateTime, UUID.randomUUID().toString(), amount);
+        accountId,
+        organizationId,
+        dateTime,
+        UUID.randomUUID().toString(),
+        Optional.empty(),
+        amount);
   }
 }

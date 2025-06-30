@@ -2,6 +2,7 @@ package dev.thiagooliveira.bankhub.domain.dto;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 public record CreateTransactionInput(
@@ -9,6 +10,7 @@ public record CreateTransactionInput(
     UUID organizationId,
     OffsetDateTime dateTime,
     String description,
+    Optional<UUID> categoryId,
     BigDecimal amount) {
 
   public CreateTransactionEnrichedInput enrichWith(UUID categoryId) {

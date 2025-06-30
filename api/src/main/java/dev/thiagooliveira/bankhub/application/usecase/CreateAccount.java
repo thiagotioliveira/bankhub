@@ -8,6 +8,7 @@ import dev.thiagooliveira.bankhub.domain.port.AccountPort;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Objects;
+import java.util.Optional;
 
 public class CreateAccount {
 
@@ -40,6 +41,7 @@ public class CreateAccount {
               account.organizationId(),
               OffsetDateTime.now(),
               "initial balance",
+              Optional.empty(),
               initialBalance));
     }
     return accountPort
