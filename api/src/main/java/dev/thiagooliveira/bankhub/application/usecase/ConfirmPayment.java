@@ -2,8 +2,8 @@ package dev.thiagooliveira.bankhub.application.usecase;
 
 import dev.thiagooliveira.bankhub.domain.dto.ConfirmPaymentInput;
 import dev.thiagooliveira.bankhub.domain.dto.CreateTransactionInput;
-import dev.thiagooliveira.bankhub.domain.dto.PayableReceivable;
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
+import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
 import dev.thiagooliveira.bankhub.domain.port.PayableReceivablePort;
 import java.time.OffsetDateTime;
 

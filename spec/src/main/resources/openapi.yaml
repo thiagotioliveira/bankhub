@@ -15,6 +15,8 @@ tags:
     description: Endpoints related to bank accounts
   - name: Transactions
     description: Endpoints related to account transactions
+  - name: Payable/Receivable
+    description: Endpoints related to payable/receivable
 
 paths:
   /api/organizations:
@@ -351,7 +353,84 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PostWithdrawalResponseBody'
+  /api/payable-receivable/payables:
+    post:
+      summary: Create a new payable
+      operationId: postPayable
+      tags:
+        - Payable/Receivable
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostPayableReceivableRequestBody'
+      responses:
+        '201':
+          description: Payable created successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostPayableReceivableResponseBody'
 
+  /api/payable-receivable/receivables:
+    post:
+      summary: Create a new receivable
+      operationId: postReceivable
+      tags:
+        - Payable/Receivable
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostPayableReceivableRequestBody'
+      responses:
+        '201':
+          description: Receivable created successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostPayableReceivableResponseBody'
+  /api/payable-receivable:
+    get:
+      summary: List all payables and receivables
+      operationId: getPayableReceivable
+      tags:
+        - Payable/Receivable
+      responses:
+        '200':
+          description: List of payables and receivables
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetPayableReceivableResponseBody'
+  /api/payable-receivable/{id}:
+    get:
+      summary: List all payables and receivables
+      operationId: getPayableReceivableById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      tags:
+        - Payable/Receivable
+      responses:
+        '200':
+          description: Get payables and receivables by ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPayableReceivableResponseBody'
 components:
   schemas:
     GetOrganizationsResponseBody:
@@ -633,6 +712,146 @@ components:
         - totalPages
         - first
         - last
+    Frequency:
+      type: string
+      enum:
+        - DAILY
+        - WEEKLY
+        - MONTHLY
+        - YEARLY
+
+    PostPayableReceivableRequestBody:
+      type: object
+      required:
+        - accountId
+        - categoryId
+        - description
+        - amount
+        - dueDate
+        - recurring
+      properties:
+        accountId:
+          type: string
+          format: uuid
+        categoryId:
+          type: string
+          format: uuid
+        description:
+          type: string
+        amount:
+          type: number
+          format: double
+        dueDate:
+          type: string
+          format: date
+        recurring:
+          type: boolean
+        frequency:
+          $ref: '#/components/schemas/Frequency'
+        installmentTotal:
+          type: integer
+          nullable: true
+
+    PostPayableReceivableResponseBody:
+      type: object
+      required:
+        - id
+        - accountId
+        - categoryId
+        - description
+        - amount
+        - dueDate
+        - type
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        accountId:
+          type: string
+          format: uuid
+        categoryId:
+          type: string
+          format: uuid
+        description:
+          type: string
+        amount:
+          type: number
+          format: double
+        dueDate:
+          type: string
+          format: date
+        type:
+          type: string
+          enum:
+            - PAYABLE
+            - RECEIVABLE
+        status:
+          type: string
+          enum:
+            - PENDING
+            - PAID
+            - OVERDUE
+        frequency:
+          $ref: '#/components/schemas/Frequency'
+        installmentNumber:
+          type: integer
+        installmentTotal:
+          type: integer
+        transactionId:
+          type: string
+          format: uuid
+    GetPayableReceivableResponseBody:
+      type: object
+      required:
+        - id
+        - accountId
+        - categoryId
+        - description
+        - amount
+        - dueDate
+        - type
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        accountId:
+          type: string
+          format: uuid
+        categoryId:
+          type: string
+          format: uuid
+        description:
+          type: string
+        amount:
+          type: number
+          format: double
+        dueDate:
+          type: string
+          format: date
+        type:
+          type: string
+          enum:
+            - PAYABLE
+            - RECEIVABLE
+        status:
+          type: string
+          enum:
+            - PENDING
+            - PAID
+            - OVERDUE
+        frequency:
+          $ref: '#/components/schemas/Frequency'
+        installmentNumber:
+          type: integer
+        installmentTotal:
+          type: integer
+        recurrenceDay:
+          type: integer
+        transactionId:
+          type: string
+          format: uuid
     Error:
       type: object
       properties:

@@ -2,9 +2,9 @@ package dev.thiagooliveira.bankhub.application.usecase;
 
 import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableEnrichedInput;
 import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableInput;
-import dev.thiagooliveira.bankhub.domain.dto.PayableReceivable;
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.domain.model.Frequency;
+import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
 import dev.thiagooliveira.bankhub.domain.port.PayableReceivablePort;
 import java.math.BigDecimal;
 import java.math.RoundingMode;

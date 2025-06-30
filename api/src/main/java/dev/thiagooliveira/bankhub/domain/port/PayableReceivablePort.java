@@ -1,6 +1,8 @@
 package dev.thiagooliveira.bankhub.domain.port;
 
 import dev.thiagooliveira.bankhub.domain.dto.*;
+import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -12,5 +14,7 @@ public interface PayableReceivablePort {
 
   PayableReceivable create(CreatePayableReceivableEnrichedInput input);
 
-  Page<PayableReceivable> findByAccountId(UUID accountId, Pageable pageable);
+  Optional<PayableReceivable> findByIdAndOrganizationId(UUID id, UUID organizationId);
+
+  List<PayableReceivable> findByOrganizationId(UUID organizationId);
 }

@@ -1,8 +1,8 @@
 package dev.thiagooliveira.bankhub.infra.persistence.entity;
 
 import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableEnrichedInput;
-import dev.thiagooliveira.bankhub.domain.dto.PayableReceivable;
 import dev.thiagooliveira.bankhub.domain.model.Frequency;
+import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivableStatus;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivableType;
 import jakarta.persistence.*;

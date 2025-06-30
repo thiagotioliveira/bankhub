@@ -1,9 +1,11 @@
 package dev.thiagooliveira.bankhub.infra.adapter;
 
 import dev.thiagooliveira.bankhub.domain.dto.*;
+import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
 import dev.thiagooliveira.bankhub.domain.port.PayableReceivablePort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.PayableReceivableEntity;
 import dev.thiagooliveira.bankhub.infra.persistence.repository.PayableReceivableRepository;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Component;
@@ -38,7 +40,18 @@ public class PayableReceivableAdapter implements PayableReceivablePort {
   }
 
   @Override
-  public Page<PayableReceivable> findByAccountId(UUID accountId, Pageable pageable) {
-    return null;
+  public Optional<PayableReceivable> findByIdAndOrganizationId(UUID id, UUID organizationId) {
+    return this.payableReceivableRepository
+        .findByIdAndOrganizationId(id, organizationId)
+        .map(PayableReceivableEntity::toDomain);
+  }
+
+  @Override
+  public List<PayableReceivable> findByOrganizationId(UUID organizationId) {
+    return this.payableReceivableRepository
+        .findByOrganizationIdOrderByDueDateAsc(organizationId)
+        .stream()
+        .map(PayableReceivableEntity::toDomain)
+        .toList();
   }
 }

@@ -21,4 +21,9 @@ public class PayableReceivableConfig {
       CreateTransaction createTransaction) {
     return new ConfirmPayment(payableReceivablePort, getAccount, createTransaction);
   }
+
+  @Bean
+  public GetPayableReceivable getPayableReceivable(PayableReceivablePort payableReceivablePort) {
+    return new GetPayableReceivable(payableReceivablePort);
+  }
 }

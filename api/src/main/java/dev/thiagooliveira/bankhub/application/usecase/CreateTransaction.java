@@ -7,7 +7,6 @@ import dev.thiagooliveira.bankhub.domain.model.Category;
 import dev.thiagooliveira.bankhub.domain.model.Transaction;
 import dev.thiagooliveira.bankhub.domain.port.AccountPort;
 import dev.thiagooliveira.bankhub.domain.port.TransactionPort;
-
 import java.math.BigDecimal;
 
 public class CreateTransaction {
@@ -64,10 +63,8 @@ public class CreateTransaction {
 
   private void updateAccount(Account account, Category category, BigDecimal amount) {
     accountPort.update(
-            account.id(),
-            category.isCredit()
-                    ? account.balance().add(amount)
-                    : account.balance().subtract(amount));
+        account.id(),
+        category.isCredit() ? account.balance().add(amount) : account.balance().subtract(amount));
   }
 
   private Account resolveAccount(CreateTransactionInput input) {
