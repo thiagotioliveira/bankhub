@@ -3,9 +3,9 @@ package dev.thiagooliveira.bankhub.infra.http.mapper;
 import dev.thiagooliveira.bankhub.domain.dto.CreateAccountInput;
 import dev.thiagooliveira.bankhub.domain.dto.projection.AccountEnriched;
 import dev.thiagooliveira.bankhub.domain.model.Account;
-import dev.thiagooliveira.bankhub.http.dto.GetAccountResponseBody;
-import dev.thiagooliveira.bankhub.http.dto.GetAccountsResponseBody;
-import dev.thiagooliveira.bankhub.http.dto.PostAccountRequestBody;
+import dev.thiagooliveira.bankhub.spec.http.dto.GetAccountResponseBody;
+import dev.thiagooliveira.bankhub.spec.http.dto.GetAccountsResponseBody;
+import dev.thiagooliveira.bankhub.spec.http.dto.PostAccountRequestBody;
 import java.util.UUID;
 import org.mapstruct.Mapper;
 

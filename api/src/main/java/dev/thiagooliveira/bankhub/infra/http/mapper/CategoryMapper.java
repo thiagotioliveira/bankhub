@@ -2,8 +2,8 @@ package dev.thiagooliveira.bankhub.infra.http.mapper;
 
 import dev.thiagooliveira.bankhub.domain.dto.CreateCategoryInput;
 import dev.thiagooliveira.bankhub.domain.model.Category;
-import dev.thiagooliveira.bankhub.http.dto.GetCategoryResponseBody;
-import dev.thiagooliveira.bankhub.http.dto.PostCategoryRequestBody;
+import dev.thiagooliveira.bankhub.spec.http.dto.GetCategoryResponseBody;
+import dev.thiagooliveira.bankhub.spec.http.dto.PostCategoryRequestBody;
 import java.util.Optional;
 import java.util.UUID;
 import org.mapstruct.Mapper;

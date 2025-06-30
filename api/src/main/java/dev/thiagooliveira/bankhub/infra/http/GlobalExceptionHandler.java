@@ -1,7 +1,7 @@
 package dev.thiagooliveira.bankhub.infra.http;
 
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
-import dev.thiagooliveira.bankhub.http.dto.Error;
+import dev.thiagooliveira.bankhub.spec.http.dto.Error;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

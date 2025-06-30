@@ -1,8 +1,8 @@
 package dev.thiagooliveira.bankhub.infra.http;
 
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
-import dev.thiagooliveira.bankhub.http.controllers.OrganizationsApi;
-import dev.thiagooliveira.bankhub.http.dto.GetOrganizationsResponseBody;
+import dev.thiagooliveira.bankhub.spec.http.controllers.OrganizationsApi;
+import dev.thiagooliveira.bankhub.spec.http.dto.GetOrganizationsResponseBody;
 import dev.thiagooliveira.bankhub.infra.config.AppProps;
 import dev.thiagooliveira.bankhub.infra.http.mapper.OrganizationMapper;
 import dev.thiagooliveira.bankhub.infra.service.OrganizationService;
