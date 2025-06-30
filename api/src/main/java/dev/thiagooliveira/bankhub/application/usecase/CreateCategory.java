@@ -15,8 +15,8 @@ public class CreateCategory {
 
   public Category create(CreateCategoryInput input) {
     if (input.organizationId().isPresent()
-        && this.categoryPort.existsByNameIgnoreCaseAndOrganizationId(
-            input.name(), input.organizationId().get())) {
+        && this.categoryPort.existsByNameIgnoreCaseAndOrganizationIdAndType(
+            input.name(), input.organizationId().get(), input.type())) {
       throw BusinessLogicException.badRequest("the name already exists");
     }
     return this.categoryPort.create(input);

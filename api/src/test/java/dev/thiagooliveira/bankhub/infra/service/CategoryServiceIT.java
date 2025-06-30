@@ -2,10 +2,10 @@ package dev.thiagooliveira.bankhub.infra.service;
 
 import static dev.thiagooliveira.bankhub.util.TestUtil.createCategoryInput;
 import static dev.thiagooliveira.bankhub.util.TestUtil.createOrganizationInput;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 import dev.thiagooliveira.bankhub.IntegrationTest;
+import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.domain.model.Category;
 import dev.thiagooliveira.bankhub.domain.model.CategoryType;
 import java.util.Optional;
@@ -36,5 +36,25 @@ class CategoryServiceIT extends IntegrationTest {
     assertNotNull(category.name());
     assertEquals(this.organizationId, category.organizationId().get());
     assertEquals(CategoryType.CREDIT, category.type());
+  }
+
+  @Test
+  void createWithSameName() {
+    this.categoryService.create(
+        createCategoryInput(Optional.of(this.organizationId), CategoryType.CREDIT));
+    assertThrows(
+        BusinessLogicException.class,
+        () ->
+            this.categoryService.create(
+                createCategoryInput(Optional.of(this.organizationId), CategoryType.CREDIT)));
+  }
+
+  @Test
+  void createWithSameNameTypeDifferent() {
+    this.categoryService.create(
+        createCategoryInput(Optional.of(this.organizationId), CategoryType.CREDIT));
+    assertNotNull(
+        this.categoryService.create(
+            createCategoryInput(Optional.of(this.organizationId), CategoryType.DEBIT)));
   }
 }

@@ -48,7 +48,9 @@ public class CategoryAdapter implements CategoryPort {
   }
 
   @Override
-  public boolean existsByNameIgnoreCaseAndOrganizationId(String name, UUID organizationId) {
-    return this.categoryRepository.existsByNameIgnoreCaseAndOrganizationId(name, organizationId);
+  public boolean existsByNameIgnoreCaseAndOrganizationIdAndType(
+      String name, UUID organizationId, CategoryType type) {
+    return this.categoryRepository.existsByNameIgnoreCaseAndOrganizationIdAndType(
+        name, organizationId, type);
   }
 }

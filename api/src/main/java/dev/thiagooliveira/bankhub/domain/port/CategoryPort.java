@@ -17,5 +17,6 @@ public interface CategoryPort {
 
   List<Category> findByOrganizationIdOrOrganizationIdIsNull(UUID organizationId);
 
-  boolean existsByNameIgnoreCaseAndOrganizationId(String name, UUID organizationId);
+  boolean existsByNameIgnoreCaseAndOrganizationIdAndType(
+      String name, UUID organizationId, CategoryType type);
 }
