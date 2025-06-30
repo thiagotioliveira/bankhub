@@ -382,8 +382,15 @@ components:
         - currency
 
     Currency:
-      type: string
-      example: EUR
+      type: object
+      properties:
+        name:
+          type: string
+        symbol:
+          type: string
+      required:
+        - name
+        - symbol
 
     Error:
       type: object

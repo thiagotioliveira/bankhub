@@ -9,7 +9,7 @@ import dev.thiagooliveira.bankhub.http.dto.PostAccountRequestBody;
 import java.util.UUID;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(uses = {CurrencyMapper.class})
 public interface AccountMapper {
 
   GetAccountsResponseBody map(Account account);

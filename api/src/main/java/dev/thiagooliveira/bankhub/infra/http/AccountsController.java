@@ -46,7 +46,7 @@ public class AccountsController implements AccountsApi {
         this.accountService
             .findByIdAndOrganizationIdEnriched(id, this.appProps.getOrganizationId())
             .map(this.accountMapper::map)
-            .orElseThrow(() -> BusinessLogicException.notFound("bank not found")));
+            .orElseThrow(() -> BusinessLogicException.notFound("account not found")));
   }
 
   @Override
