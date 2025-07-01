@@ -69,4 +69,11 @@ public interface PayableReceivableMapper {
   default Optional<String> mapString(JsonNullable<String> value) {
     return value.isPresent() ? Optional.of(value.get()) : Optional.empty();
   }
+
+  default Optional<Frequency> mapFrequency(
+      JsonNullable<PostPayableReceivableRequestBody.FrequencyEnum> value) {
+    return value.isPresent()
+        ? Optional.of(Frequency.valueOf(value.get().name()))
+        : Optional.empty();
+  }
 }

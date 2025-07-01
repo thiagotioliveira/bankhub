@@ -754,7 +754,7 @@ components:
         - categoryId
         - description
         - amount
-        - dueDate
+        - startDate
         - recurring
       properties:
         accountId:
@@ -774,7 +774,9 @@ components:
         recurring:
           type: boolean
         frequency:
-          $ref: '#/components/schemas/Frequency'
+          type: string
+          enum: [ MONTHLY ]
+          nullable: true
         installmentTotal:
           type: integer
           nullable: true
