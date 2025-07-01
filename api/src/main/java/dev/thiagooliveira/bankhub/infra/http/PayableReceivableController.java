@@ -52,18 +52,6 @@ public class PayableReceivableController implements PayableReceivableApi {
   }
 
   @Override
-  public ResponseEntity<PostPayableReceivablePaidResponseBody> payById(
-      UUID id, PostPayableReceivablePaidRequestBody postPayableReceivablePaidRequestBody) {
-    var paid =
-        this.payableReceivableService.pay(
-            this.payableReceivableMapper.map(
-                id, this.appProps.getOrganizationId(), postPayableReceivablePaidRequestBody));
-    return ResponseEntity.created(
-            URI.create(String.format("/api/payable-receivable/%s", paid.id())))
-        .body(this.payableReceivableMapper.mapToPostPayableReceivablePaidResponseBody(paid));
-  }
-
-  @Override
   public ResponseEntity<PostPayableReceivableResponseBody> postPayable(
       PostPayableReceivableRequestBody postPayableReceivableRequestBody) {
     var created =

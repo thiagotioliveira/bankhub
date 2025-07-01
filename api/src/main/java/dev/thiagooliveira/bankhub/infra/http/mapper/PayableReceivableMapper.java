@@ -1,6 +1,5 @@
 package dev.thiagooliveira.bankhub.infra.http.mapper;
 
-import dev.thiagooliveira.bankhub.domain.dto.ConfirmPaymentInput;
 import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableInput;
 import dev.thiagooliveira.bankhub.domain.model.Frequency;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
@@ -15,12 +14,6 @@ import org.openapitools.jackson.nullable.JsonNullable;
 
 @Mapper
 public interface PayableReceivableMapper {
-
-  PostPayableReceivablePaidResponseBody mapToPostPayableReceivablePaidResponseBody(
-      PayableReceivable payableReceivable);
-
-  ConfirmPaymentInput map(
-      UUID payableReceivableId, UUID organizationId, PostPayableReceivablePaidRequestBody body);
 
   CreatePayableReceivableInput map(
       PayableReceivableType type,

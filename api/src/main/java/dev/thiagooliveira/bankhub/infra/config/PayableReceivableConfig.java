@@ -20,12 +20,12 @@ public class PayableReceivableConfig {
   }
 
   @Bean
-  public ConfirmPayment confirmPayment(
+  public CreatePayment confirmPayment(
       PayableReceivablePort payableReceivablePort,
       GetAccount getAccount,
       CreateTransaction createTransaction,
       PaymentPort paymentPort) {
-    return new ConfirmPayment(payableReceivablePort, getAccount, createTransaction, paymentPort);
+    return new CreatePayment(payableReceivablePort, getAccount, createTransaction, paymentPort);
   }
 
   @Bean

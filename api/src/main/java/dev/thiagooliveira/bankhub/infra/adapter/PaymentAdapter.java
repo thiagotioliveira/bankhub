@@ -1,6 +1,6 @@
 package dev.thiagooliveira.bankhub.infra.adapter;
 
-import dev.thiagooliveira.bankhub.domain.dto.CreatePaymentInput;
+import dev.thiagooliveira.bankhub.domain.dto.CreatePaymentWithTransactionInput;
 import dev.thiagooliveira.bankhub.domain.model.Payment;
 import dev.thiagooliveira.bankhub.domain.port.PaymentPort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.PaymentEntity;
@@ -18,7 +18,7 @@ public class PaymentAdapter implements PaymentPort {
   }
 
   @Override
-  public Payment create(CreatePaymentInput input) {
+  public Payment create(CreatePaymentWithTransactionInput input) {
     return this.paymentRepository.save(PaymentEntity.from(input)).toDomain();
   }
 

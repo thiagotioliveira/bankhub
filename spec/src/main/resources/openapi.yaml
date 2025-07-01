@@ -17,6 +17,8 @@ tags:
     description: Endpoints related to account transactions
   - name: Payable/Receivable
     description: Endpoints related to payable/receivable
+  - name: Payments
+    description: Endpoints related to payments
 
 paths:
   /api/organizations:
@@ -440,32 +442,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetPayableReceivableResponseBody'
-  /api/payable-receivable/{id}/pay:
+  /api/payments:
     post:
       summary: Pay a payable/receivable
-      operationId: payById
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
+      operationId: pay
       tags:
-        - Payable/Receivable
+        - Payments
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostPayableReceivablePaidRequestBody'
+              $ref: '#/components/schemas/PostPaymentRequestBody'
       responses:
         '201':
           description: paid with success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PostPayableReceivablePaidResponseBody'
+                $ref: '#/components/schemas/PostPaymentResponseBody'
 components:
   schemas:
     GetOrganizationsResponseBody:
@@ -881,9 +876,12 @@ components:
         paymentId:
           type: string
           format: uuid
-    PostPayableReceivablePaidRequestBody:
+    PostPaymentRequestBody:
       type: object
       properties:
+        payableReceivableId:
+          type: string
+          format: uuid
         amount:
           type: number
           format: double
@@ -895,15 +893,10 @@ components:
         description:
           type: string
           nullable: true
-    PostPayableReceivablePaidResponseBody:
+    PostPaymentResponseBody:
       type: object
       properties:
-        status:
-          type: string
-          enum:
-            - PENDING
-            - PAID
-        paymentId:
+        id:
           type: string
           format: uuid
     Error:

@@ -1,9 +1,7 @@
 package dev.thiagooliveira.bankhub.infra.service;
 
-import dev.thiagooliveira.bankhub.application.usecase.ConfirmPayment;
 import dev.thiagooliveira.bankhub.application.usecase.CreatePayableReceivable;
 import dev.thiagooliveira.bankhub.application.usecase.GetPayableReceivable;
-import dev.thiagooliveira.bankhub.domain.dto.ConfirmPaymentInput;
 import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableInput;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
 import java.time.LocalDate;
@@ -17,26 +15,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class PayableReceivableService {
 
   private final CreatePayableReceivable createPayableReceivable;
-  private final ConfirmPayment confirmPayment;
   private final GetPayableReceivable getPayableReceivable;
 
   public PayableReceivableService(
-      CreatePayableReceivable createPayableReceivable,
-      ConfirmPayment confirmPayment,
-      GetPayableReceivable getPayableReceivable) {
+      CreatePayableReceivable createPayableReceivable, GetPayableReceivable getPayableReceivable) {
     this.createPayableReceivable = createPayableReceivable;
-    this.confirmPayment = confirmPayment;
     this.getPayableReceivable = getPayableReceivable;
   }
 
   @Transactional
   public PayableReceivable create(CreatePayableReceivableInput input) {
     return this.createPayableReceivable.create(input);
-  }
-
-  @Transactional
-  public PayableReceivable pay(ConfirmPaymentInput input) {
-    return this.confirmPayment.pay(input);
   }
 
   @Transactional

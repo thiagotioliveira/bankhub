@@ -1,22 +1,22 @@
 package dev.thiagooliveira.bankhub.application.usecase;
 
-import dev.thiagooliveira.bankhub.domain.dto.ConfirmPaymentInput;
 import dev.thiagooliveira.bankhub.domain.dto.CreatePaymentInput;
+import dev.thiagooliveira.bankhub.domain.dto.CreatePaymentWithTransactionInput;
 import dev.thiagooliveira.bankhub.domain.dto.CreateTransactionInput;
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
-import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
+import dev.thiagooliveira.bankhub.domain.model.Payment;
 import dev.thiagooliveira.bankhub.domain.port.PayableReceivablePort;
 import dev.thiagooliveira.bankhub.domain.port.PaymentPort;
 import java.time.OffsetDateTime;
 
-public class ConfirmPayment {
+public class CreatePayment {
 
-  private final PayableReceivablePort payableReceivablePort;
+  private final PayableReceivablePort payableReceivablePort; // TODO update to use usecase
   private final GetAccount getAccount;
   private final CreateTransaction createTransaction;
   private final PaymentPort paymentPort;
 
-  public ConfirmPayment(
+  public CreatePayment(
       PayableReceivablePort payableReceivablePort,
       GetAccount getAccount,
       CreateTransaction createTransaction,
@@ -27,7 +27,7 @@ public class ConfirmPayment {
     this.paymentPort = paymentPort;
   }
 
-  public PayableReceivable pay(ConfirmPaymentInput input) {
+  public Payment create(CreatePaymentInput input) {
     var target =
         this.payableReceivablePort
             .findByIdAndOrganizationId(input.payableReceivableId(), input.organizationId())
@@ -50,7 +50,9 @@ public class ConfirmPayment {
                 input.amount().orElse(target.amount())));
     var payment =
         this.paymentPort.create(
-            new CreatePaymentInput(target.id(), transaction.id(), transaction.dateTime()));
-    return this.payableReceivablePort.update(target.markAsPaid(payment.id()));
+            new CreatePaymentWithTransactionInput(
+                target.id(), transaction.id(), transaction.dateTime()));
+    this.payableReceivablePort.update(target.markAsPaid(payment.id()));
+    return payment;
   }
 }

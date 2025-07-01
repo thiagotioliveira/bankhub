@@ -1,6 +1,6 @@
 package dev.thiagooliveira.bankhub.infra.persistence.entity;
 
-import dev.thiagooliveira.bankhub.domain.dto.CreatePaymentInput;
+import dev.thiagooliveira.bankhub.domain.dto.CreatePaymentWithTransactionInput;
 import dev.thiagooliveira.bankhub.domain.model.Payment;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,7 +34,7 @@ public class PaymentEntity {
     this.transactionId = transactionId;
   }
 
-  public static PaymentEntity from(CreatePaymentInput input) {
+  public static PaymentEntity from(CreatePaymentWithTransactionInput input) {
     PaymentEntity paymentEntity = new PaymentEntity();
     paymentEntity.id = UUID.randomUUID();
     paymentEntity.payableReceivableId = input.payableReceivableId();
