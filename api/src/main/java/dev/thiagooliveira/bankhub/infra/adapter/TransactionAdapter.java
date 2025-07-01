@@ -39,8 +39,6 @@ public class TransactionAdapter implements TransactionPort {
         this.transactionRepository.findEnrichedByFiltersOrderByDateTime(
             param.accountIds(),
             param.organizationId(),
-            param.startDateTime(),
-            param.endDateTime(),
             PageRequest.of(param.pageable().pageNumber(), param.pageable().pageSize()));
     return new Page<TransactionEnriched>(
         page.getContent(),

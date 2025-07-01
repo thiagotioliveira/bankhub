@@ -2,7 +2,6 @@ package dev.thiagooliveira.bankhub.infra.persistence.repository;
 
 import dev.thiagooliveira.bankhub.domain.dto.projection.TransactionEnriched;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.TransactionEntity;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -33,8 +32,6 @@ public interface TransactionRepository
         JOIN accounts a ON a.id = t.account_id
         WHERE t.account_id IN :accountIds
           AND a.organization_id = :organizationId
-          AND (t.date_time >= :startDateTime)
-          AND (t.date_time <= :endDateTime)
         ORDER BY t.date_time DESC
         """,
       countQuery =
@@ -45,14 +42,10 @@ public interface TransactionRepository
         JOIN accounts a ON a.id = t.account_id
         WHERE t.account_id IN :accountIds
           AND a.organization_id = :organizationId
-          AND (t.date_time >= :startDateTime)
-          AND (t.date_time <= :endDateTime)
         """,
       nativeQuery = true)
   Page<TransactionEnriched> findEnrichedByFiltersOrderByDateTime(
       @Param("accountIds") List<UUID> accountIds,
       @Param("organizationId") UUID organizationId,
-      @Param("startDateTime") OffsetDateTime startDateTime,
-      @Param("endDateTime") OffsetDateTime endDateTime,
       Pageable pageable);
 }

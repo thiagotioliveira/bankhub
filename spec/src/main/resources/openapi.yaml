@@ -276,22 +276,6 @@ paths:
               type: string
               format: uuid
 
-        - name: start
-          in: query
-          description: Start of the date/time range filter (inclusive)
-          required: false
-          schema:
-            type: string
-            format: date-time
-
-        - name: end
-          in: query
-          description: End of the date/time range filter (inclusive)
-          required: false
-          schema:
-            type: string
-            format: date-time
-
         - name: page
           in: query
           description: Page number (0-based index)

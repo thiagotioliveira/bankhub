@@ -8,7 +8,6 @@ import dev.thiagooliveira.bankhub.infra.service.TransactionService;
 import dev.thiagooliveira.bankhub.spec.http.controllers.TransactionsApi;
 import dev.thiagooliveira.bankhub.spec.http.dto.*;
 import java.net.URI;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
@@ -55,16 +54,14 @@ public class TransactionsController implements TransactionsApi {
 
   @Override
   public ResponseEntity<GetTransactionsResponseBody> getByFiltersOrderByDateTime(
-      List<UUID> accountIds, OffsetDateTime start, OffsetDateTime end, Integer page, Integer size) {
+      List<UUID> accountIds, Integer page, Integer size) {
     return ResponseEntity.ok(
         this.transactionMapper.map(
             this.transactionService.findEnrichedByFiltersOrderByDateTime(
                 new GetTransactionPageable(
                     accountIds != null ? accountIds : List.of(),
                     this.appProps.getOrganizationId(),
-                    start != null ? start : OffsetDateTime.now().minusDays(1),
-                    end != null ? end : OffsetDateTime.now(),
                     page != null ? page : 0,
-                    size != null ? size : 10))));
+                    size != null ? size : 20))));
   }
 }

@@ -8,7 +8,6 @@ import dev.thiagooliveira.bankhub.domain.dto.GetTransactionPageable;
 import dev.thiagooliveira.bankhub.domain.dto.Pageable;
 import dev.thiagooliveira.bankhub.domain.model.Currency;
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,11 +67,7 @@ class AccountServiceIT extends IntegrationTest {
     var pageTransactions =
         this.transactionService.findEnrichedByFiltersOrderByDateTime(
             new GetTransactionPageable(
-                List.of(account.id()),
-                this.organizationId,
-                OffsetDateTime.now().minusDays(1),
-                OffsetDateTime.now(),
-                Pageable.of(0, 10)));
+                List.of(account.id()), this.organizationId, Pageable.of(0, 10)));
     assertNotNull(pageTransactions);
     assertFalse(pageTransactions.content().isEmpty());
   }
