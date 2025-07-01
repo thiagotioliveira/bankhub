@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public record PayableReceivable(
     UUID id,
+    UUID templateId,
     UUID accountId,
     UUID categoryId,
     String description,
@@ -18,14 +19,15 @@ public record PayableReceivable(
     Optional<Frequency> frequency,
     Optional<Integer> installmentNumber,
     Optional<Integer> installmentTotal,
-    Optional<UUID> transactionId) {
+    Optional<UUID> paymentId) {
 
-  public PayableReceivable markAsPaid(UUID transactionId) {
+  public PayableReceivable markAsPaid(UUID paymentId) {
     if (this.status == PayableReceivableStatus.PAID) {
       throw BusinessLogicException.badRequest("payable/receivable already paid");
     }
     return new PayableReceivable(
         this.id,
+        this.templateId,
         this.accountId,
         this.categoryId,
         this.description,
@@ -36,6 +38,6 @@ public record PayableReceivable(
         this.frequency,
         this.installmentNumber,
         this.installmentTotal,
-        Optional.of(transactionId));
+        Optional.of(paymentId));
   }
 }

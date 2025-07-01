@@ -5,29 +5,46 @@ import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableInput;
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.domain.model.Frequency;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
+import dev.thiagooliveira.bankhub.domain.model.PayableReceivableTemplate;
 import dev.thiagooliveira.bankhub.domain.port.PayableReceivablePort;
+import dev.thiagooliveira.bankhub.domain.port.PayableReceivableTemplatePort;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 public class CreatePayableReceivable {
 
   private final PayableReceivablePort payableReceivablePort;
+  private final PayableReceivableTemplatePort payableReceivableTemplatePort;
   private final GetCategory getCategory;
   private final GetAccount getAccount;
 
   public CreatePayableReceivable(
-      PayableReceivablePort payableReceivablePort, GetCategory getCategory, GetAccount getAccount) {
+      PayableReceivablePort payableReceivablePort,
+      PayableReceivableTemplatePort payableReceivableTemplatePort,
+      GetCategory getCategory,
+      GetAccount getAccount) {
     this.payableReceivablePort = payableReceivablePort;
+    this.payableReceivableTemplatePort = payableReceivableTemplatePort;
     this.getCategory = getCategory;
     this.getAccount = getAccount;
   }
 
-  public List<PayableReceivable> create(CreatePayableReceivableInput input) {
+  public PayableReceivable createWithTemplate(
+      PayableReceivableTemplate template, UUID organizationId, LocalDate dueDate) {
+    var category =
+        this.getCategory
+            .findById(template.categoryId(), organizationId)
+            .orElseThrow(() -> BusinessLogicException.notFound("category not found"));
+    return this.payableReceivablePort.create(
+        new CreatePayableReceivableEnrichedInput(template, category, dueDate));
+  }
+
+  public PayableReceivable create(CreatePayableReceivableInput input) {
     var category =
         this.getCategory
             .findById(input.categoryId(), input.organizationId())
@@ -35,8 +52,10 @@ public class CreatePayableReceivable {
     this.getAccount
         .findByIdAndOrganizationId(input.accountId(), input.organizationId())
         .orElseThrow(() -> BusinessLogicException.notFound("account not found"));
-    var items = splitIntoMultiple(input.enrichWith(category));
-    return items.stream().map(this.payableReceivablePort::create).collect(Collectors.toList());
+
+    var template = this.payableReceivableTemplatePort.create(input.toTemplateInput());
+    var items = splitIntoMultiple(input.enrichWith(template, category));
+    return items.stream().map(this.payableReceivablePort::create).toList().get(0);
   }
 
   private static List<CreatePayableReceivableEnrichedInput> splitIntoMultiple(
@@ -70,10 +89,10 @@ public class CreatePayableReceivable {
 
       dueDate =
           switch (frequency) {
-            case DAILY -> dueDate.plusDays(1);
-            case WEEKLY -> dueDate.plusWeeks(1);
+            // case DAILY -> dueDate.plusDays(1);
+            // case WEEKLY -> dueDate.plusWeeks(1);
             case MONTHLY -> dueDate.plusMonths(1);
-            case YEARLY -> dueDate.plusYears(1);
+              // case YEARLY -> dueDate.plusYears(1);
           };
     }
 
@@ -88,6 +107,7 @@ public class CreatePayableReceivable {
     return new CreatePayableReceivableEnrichedInput(
         input.type(),
         input.accountId(),
+        input.template(),
         input.category(),
         input.description()
             + (input.frequency().isPresent() && input.installmentTotal().isPresent()

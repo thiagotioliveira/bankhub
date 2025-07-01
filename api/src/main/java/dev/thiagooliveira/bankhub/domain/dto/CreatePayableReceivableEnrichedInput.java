@@ -10,6 +10,7 @@ import java.util.UUID;
 public record CreatePayableReceivableEnrichedInput(
     PayableReceivableType type,
     UUID accountId,
+    PayableReceivableTemplate template,
     Category category,
     String description,
     BigDecimal amount,
@@ -18,6 +19,23 @@ public record CreatePayableReceivableEnrichedInput(
     Optional<Frequency> frequency,
     Optional<Integer> installmentNumber,
     Optional<Integer> installmentTotal) {
+
+  public CreatePayableReceivableEnrichedInput(
+      PayableReceivableTemplate template, Category category, LocalDate dueDate) {
+    this(
+        template.type(),
+        template.accountId(),
+        template,
+        category,
+        template.description(),
+        template.amount(),
+        dueDate,
+        template.recurring(),
+        template.frequency(),
+        Optional.empty(),
+        template.installmentTotal());
+  }
+
   public CreatePayableReceivableEnrichedInput {
     if (PayableReceivableType.PAYABLE.equals(type) && !CategoryType.DEBIT.equals(category.type()))
       throw new BusinessLogicException("category type needs to be DEBIT");

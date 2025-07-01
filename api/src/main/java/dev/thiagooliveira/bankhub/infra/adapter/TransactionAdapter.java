@@ -8,6 +8,8 @@ import dev.thiagooliveira.bankhub.domain.model.Transaction;
 import dev.thiagooliveira.bankhub.domain.port.TransactionPort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.TransactionEntity;
 import dev.thiagooliveira.bankhub.infra.persistence.repository.TransactionRepository;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,11 @@ public class TransactionAdapter implements TransactionPort {
 
   public TransactionAdapter(TransactionRepository transactionRepository) {
     this.transactionRepository = transactionRepository;
+  }
+
+  @Override
+  public Optional<Transaction> findById(UUID id) {
+    return this.transactionRepository.findById(id).map(TransactionEntity::toDomain);
   }
 
   @Override

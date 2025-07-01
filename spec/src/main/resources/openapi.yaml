@@ -371,9 +371,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PostPayableReceivableResponseBody'
+                $ref: '#/components/schemas/PostPayableReceivableResponseBody'
 
   /api/payable-receivable/receivables:
     post:
@@ -393,13 +391,24 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PostPayableReceivableResponseBody'
-  /api/payable-receivable:
+                $ref: '#/components/schemas/PostPayableReceivableResponseBody'
+  /api/payable-receivable/{start}/{end}:
     get:
       summary: List all payables and receivables
       operationId: getPayableReceivable
+      parameters:
+        - name: start
+          in: path
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: end
+          in: path
+          required: true
+          schema:
+            type: string
+            format: date
       tags:
         - Payable/Receivable
       responses:
@@ -741,10 +750,7 @@ components:
     Frequency:
       type: string
       enum:
-        - DAILY
-        - WEEKLY
         - MONTHLY
-        - YEARLY
 
     PostPayableReceivableRequestBody:
       type: object
@@ -824,7 +830,7 @@ components:
           type: integer
         installmentTotal:
           type: integer
-        transactionId:
+        paymentId:
           type: string
           format: uuid
     GetPayableReceivableResponseBody:
@@ -872,9 +878,7 @@ components:
           type: integer
         installmentTotal:
           type: integer
-        recurrenceDay:
-          type: integer
-        transactionId:
+        paymentId:
           type: string
           format: uuid
     PostPayableReceivablePaidRequestBody:
@@ -899,7 +903,7 @@ components:
           enum:
             - PENDING
             - PAID
-        transactionId:
+        paymentId:
           type: string
           format: uuid
     Error:

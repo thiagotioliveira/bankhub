@@ -46,7 +46,7 @@ class PayableReceivableServiceIT extends IntegrationTest {
 
   @Test
   void pay() {
-    var payables =
+    var payable =
         this.payableReceivableService.create(
             new CreatePayableReceivableInput(
                 PayableReceivableType.PAYABLE,
@@ -60,14 +60,12 @@ class PayableReceivableServiceIT extends IntegrationTest {
                 Optional.empty(),
                 Optional.empty()));
 
-    assertNotNull(payables);
-    assertEquals(1, payables.size());
+    assertNotNull(payable);
 
     var payablePaid =
         this.payableReceivableService.pay(
             new ConfirmPaymentInput(
-                payables.get(0).id(),
-                this.accountId,
+                payable.id(),
                 this.organizationId,
                 Optional.empty(),
                 Optional.empty(),
@@ -75,13 +73,13 @@ class PayableReceivableServiceIT extends IntegrationTest {
 
     assertNotNull(payablePaid);
     assertEquals(PayableReceivableStatus.PAID, payablePaid.status());
-    assertTrue(payablePaid.transactionId().isPresent());
+    assertTrue(payablePaid.paymentId().isPresent());
   }
 
   @Test
   void createPayableRecurringByMonth() {
     LocalDate dueDate = LocalDate.now().plusDays(5);
-    var payables =
+    var receivable =
         this.payableReceivableService.create(
             new CreatePayableReceivableInput(
                 PayableReceivableType.PAYABLE,
@@ -95,29 +93,25 @@ class PayableReceivableServiceIT extends IntegrationTest {
                 Optional.of(Frequency.MONTHLY),
                 Optional.empty()));
 
-    assertNotNull(payables);
-    assertEquals(1, payables.size());
+    assertNotNull(receivable);
 
-    payables.forEach(
-        receivable -> {
-          assertNotNull(receivable);
-          assertNotNull(receivable.id());
-          assertEquals(this.debitCategoryId, receivable.categoryId());
-          assertEquals(this.accountId, receivable.accountId());
-          assertNotNull(receivable.description());
-          assertEquals(new BigDecimal("100"), receivable.amount());
-          assertEquals(dueDate, receivable.dueDate());
-          assertEquals(PayableReceivableStatus.PENDING, receivable.status());
-          assertFalse(receivable.installmentNumber().isPresent());
-          assertFalse(receivable.installmentTotal().isPresent());
-          assertFalse(receivable.transactionId().isPresent());
-        });
+    assertNotNull(receivable);
+    assertNotNull(receivable.id());
+    assertEquals(this.debitCategoryId, receivable.categoryId());
+    assertEquals(this.accountId, receivable.accountId());
+    assertNotNull(receivable.description());
+    assertEquals(new BigDecimal("100"), receivable.amount());
+    assertEquals(dueDate, receivable.dueDate());
+    assertEquals(PayableReceivableStatus.PENDING, receivable.status());
+    assertFalse(receivable.installmentNumber().isPresent());
+    assertFalse(receivable.installmentTotal().isPresent());
+    assertFalse(receivable.paymentId().isPresent());
   }
 
   @Test
   void createPayableInstallments() {
     LocalDate dueDate = LocalDate.now().plusDays(5);
-    var receivables =
+    var receivable =
         this.payableReceivableService.create(
             new CreatePayableReceivableInput(
                 PayableReceivableType.PAYABLE,
@@ -131,29 +125,26 @@ class PayableReceivableServiceIT extends IntegrationTest {
                 Optional.of(Frequency.MONTHLY),
                 Optional.of(10)));
 
-    assertNotNull(receivables);
-    assertEquals(10, receivables.size());
+    assertNotNull(receivable);
 
-    for (var receivable : receivables) {
-      assertNotNull(receivable);
-      assertNotNull(receivable.id());
-      assertEquals(this.debitCategoryId, receivable.categoryId());
-      assertEquals(this.accountId, receivable.accountId());
-      assertNotNull(receivable.description());
-      assertEquals(new BigDecimal("10.00"), receivable.amount());
-      assertEquals(dueDate, receivable.dueDate());
-      assertEquals(PayableReceivableStatus.PENDING, receivable.status());
-      assertTrue(receivable.installmentNumber().isPresent());
-      assertEquals(10, receivable.installmentTotal().get());
-      assertFalse(receivable.transactionId().isPresent());
-      dueDate = dueDate.plusMonths(1);
-    }
+    assertNotNull(receivable);
+    assertNotNull(receivable.id());
+    assertEquals(this.debitCategoryId, receivable.categoryId());
+    assertEquals(this.accountId, receivable.accountId());
+    assertNotNull(receivable.description());
+    assertEquals(new BigDecimal("10.00"), receivable.amount());
+    assertEquals(dueDate, receivable.dueDate());
+    assertEquals(PayableReceivableStatus.PENDING, receivable.status());
+    assertTrue(receivable.installmentNumber().isPresent());
+    assertEquals(10, receivable.installmentTotal().get());
+    assertFalse(receivable.paymentId().isPresent());
+    dueDate = dueDate.plusMonths(1);
   }
 
   @Test
   void createReceivableRecurringByMonth() {
     LocalDate dueDate = LocalDate.now().plusDays(5);
-    var receivables =
+    var receivable =
         this.payableReceivableService.create(
             new CreatePayableReceivableInput(
                 PayableReceivableType.RECEIVABLE,
@@ -167,29 +158,25 @@ class PayableReceivableServiceIT extends IntegrationTest {
                 Optional.of(Frequency.MONTHLY),
                 Optional.empty()));
 
-    assertNotNull(receivables);
-    assertEquals(1, receivables.size());
+    assertNotNull(receivable);
 
-    receivables.forEach(
-        receivable -> {
-          assertNotNull(receivable);
-          assertNotNull(receivable.id());
-          assertEquals(this.creditCategoryId, receivable.categoryId());
-          assertEquals(this.accountId, receivable.accountId());
-          assertNotNull(receivable.description());
-          assertEquals(new BigDecimal("1000"), receivable.amount());
-          assertEquals(dueDate, receivable.dueDate());
-          assertEquals(PayableReceivableStatus.PENDING, receivable.status());
-          assertFalse(receivable.installmentNumber().isPresent());
-          assertFalse(receivable.installmentTotal().isPresent());
-          assertFalse(receivable.transactionId().isPresent());
-        });
+    assertNotNull(receivable);
+    assertNotNull(receivable.id());
+    assertEquals(this.creditCategoryId, receivable.categoryId());
+    assertEquals(this.accountId, receivable.accountId());
+    assertNotNull(receivable.description());
+    assertEquals(new BigDecimal("1000"), receivable.amount());
+    assertEquals(dueDate, receivable.dueDate());
+    assertEquals(PayableReceivableStatus.PENDING, receivable.status());
+    assertFalse(receivable.installmentNumber().isPresent());
+    assertFalse(receivable.installmentTotal().isPresent());
+    assertFalse(receivable.paymentId().isPresent());
   }
 
   @Test
   void createReceivableInstallments() {
     LocalDate dueDate = LocalDate.now().plusDays(5);
-    var receivables =
+    var receivable =
         this.payableReceivableService.create(
             new CreatePayableReceivableInput(
                 PayableReceivableType.RECEIVABLE,
@@ -203,22 +190,19 @@ class PayableReceivableServiceIT extends IntegrationTest {
                 Optional.of(Frequency.MONTHLY),
                 Optional.of(10)));
 
-    assertNotNull(receivables);
-    assertEquals(10, receivables.size());
+    assertNotNull(receivable);
 
-    for (var receivable : receivables) {
-      assertNotNull(receivable);
-      assertNotNull(receivable.id());
-      assertEquals(this.creditCategoryId, receivable.categoryId());
-      assertEquals(this.accountId, receivable.accountId());
-      assertNotNull(receivable.description());
-      assertEquals(new BigDecimal("100.00"), receivable.amount());
-      assertEquals(dueDate, receivable.dueDate());
-      assertEquals(PayableReceivableStatus.PENDING, receivable.status());
-      assertTrue(receivable.installmentNumber().isPresent());
-      assertEquals(10, receivable.installmentTotal().get());
-      assertFalse(receivable.transactionId().isPresent());
-      dueDate = dueDate.plusMonths(1);
-    }
+    assertNotNull(receivable);
+    assertNotNull(receivable.id());
+    assertEquals(this.creditCategoryId, receivable.categoryId());
+    assertEquals(this.accountId, receivable.accountId());
+    assertNotNull(receivable.description());
+    assertEquals(new BigDecimal("100.00"), receivable.amount());
+    assertEquals(dueDate, receivable.dueDate());
+    assertEquals(PayableReceivableStatus.PENDING, receivable.status());
+    assertTrue(receivable.installmentNumber().isPresent());
+    assertEquals(10, receivable.installmentTotal().get());
+    assertFalse(receivable.paymentId().isPresent());
+    dueDate = dueDate.plusMonths(1);
   }
 }

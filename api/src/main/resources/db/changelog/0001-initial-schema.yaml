@@ -254,7 +254,78 @@ databaseChangeLog:
                   name: organization_id
                   value: null
   - changeSet:
-      id: 008-create-payables-receivables
+      id: 008-create-payable-receivable-templates
+      author: thiago
+      changes:
+        - createTable:
+            tableName: payable_receivable_templates
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: account_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: numeric(10,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recurring
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: frequency
+                  type: varchar(50)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: installment_total
+                  type: int
+                  constraints:
+                    nullable: true
+        - addForeignKeyConstraint:
+            baseTableName: payable_receivable_templates
+            baseColumnNames: account_id
+            referencedTableName: accounts
+            referencedColumnNames: id
+            constraintName: fk_payable_receivable_templates_accounts
+        - addForeignKeyConstraint:
+            baseTableName: payable_receivable_templates
+            baseColumnNames: category_id
+            referencedTableName: categories
+            referencedColumnNames: id
+            constraintName: fk_payable_receivable_templates_categories
+
+  - changeSet:
+      id: 009-create-payables-receivables
       author: thiago
       changes:
         - createTable:
@@ -267,10 +338,10 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: description
-                  type: varchar(255)
+                  name: template_id
+                  type: uuid
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: due_date
                   type: date
@@ -279,11 +350,6 @@ databaseChangeLog:
               - column:
                   name: amount
                   type: numeric(10,2)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: type
-                  type: varchar(10)
                   constraints:
                     nullable: false
               - column:
@@ -296,67 +362,15 @@ databaseChangeLog:
                   type: int
                   constraints:
                     nullable: true
-              - column:
-                  name: installment_total
-                  type: int
-                  constraints:
-                    nullable: true
-              - column:
-                  name: parent_id
-                  type: uuid
-                  constraints:
-                    nullable: true
-              - column:
-                  name: account_id
-                  type: uuid
-                  constraints:
-                    nullable: false
-              - column:
-                  name: category_id
-                  type: uuid
-                  constraints:
-                    nullable: false
-              - column:
-                  name: is_recurring
-                  type: boolean
-                  defaultValueBoolean: false
-                  constraints:
-                    nullable: false
-              - column:
-                  name: frequency
-                  type: varchar(20)
-                  constraints:
-                    nullable: true
-              - column:
-                  name: recurrence_day
-                  type: smallint
-                  constraints:
-                    nullable: true
-              - column:
-                  name: transaction_id
-                  type: uuid
-                  constraints:
-                    nullable: true
         - addForeignKeyConstraint:
             baseTableName: payables_receivables
-            baseColumnNames: account_id
-            referencedTableName: accounts
+            baseColumnNames: template_id
+            referencedTableName: payable_receivable_templates
             referencedColumnNames: id
-            constraintName: fk_payables_receivables_accounts
-        - addForeignKeyConstraint:
-            baseTableName: payables_receivables
-            baseColumnNames: category_id
-            referencedTableName: categories
-            referencedColumnNames: id
-            constraintName: fk_payables_receivables_categories
-        - addForeignKeyConstraint:
-            baseTableName: payables_receivables
-            baseColumnNames: transaction_id
-            referencedTableName: transactions
-            referencedColumnNames: id
-            constraintName: fk_payables_receivables_transaction
+            constraintName: fk_payables_receivables_templates
+
   - changeSet:
-      id: 009-create-account-balance-snapshots
+      id: 010-create-account-balance-snapshots
       author: thiago
       changes:
         - createTable:
@@ -389,3 +403,44 @@ databaseChangeLog:
             referencedTableName: accounts
             referencedColumnNames: id
             constraintName: fk_account_balance_snapshots_accounts
+
+  - changeSet:
+      id: 011-create-payments
+      author: thiago
+      changes:
+        - createTable:
+            tableName: payments
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: payable_receivable_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: transaction_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payment_date
+                  type: date
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: payments
+            baseColumnNames: payable_receivable_id
+            referencedTableName: payables_receivables
+            referencedColumnNames: id
+            constraintName: fk_payments_payable_receivable
+        - addForeignKeyConstraint:
+            baseTableName: payments
+            baseColumnNames: transaction_id
+            referencedTableName: transactions
+            referencedColumnNames: id
+            constraintName: fk_payments_transaction

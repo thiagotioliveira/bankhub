@@ -6,6 +6,7 @@ import dev.thiagooliveira.bankhub.application.usecase.GetPayableReceivable;
 import dev.thiagooliveira.bankhub.domain.dto.ConfirmPaymentInput;
 import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableInput;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,16 +30,19 @@ public class PayableReceivableService {
   }
 
   @Transactional
-  public List<PayableReceivable> create(CreatePayableReceivableInput input) {
+  public PayableReceivable create(CreatePayableReceivableInput input) {
     return this.createPayableReceivable.create(input);
   }
 
+  @Transactional
   public PayableReceivable pay(ConfirmPaymentInput input) {
     return this.confirmPayment.pay(input);
   }
 
-  public List<PayableReceivable> getPayableReceivables(UUID organizationId) {
-    return this.getPayableReceivable.findByOrganizationId(organizationId);
+  @Transactional
+  public List<PayableReceivable> getPayableReceivables(
+      UUID organizationId, LocalDate from, LocalDate to) {
+    return this.getPayableReceivable.findByOrganizationId(organizationId, from, to);
   }
 
   public Optional<PayableReceivable> getPayableReceivable(UUID id, UUID organizationId) {

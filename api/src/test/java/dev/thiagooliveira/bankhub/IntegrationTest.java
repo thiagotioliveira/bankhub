@@ -18,10 +18,14 @@ public class IntegrationTest {
   @Autowired private BankRepository bankRepository;
   @Autowired private CategoryRepository categoryRepository;
   @Autowired private PayableReceivableRepository payableReceivableRepository;
+  @Autowired private PaymentRepository paymentRepository;
+  @Autowired private PayableReceivableTemplateRepository templateRepository;
 
   @AfterEach
   void tearDown() {
+    this.paymentRepository.deleteAll();
     this.payableReceivableRepository.deleteAll();
+    this.templateRepository.deleteAll();
     this.transactionRepository.deleteAll();
     this.accountBalanceSnapshotRepository.deleteAll();
     this.accountRepository.deleteAll();

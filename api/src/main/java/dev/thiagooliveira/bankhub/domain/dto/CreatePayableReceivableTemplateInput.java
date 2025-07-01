@@ -3,26 +3,25 @@ package dev.thiagooliveira.bankhub.domain.dto;
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.domain.model.Category;
 import dev.thiagooliveira.bankhub.domain.model.Frequency;
-import dev.thiagooliveira.bankhub.domain.model.PayableReceivableTemplate;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivableType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
-public record CreatePayableReceivableInput(
-    PayableReceivableType type,
-    UUID organizationId,
+public record CreatePayableReceivableTemplateInput(
     UUID accountId,
+    UUID organizationId,
     UUID categoryId,
     String description,
     BigDecimal amount,
+    PayableReceivableType type,
     LocalDate startDate,
     boolean recurring,
     Optional<Frequency> frequency,
     Optional<Integer> installmentTotal) {
 
-  public CreatePayableReceivableInput {
+  public CreatePayableReceivableTemplateInput {
     if (amount.compareTo(BigDecimal.ZERO) < 0)
       throw new BusinessLogicException("amount must be positive");
     if (LocalDate.now().isAfter(startDate))
@@ -35,47 +34,17 @@ public record CreatePayableReceivableInput(
     }
   }
 
-  public static CreatePayableReceivableInput from(CreatePayableReceivableTemplateInput input) {
-    return new CreatePayableReceivableInput(
-        input.type(),
-        input.organizationId(),
-        input.accountId(),
-        input.categoryId(),
-        input.description(),
-        input.amount(),
-        input.startDate(),
-        input.recurring(),
-        input.frequency(),
-        input.installmentTotal());
-  }
-
-  public CreatePayableReceivableTemplateInput toTemplateInput() {
-    return new CreatePayableReceivableTemplateInput(
+  public CreatePayableReceivableTemplateEnrichedInput enrichWith(Category category) {
+    return new CreatePayableReceivableTemplateEnrichedInput(
         this.accountId,
         this.organizationId,
-        this.categoryId,
-        this.description,
-        this.amount,
-        this.type,
-        this.startDate,
-        this.recurring,
-        this.frequency,
-        this.installmentTotal);
-  }
-
-  public CreatePayableReceivableEnrichedInput enrichWith(
-      PayableReceivableTemplate template, Category category) {
-    return new CreatePayableReceivableEnrichedInput(
-        this.type,
-        this.accountId,
-        template,
         category,
         this.description,
         this.amount,
+        this.type,
         this.startDate,
         this.recurring,
         this.frequency,
-        Optional.empty(),
         this.installmentTotal);
   }
 }

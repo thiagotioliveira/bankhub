@@ -43,8 +43,9 @@ public class CreateAccount {
 
     var account = this.accountPort.create(input);
     var now = LocalDate.now();
+    var lastMonth = now.minusMonths(1);
     this.createAccountBalanceSnapshot.create(
-        account.id(), now.minusMonths(1).withDayOfMonth(now.lengthOfMonth()), initialBalance);
+        account.id(), lastMonth.withDayOfMonth(lastMonth.lengthOfMonth()), initialBalance);
     if (!Objects.equals(initialBalance, BigDecimal.ZERO)) {
       var categoryType = initialBalance.signum() > 0 ? CategoryType.CREDIT : CategoryType.DEBIT;
       var category = this.getCategory.findByType(categoryType).orElseThrow();
