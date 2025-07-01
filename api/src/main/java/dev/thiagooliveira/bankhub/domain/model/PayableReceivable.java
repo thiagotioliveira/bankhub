@@ -21,6 +21,23 @@ public record PayableReceivable(
     Optional<Integer> installmentTotal,
     Optional<UUID> paymentId) {
 
+  public PayableReceivable update(Optional<BigDecimal> amount, Optional<LocalDate> dueDate) {
+    return new PayableReceivable(
+        this.id,
+        this.templateId,
+        this.accountId,
+        this.categoryId,
+        this.description,
+        amount.orElse(this.amount),
+        dueDate.orElse(this.dueDate),
+        this.type,
+        this.status,
+        this.frequency,
+        this.installmentNumber,
+        this.installmentTotal,
+        this.paymentId);
+  }
+
   public PayableReceivable markAsPaid(UUID paymentId) {
     if (this.status == PayableReceivableStatus.PAID) {
       throw BusinessLogicException.badRequest("payable/receivable already paid");

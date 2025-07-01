@@ -2,7 +2,9 @@ package dev.thiagooliveira.bankhub.infra.service;
 
 import dev.thiagooliveira.bankhub.application.usecase.CreatePayableReceivable;
 import dev.thiagooliveira.bankhub.application.usecase.GetPayableReceivable;
+import dev.thiagooliveira.bankhub.application.usecase.UpdatePayableReceivable;
 import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableInput;
+import dev.thiagooliveira.bankhub.domain.dto.UpdatePayableReceivableInput;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
 import java.time.LocalDate;
 import java.util.List;
@@ -16,11 +18,20 @@ public class PayableReceivableService {
 
   private final CreatePayableReceivable createPayableReceivable;
   private final GetPayableReceivable getPayableReceivable;
+  private final UpdatePayableReceivable updatePayableReceivable;
 
   public PayableReceivableService(
-      CreatePayableReceivable createPayableReceivable, GetPayableReceivable getPayableReceivable) {
+      CreatePayableReceivable createPayableReceivable,
+      GetPayableReceivable getPayableReceivable,
+      UpdatePayableReceivable updatePayableReceivable) {
     this.createPayableReceivable = createPayableReceivable;
     this.getPayableReceivable = getPayableReceivable;
+    this.updatePayableReceivable = updatePayableReceivable;
+  }
+
+  @Transactional
+  public void update(UpdatePayableReceivableInput input) {
+    this.updatePayableReceivable.update(input);
   }
 
   @Transactional

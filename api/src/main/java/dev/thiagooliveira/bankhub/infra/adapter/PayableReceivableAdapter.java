@@ -8,6 +8,7 @@ import dev.thiagooliveira.bankhub.domain.port.PaymentPort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.PayableReceivableEntity;
 import dev.thiagooliveira.bankhub.infra.persistence.repository.PayableReceivableRepository;
 import dev.thiagooliveira.bankhub.infra.persistence.repository.PayableReceivableTemplateRepository;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +29,27 @@ public class PayableReceivableAdapter implements PayableReceivablePort {
     this.payableReceivableRepository = payableReceivableRepository;
     this.payableReceivableTemplateRepository = payableReceivableTemplateRepository;
     this.paymentPort = paymentPort;
+  }
+
+  @Override
+  public PayableReceivable update(
+      UUID id, Optional<BigDecimal> amount, Optional<LocalDate> dueDate) {
+    return this.payableReceivableRepository
+        .findById(id)
+        .map(p -> p.update(amount, dueDate))
+        .map(
+            p -> {
+              var template =
+                  this.payableReceivableTemplateRepository
+                      .findById(p.getTemplateId())
+                      .orElseThrow();
+              var paymentId =
+                  this.paymentPort.findByPayableReceivableId(p.getId()).stream()
+                      .map(Payment::id)
+                      .findFirst();
+              return p.toDomain(template, paymentId);
+            })
+        .orElseThrow();
   }
 
   @Override
@@ -163,6 +185,7 @@ public class PayableReceivableAdapter implements PayableReceivablePort {
 
   @Override
   public boolean existsByTemplateIdAndDueDate(UUID templateId, LocalDate dueDate) {
-    return this.payableReceivableRepository.existsByTemplateIdAndDueDate(templateId, dueDate);
+    return this.payableReceivableRepository.existsByTemplateIdAndDueDateOriginal(
+        templateId, dueDate);
   }
 }

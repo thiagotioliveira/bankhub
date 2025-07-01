@@ -40,7 +40,6 @@ public class GetPayableReceivable {
           }
         }
       }
-      return this.port.findByOrganizationId(organizationId, from, to);
     }
 
     return port.findByOrganizationId(organizationId, from, to);

@@ -21,6 +21,9 @@ public class PayableReceivableEntity {
   private LocalDate dueDate;
 
   @Column(nullable = false)
+  private LocalDate dueDateOriginal;
+
+  @Column(nullable = false)
   private BigDecimal amount;
 
   @Enumerated(EnumType.STRING)
@@ -35,12 +38,14 @@ public class PayableReceivableEntity {
       UUID id,
       UUID templateId,
       LocalDate dueDate,
+      LocalDate dueDateOriginal,
       BigDecimal amount,
       PayableReceivableStatus status,
       Integer installmentNumber) {
     this.id = id;
     this.templateId = templateId;
     this.dueDate = dueDate;
+    this.dueDateOriginal = dueDateOriginal;
     this.amount = amount;
     this.status = status;
     this.installmentNumber = installmentNumber;
@@ -52,6 +57,7 @@ public class PayableReceivableEntity {
     entity.templateId = input.template().id();
     entity.amount = input.amount();
     entity.dueDate = input.dueDate();
+    entity.dueDateOriginal = input.dueDate();
     entity.installmentNumber = input.installmentNumber().orElse(null);
     entity.status = PayableReceivableStatus.PENDING;
     return entity;
@@ -84,6 +90,12 @@ public class PayableReceivableEntity {
         Optional.ofNullable(this.installmentNumber),
         Optional.ofNullable(templateEntity.getInstallmentTotal()),
         transactionId);
+  }
+
+  public PayableReceivableEntity update(Optional<BigDecimal> amount, Optional<LocalDate> dueDate) {
+    amount.ifPresent(a -> this.amount = a);
+    dueDate.ifPresent(d -> this.dueDate = d);
+    return this;
   }
 
   public UUID getId() {
@@ -132,5 +144,13 @@ public class PayableReceivableEntity {
 
   public void setTemplateId(UUID templateId) {
     this.templateId = templateId;
+  }
+
+  public LocalDate getDueDateOriginal() {
+    return dueDateOriginal;
+  }
+
+  public void setDueDateOriginal(LocalDate dueDateOriginal) {
+    this.dueDateOriginal = dueDateOriginal;
   }
 }

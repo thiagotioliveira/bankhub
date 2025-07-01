@@ -407,8 +407,29 @@ paths:
                 items:
                   $ref: '#/components/schemas/GetPayableReceivableResponseBody'
   /api/payable-receivable/{id}:
+    patch:
+      summary: Update payables/receivables by ID
+      operationId: updatePayableReceivableById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      tags:
+        - Payable/Receivable
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchPayableReceivableRequestBody'
+      responses:
+        '204':
+          description: Update payables/receivables by ID
     get:
-      summary: Get payables and receivables by ID
+      summary: Get payables/receivables by ID
       operationId: getPayableReceivableById
       parameters:
         - name: id
@@ -421,7 +442,7 @@ paths:
         - Payable/Receivable
       responses:
         '200':
-          description: Get payables and receivables by ID
+          description: Get payables/receivables by ID
           content:
             application/json:
               schema:
@@ -814,6 +835,17 @@ components:
         paymentId:
           type: string
           format: uuid
+    PatchPayableReceivableRequestBody:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+          nullable: true
+        dueDate:
+          type: string
+          format: date
+          nullable: true
     GetPayableReceivableResponseBody:
       type: object
       required:

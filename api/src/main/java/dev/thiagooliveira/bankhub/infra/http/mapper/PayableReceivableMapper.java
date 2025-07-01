@@ -1,11 +1,13 @@
 package dev.thiagooliveira.bankhub.infra.http.mapper;
 
 import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableInput;
+import dev.thiagooliveira.bankhub.domain.dto.UpdatePayableReceivableInput;
 import dev.thiagooliveira.bankhub.domain.model.Frequency;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivableType;
 import dev.thiagooliveira.bankhub.spec.http.dto.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,6 +16,10 @@ import org.openapitools.jackson.nullable.JsonNullable;
 
 @Mapper
 public interface PayableReceivableMapper {
+  UpdatePayableReceivableInput map(
+      UUID payableReceivableId,
+      UUID organizationId,
+      PatchPayableReceivableRequestBody patchPayableReceivableRequestBody);
 
   CreatePayableReceivableInput map(
       PayableReceivableType type,
@@ -42,10 +48,6 @@ public interface PayableReceivableMapper {
         .orElse(null);
   }
 
-  default Integer mapInteger(JsonNullable<Integer> value) {
-    return value.orElse(null);
-  }
-
   default Optional<Integer> mapIntegerToOptional(JsonNullable<Integer> value) {
     return value.isPresent() ? Optional.of(value.get()) : Optional.empty();
   }
@@ -66,7 +68,7 @@ public interface PayableReceivableMapper {
     return value.isPresent() ? Optional.of(value.get()) : Optional.empty();
   }
 
-  default Optional<String> mapString(JsonNullable<String> value) {
+  default Optional<LocalDate> mapLocalDate(JsonNullable<LocalDate> value) {
     return value.isPresent() ? Optional.of(value.get()) : Optional.empty();
   }
 

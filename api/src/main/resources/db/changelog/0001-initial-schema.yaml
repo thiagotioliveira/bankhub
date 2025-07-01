@@ -348,6 +348,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: due_date_original
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
                   name: amount
                   type: numeric(10,2)
                   constraints:

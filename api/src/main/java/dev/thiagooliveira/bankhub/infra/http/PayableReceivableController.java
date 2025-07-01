@@ -78,4 +78,13 @@ public class PayableReceivableController implements PayableReceivableApi {
             URI.create(String.format("/api/payable-receivable/%s", created.id())))
         .body(this.payableReceivableMapper.mapToPostPayableReceivableResponseBody(created));
   }
+
+  @Override
+  public ResponseEntity<Void> updatePayableReceivableById(
+      UUID id, PatchPayableReceivableRequestBody patchPayableReceivableRequestBody) {
+    this.payableReceivableService.update(
+        this.payableReceivableMapper.map(
+            id, this.appProps.getOrganizationId(), patchPayableReceivableRequestBody));
+    return ResponseEntity.noContent().build();
+  }
 }

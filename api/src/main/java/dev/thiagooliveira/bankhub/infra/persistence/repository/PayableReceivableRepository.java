@@ -53,5 +53,5 @@ public interface PayableReceivableRepository extends JpaRepository<PayableReceiv
 
   Optional<PayableReceivableEntity> findByTemplateIdAndDueDate(UUID templateId, LocalDate dueDate);
 
-  boolean existsByTemplateIdAndDueDate(UUID templateId, LocalDate dueDate);
+  boolean existsByTemplateIdAndDueDateOriginal(UUID templateId, LocalDate dueDate);
 }

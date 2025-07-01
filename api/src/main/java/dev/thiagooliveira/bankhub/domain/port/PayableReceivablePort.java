@@ -2,12 +2,15 @@ package dev.thiagooliveira.bankhub.domain.port;
 
 import dev.thiagooliveira.bankhub.domain.dto.*;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface PayableReceivablePort {
+
+  PayableReceivable update(UUID id, Optional<BigDecimal> amount, Optional<LocalDate> dueDate);
 
   PayableReceivable update(PayableReceivable payableReceivable);
 

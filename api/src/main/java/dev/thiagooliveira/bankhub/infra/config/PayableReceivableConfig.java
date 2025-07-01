@@ -36,4 +36,10 @@ public class PayableReceivableConfig {
     return new GetPayableReceivable(
         payableReceivablePort, payableReceivableTemplatePort, createPayableReceivable);
   }
+
+  @Bean
+  public UpdatePayableReceivable updatePayableReceivable(
+      PayableReceivablePort payableReceivablePort) {
+    return new UpdatePayableReceivable(payableReceivablePort);
+  }
 }
