@@ -33,6 +33,7 @@ public interface TransactionRepository
         WHERE t.account_id IN :accountIds
           AND a.organization_id = :organizationId
         ORDER BY t.date_time DESC
+        LIMIT :#{#pageable.pageSize} OFFSET :#{#pageable.offset}
         """,
       countQuery =
           """
