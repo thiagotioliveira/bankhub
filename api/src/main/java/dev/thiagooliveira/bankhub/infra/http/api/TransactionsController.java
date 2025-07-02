@@ -1,8 +1,8 @@
-package dev.thiagooliveira.bankhub.infra.http;
+package dev.thiagooliveira.bankhub.infra.http.api;
 
 import dev.thiagooliveira.bankhub.domain.dto.GetTransactionPageable;
 import dev.thiagooliveira.bankhub.infra.config.AppProps;
-import dev.thiagooliveira.bankhub.infra.http.mapper.TransactionMapper;
+import dev.thiagooliveira.bankhub.infra.http.api.mapper.TransactionMapper;
 import dev.thiagooliveira.bankhub.infra.service.CategoryService;
 import dev.thiagooliveira.bankhub.infra.service.TransactionService;
 import dev.thiagooliveira.bankhub.spec.http.controllers.TransactionsApi;

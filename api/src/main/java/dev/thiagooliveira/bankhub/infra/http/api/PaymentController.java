@@ -1,7 +1,7 @@
-package dev.thiagooliveira.bankhub.infra.http;
+package dev.thiagooliveira.bankhub.infra.http.api;
 
 import dev.thiagooliveira.bankhub.infra.config.AppProps;
-import dev.thiagooliveira.bankhub.infra.http.mapper.PaymentMapper;
+import dev.thiagooliveira.bankhub.infra.http.api.mapper.PaymentMapper;
 import dev.thiagooliveira.bankhub.infra.service.PaymentService;
 import dev.thiagooliveira.bankhub.spec.http.controllers.PaymentsApi;
 import dev.thiagooliveira.bankhub.spec.http.dto.PostPaymentRequestBody;

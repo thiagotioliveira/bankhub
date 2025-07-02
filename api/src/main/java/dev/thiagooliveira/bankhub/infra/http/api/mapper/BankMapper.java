@@ -1,4 +1,4 @@
-package dev.thiagooliveira.bankhub.infra.http.mapper;
+package dev.thiagooliveira.bankhub.infra.http.api.mapper;
 
 import dev.thiagooliveira.bankhub.domain.dto.CreateBankInput;
 import dev.thiagooliveira.bankhub.domain.model.Bank;

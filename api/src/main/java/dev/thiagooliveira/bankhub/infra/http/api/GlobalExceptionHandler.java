@@ -1,4 +1,4 @@
-package dev.thiagooliveira.bankhub.infra.http;
+package dev.thiagooliveira.bankhub.infra.http.api;
 
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.spec.http.dto.Error;

@@ -1,8 +1,8 @@
-package dev.thiagooliveira.bankhub.infra.http;
+package dev.thiagooliveira.bankhub.infra.http.api;
 
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.infra.config.AppProps;
-import dev.thiagooliveira.bankhub.infra.http.mapper.AccountMapper;
+import dev.thiagooliveira.bankhub.infra.http.api.mapper.AccountMapper;
 import dev.thiagooliveira.bankhub.infra.service.AccountService;
 import dev.thiagooliveira.bankhub.spec.http.controllers.AccountsApi;
 import dev.thiagooliveira.bankhub.spec.http.dto.GetAccountResponseBody;

@@ -1,9 +1,9 @@
-package dev.thiagooliveira.bankhub.infra.http;
+package dev.thiagooliveira.bankhub.infra.http.api;
 
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivableType;
 import dev.thiagooliveira.bankhub.infra.config.AppProps;
-import dev.thiagooliveira.bankhub.infra.http.mapper.PayableReceivableMapper;
+import dev.thiagooliveira.bankhub.infra.http.api.mapper.PayableReceivableMapper;
 import dev.thiagooliveira.bankhub.infra.service.PayableReceivableService;
 import dev.thiagooliveira.bankhub.spec.http.controllers.PayableReceivableApi;
 import dev.thiagooliveira.bankhub.spec.http.dto.*;

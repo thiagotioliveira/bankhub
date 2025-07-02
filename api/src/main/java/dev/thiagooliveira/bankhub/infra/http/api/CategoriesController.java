@@ -1,8 +1,8 @@
-package dev.thiagooliveira.bankhub.infra.http;
+package dev.thiagooliveira.bankhub.infra.http.api;
 
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.infra.config.AppProps;
-import dev.thiagooliveira.bankhub.infra.http.mapper.CategoryMapper;
+import dev.thiagooliveira.bankhub.infra.http.api.mapper.CategoryMapper;
 import dev.thiagooliveira.bankhub.infra.service.CategoryService;
 import dev.thiagooliveira.bankhub.spec.http.controllers.CategoriesApi;
 import dev.thiagooliveira.bankhub.spec.http.dto.GetCategoryResponseBody;
