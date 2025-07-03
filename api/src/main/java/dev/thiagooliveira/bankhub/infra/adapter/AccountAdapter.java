@@ -3,13 +3,13 @@ package dev.thiagooliveira.bankhub.infra.adapter;
 import dev.thiagooliveira.bankhub.domain.dto.CreateAccountInput;
 import dev.thiagooliveira.bankhub.domain.dto.projection.AccountEnriched;
 import dev.thiagooliveira.bankhub.domain.model.Account;
+import dev.thiagooliveira.bankhub.domain.model.MonthlyAccountSummary;
 import dev.thiagooliveira.bankhub.domain.port.AccountPort;
-import dev.thiagooliveira.bankhub.infra.persistence.entity.AccountBalanceSnapshotEntity;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.AccountEntity;
+import dev.thiagooliveira.bankhub.infra.persistence.entity.MonthlyAccountSummaryEntity;
 import dev.thiagooliveira.bankhub.infra.persistence.repository.AccountBalanceSnapshotRepository;
 import dev.thiagooliveira.bankhub.infra.persistence.repository.AccountRepository;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -65,8 +65,17 @@ public class AccountAdapter implements AccountPort {
   }
 
   @Override
-  public void createBalanceSnapshot(UUID id, LocalDate date, BigDecimal balance) {
-    var snapshot = new AccountBalanceSnapshotEntity(UUID.randomUUID(), id, date, balance);
+  public void createMonthlyAccountSummary(MonthlyAccountSummary input) {
+    var snapshot =
+        new MonthlyAccountSummaryEntity(
+            UUID.randomUUID(),
+            input.accountId(),
+            input.yearMonth(),
+            input.balance(),
+            input.income(),
+            input.expenses(),
+            input.receivablesPending(),
+            input.payablePending());
     this.accountBalanceSnapshotRepository.save(snapshot);
   }
 }

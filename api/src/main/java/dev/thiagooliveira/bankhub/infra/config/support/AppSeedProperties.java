@@ -134,7 +134,6 @@ public class AppSeedProperties {
   public static class Category {
     private String name;
     private String type;
-    private boolean root;
 
     public String getName() {
       return name;
@@ -150,14 +149,6 @@ public class AppSeedProperties {
 
     public void setType(String type) {
       this.type = type;
-    }
-
-    public boolean isRoot() {
-      return root;
-    }
-
-    public void setRoot(boolean root) {
-      this.root = root;
     }
   }
 }

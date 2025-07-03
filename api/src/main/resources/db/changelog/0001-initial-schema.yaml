@@ -375,11 +375,11 @@ databaseChangeLog:
             constraintName: fk_payables_receivables_templates
 
   - changeSet:
-      id: 010-create-account-balance-snapshots
+      id: 010-monthly_account_summary
       author: thiago
       changes:
         - createTable:
-            tableName: account_balance_snapshots
+            tableName: monthly_account_summary
             columns:
               - column:
                   name: id
@@ -393,8 +393,8 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: at_date
-                  type: date
+                  name: year_month
+                  type: varchar(7)
                   constraints:
                     nullable: false
               - column:
@@ -402,12 +402,32 @@ databaseChangeLog:
                   type: numeric(10,2)
                   constraints:
                     nullable: false
+              - column:
+                  name: income
+                  type: numeric(10,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expenses
+                  type: numeric(10,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: receivables_pending
+                  type: numeric(10,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payable_pending
+                  type: numeric(10,2)
+                  constraints:
+                    nullable: false
         - addForeignKeyConstraint:
-            baseTableName: account_balance_snapshots
+            baseTableName: monthly_account_summary
             baseColumnNames: account_id
             referencedTableName: accounts
             referencedColumnNames: id
-            constraintName: fk_account_balance_snapshots_accounts
+            constraintName: fk_monthly_account_summary_accounts
 
   - changeSet:
       id: 011-create-payments

@@ -91,7 +91,7 @@ public class DatabaseSeeder implements CommandLineRunner {
               c -> {
                 this.categoryService.create(
                     new CreateCategoryInput(
-                        c.isRoot() ? Optional.empty() : Optional.of(organization.id()),
+                        Optional.of(organization.id()),
                         c.getName(),
                         CategoryType.valueOf(c.getType())));
               });

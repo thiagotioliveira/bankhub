@@ -6,7 +6,6 @@ import dev.thiagooliveira.bankhub.domain.dto.CreateTransactionInput;
 import dev.thiagooliveira.bankhub.domain.dto.GetTransactionPageable;
 import dev.thiagooliveira.bankhub.domain.dto.Page;
 import dev.thiagooliveira.bankhub.domain.dto.projection.TransactionEnriched;
-import dev.thiagooliveira.bankhub.domain.model.IncomeAndExpenses;
 import dev.thiagooliveira.bankhub.domain.model.Transaction;
 import java.time.LocalDate;
 import java.util.List;
@@ -42,8 +41,8 @@ public class TransactionService {
     return this.getTransaction.getByOrganizationId(organizationId, from, to);
   }
 
-  public List<IncomeAndExpenses> getIncomeAndExpenses(
+  public List<TransactionEnriched> getByOrganizationId(
       UUID organizationId, LocalDate from, LocalDate to) {
-    return this.getTransaction.get(organizationId, from, to);
+    return this.getTransaction.getByOrganizationId(organizationId, from, to);
   }
 }

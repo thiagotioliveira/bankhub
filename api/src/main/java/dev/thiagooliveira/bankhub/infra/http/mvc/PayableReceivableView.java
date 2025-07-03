@@ -2,7 +2,7 @@ package dev.thiagooliveira.bankhub.infra.http.mvc;
 
 import dev.thiagooliveira.bankhub.domain.model.Frequency;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivableType;
-import dev.thiagooliveira.bankhub.infra.config.AppProps;
+import dev.thiagooliveira.bankhub.infra.config.support.AppProperties;
 import dev.thiagooliveira.bankhub.infra.http.mvc.dto.CreatePayableReceivableInput;
 import dev.thiagooliveira.bankhub.infra.service.AccountService;
 import dev.thiagooliveira.bankhub.infra.service.CategoryService;
@@ -17,13 +17,13 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class PayableReceivableView {
 
-  private final AppProps appProps;
+  private final AppProperties appProps;
   private final AccountService accountService;
   private final CategoryService categoryService;
   private final PayableReceivableService payableReceivableService;
 
   public PayableReceivableView(
-      AppProps appProps,
+      AppProperties appProps,
       AccountService accountService,
       CategoryService categoryService,
       PayableReceivableService payableReceivableService) {

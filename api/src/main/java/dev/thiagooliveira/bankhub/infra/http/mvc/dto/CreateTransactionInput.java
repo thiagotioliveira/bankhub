@@ -8,6 +8,7 @@ public class CreateTransactionInput {
   private BigDecimal amount = BigDecimal.TEN;
   private UUID accountId;
   private UUID categoryId;
+  private String description;
 
   public CreateTransactionInput(String type) {
     this.type = type;
@@ -43,5 +44,13 @@ public class CreateTransactionInput {
 
   public void setType(String type) {
     this.type = type;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 }

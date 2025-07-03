@@ -49,4 +49,9 @@ public class PayableReceivableService {
   public Optional<PayableReceivable> getPayableReceivable(UUID id, UUID organizationId) {
     return this.getPayableReceivable.findByIdAndOrganizationId(id, organizationId);
   }
+
+  public List<PayableReceivableEnriched> findByOrganizationId(
+      UUID organizationId, LocalDate from, LocalDate to) {
+    return this.getPayableReceivable.findByOrganizationId(organizationId, from, to);
+  }
 }

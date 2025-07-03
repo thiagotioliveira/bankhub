@@ -34,12 +34,6 @@ app:
             balance: 1000.00
             currency: BRL
     categories:
-      - name: Default
-        type: CREDIT
-        root: true
-      - name: Default
-        type: DEBIT
-        root: true
       - name: Salary John
         type: CREDIT
       - name: Salary Mary

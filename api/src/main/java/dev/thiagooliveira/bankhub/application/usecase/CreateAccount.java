@@ -5,10 +5,11 @@ import dev.thiagooliveira.bankhub.domain.dto.CreateTransactionInput;
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.domain.model.Account;
 import dev.thiagooliveira.bankhub.domain.model.CategoryType;
+import dev.thiagooliveira.bankhub.domain.model.MonthlyAccountSummary;
 import dev.thiagooliveira.bankhub.domain.port.AccountPort;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.YearMonth;
 
 public class CreateAccount {
 
@@ -16,19 +17,19 @@ public class CreateAccount {
   private final GetBank getBank;
   private final CreateTransaction createTransaction;
   private final GetCategory getCategory;
-  private final CreateAccountBalanceSnapshot createAccountBalanceSnapshot;
+  private final CreateMonthlyAccountSummary createMonthlyAccountSummary;
 
   public CreateAccount(
       AccountPort accountPort,
       GetBank getBank,
       CreateTransaction createTransaction,
       GetCategory getCategory,
-      CreateAccountBalanceSnapshot createAccountBalanceSnapshot) {
+      CreateMonthlyAccountSummary createMonthlyAccountSummary) {
     this.accountPort = accountPort;
     this.getBank = getBank;
     this.createTransaction = createTransaction;
     this.getCategory = getCategory;
-    this.createAccountBalanceSnapshot = createAccountBalanceSnapshot;
+    this.createMonthlyAccountSummary = createMonthlyAccountSummary;
   }
 
   public Account create(CreateAccountInput input, BigDecimal initialBalance) {
@@ -41,10 +42,16 @@ public class CreateAccount {
     }
 
     var account = this.accountPort.create(input);
-    var now = LocalDate.now();
-    var lastMonth = now.minusMonths(1);
-    this.createAccountBalanceSnapshot.create(
-        account.id(), lastMonth.withDayOfMonth(lastMonth.lengthOfMonth()), BigDecimal.ZERO);
+    this.createMonthlyAccountSummary.create(
+        new MonthlyAccountSummary(
+            account.id(),
+            YearMonth.now().minusMonths(1),
+            account.currency(),
+            BigDecimal.ZERO,
+            BigDecimal.ZERO,
+            BigDecimal.ZERO,
+            BigDecimal.ZERO,
+            BigDecimal.ZERO));
     if (initialBalance != null && initialBalance.compareTo(BigDecimal.ZERO) != 0) {
       var categoryType = initialBalance.signum() > 0 ? CategoryType.CREDIT : CategoryType.DEBIT;
       var category = this.getCategory.findByType(categoryType).orElseThrow();
