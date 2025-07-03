@@ -1,23 +1,20 @@
 spring:
   application:
     name: bankhub-api
+  docker:
+    compose:
+      enabled: false
   datasource:
-    url: jdbc:postgresql://localhost:5432/bankhub
-    username: admin
-    password: admin
-    driver-class-name: org.postgresql.Driver
+    url:
+    username:
+    password:
+    driver-class-name:
     hikari:
       maximum-pool-size: 10
       minimum-idle: 5
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: none
-logging:
-  level:
-    org.springframework.security: DEBUG
-    org.springframework.security.web.FilterChainProxy: DEBUG
-    org.springframework.web: INFO
-    org.hibernate.orm.jdbc.bind: TRACE
-    dev.thiagooliveira.bankhub: DEBUG
-    liquibase: DEBUG
+app:
+  seed:
+    enabled: false

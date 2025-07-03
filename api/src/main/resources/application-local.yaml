@@ -1,0 +1,56 @@
+spring:
+  docker:
+    compose:
+      enabled: true
+      file: compose-local.yaml
+  #datasource:
+  #  url: jdbc:postgresql://localhost:5432/bankhub
+  #  username: admin
+  #  password: admin
+  #  driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.web.FilterChainProxy: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.orm.jdbc.bind: TRACE
+    dev.thiagooliveira.bankhub: DEBUG
+    liquibase: DEBUG
+
+app:
+  seed:
+    enabled: true
+    users:
+      - email: john@bunkhub.app
+        name: John
+      - email: mary@bunkhub.app
+        name: Mary
+    banks:
+      - name: ActivoBank
+        accounts:
+          - name: ActivoBank Account
+            balance: 1000.00
+            currency: BRL
+    categories:
+      - name: Default
+        type: CREDIT
+        root: true
+      - name: Default
+        type: DEBIT
+        root: true
+      - name: Salary John
+        type: CREDIT
+      - name: Salary Mary
+        type: CREDIT
+      - name: Apartment Rental
+        type: DEBIT
+      - name: Electricity Bill
+        type: DEBIT
+      - name: Water Bill
+        type: DEBIT
+      - name: Food
+        type: DEBIT
+      - name: Leisure
+        type: DEBIT

@@ -1,10 +1,10 @@
-package dev.thiagooliveira.bankhub.infra.config;
+package dev.thiagooliveira.bankhub.infra.config.support;
 
 import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AppProps {
+public class AppProperties {
   private UUID organizationId;
 
   public UUID getOrganizationId() {

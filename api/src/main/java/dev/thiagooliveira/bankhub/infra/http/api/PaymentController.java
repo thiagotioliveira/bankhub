@@ -1,6 +1,6 @@
 package dev.thiagooliveira.bankhub.infra.http.api;
 
-import dev.thiagooliveira.bankhub.infra.config.AppProps;
+import dev.thiagooliveira.bankhub.infra.config.support.AppProperties;
 import dev.thiagooliveira.bankhub.infra.http.api.mapper.PaymentMapper;
 import dev.thiagooliveira.bankhub.infra.service.PaymentService;
 import dev.thiagooliveira.bankhub.spec.http.controllers.PaymentsApi;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class PaymentController implements PaymentsApi {
-  private final AppProps appProps;
+  private final AppProperties appProps;
   private final PaymentService paymentService;
   private final PaymentMapper paymentMapper;
 
   public PaymentController(
-      AppProps appProps, PaymentService paymentService, PaymentMapper paymentMapper) {
+      AppProperties appProps, PaymentService paymentService, PaymentMapper paymentMapper) {
     this.appProps = appProps;
     this.paymentService = paymentService;
     this.paymentMapper = paymentMapper;

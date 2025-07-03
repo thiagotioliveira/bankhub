@@ -1,7 +1,7 @@
 package dev.thiagooliveira.bankhub.infra.http.api;
 
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
-import dev.thiagooliveira.bankhub.infra.config.AppProps;
+import dev.thiagooliveira.bankhub.infra.config.support.AppProperties;
 import dev.thiagooliveira.bankhub.infra.http.api.mapper.OrganizationMapper;
 import dev.thiagooliveira.bankhub.infra.service.OrganizationService;
 import dev.thiagooliveira.bankhub.spec.http.controllers.OrganizationsApi;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class OrganizationsController implements OrganizationsApi {
 
-  private final AppProps appProps;
+  private final AppProperties appProps;
   private final OrganizationService organizationService;
   private final OrganizationMapper organizationMapper;
 
   public OrganizationsController(
-      AppProps appProps,
+      AppProperties appProps,
       OrganizationService organizationService,
       OrganizationMapper organizationMapper) {
     this.appProps = appProps;

@@ -2,7 +2,7 @@ package dev.thiagooliveira.bankhub.infra.http.api;
 
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivableType;
-import dev.thiagooliveira.bankhub.infra.config.AppProps;
+import dev.thiagooliveira.bankhub.infra.config.support.AppProperties;
 import dev.thiagooliveira.bankhub.infra.http.api.mapper.PayableReceivableMapper;
 import dev.thiagooliveira.bankhub.infra.service.PayableReceivableService;
 import dev.thiagooliveira.bankhub.spec.http.controllers.PayableReceivableApi;
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PayableReceivableController implements PayableReceivableApi {
 
-  private final AppProps appProps;
+  private final AppProperties appProps;
   private final PayableReceivableService payableReceivableService;
   private final PayableReceivableMapper payableReceivableMapper;
 
   public PayableReceivableController(
-      AppProps appProps,
+      AppProperties appProps,
       PayableReceivableService payableReceivableService,
       PayableReceivableMapper payableReceivableMapper) {
     this.appProps = appProps;

@@ -1,7 +1,7 @@
 package dev.thiagooliveira.bankhub.infra.http.api;
 
 import dev.thiagooliveira.bankhub.domain.dto.GetTransactionPageable;
-import dev.thiagooliveira.bankhub.infra.config.AppProps;
+import dev.thiagooliveira.bankhub.infra.config.support.AppProperties;
 import dev.thiagooliveira.bankhub.infra.http.api.mapper.TransactionMapper;
 import dev.thiagooliveira.bankhub.infra.service.CategoryService;
 import dev.thiagooliveira.bankhub.infra.service.TransactionService;
@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TransactionsController implements TransactionsApi {
 
-  private final AppProps appProps;
+  private final AppProperties appProps;
   private final TransactionService transactionService;
   private final TransactionMapper transactionMapper;
 
   public TransactionsController(
-      AppProps appProps,
+      AppProperties appProps,
       TransactionService transactionService,
       TransactionMapper transactionMapper,
       CategoryService categoryService) {

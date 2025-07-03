@@ -1,7 +1,7 @@
 package dev.thiagooliveira.bankhub.infra.http.api;
 
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
-import dev.thiagooliveira.bankhub.infra.config.AppProps;
+import dev.thiagooliveira.bankhub.infra.config.support.AppProperties;
 import dev.thiagooliveira.bankhub.infra.http.api.mapper.CategoryMapper;
 import dev.thiagooliveira.bankhub.infra.service.CategoryService;
 import dev.thiagooliveira.bankhub.spec.http.controllers.CategoriesApi;
@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CategoriesController implements CategoriesApi {
 
-  private final AppProps appProps;
+  private final AppProperties appProps;
   private final CategoryService categoryService;
   private final CategoryMapper categoryMapper;
 
   public CategoriesController(
-      AppProps appProps, CategoryService categoryService, CategoryMapper categoryMapper) {
+      AppProperties appProps, CategoryService categoryService, CategoryMapper categoryMapper) {
     this.appProps = appProps;
     this.categoryService = categoryService;
     this.categoryMapper = categoryMapper;

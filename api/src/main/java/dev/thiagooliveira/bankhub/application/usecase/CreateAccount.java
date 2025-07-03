@@ -9,7 +9,6 @@ import dev.thiagooliveira.bankhub.domain.port.AccountPort;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.Objects;
 
 public class CreateAccount {
 
@@ -46,7 +45,7 @@ public class CreateAccount {
     var lastMonth = now.minusMonths(1);
     this.createAccountBalanceSnapshot.create(
         account.id(), lastMonth.withDayOfMonth(lastMonth.lengthOfMonth()), BigDecimal.ZERO);
-    if (!Objects.equals(initialBalance, BigDecimal.ZERO)) {
+    if (initialBalance != null && initialBalance.compareTo(BigDecimal.ZERO) != 0) {
       var categoryType = initialBalance.signum() > 0 ? CategoryType.CREDIT : CategoryType.DEBIT;
       var category = this.getCategory.findByType(categoryType).orElseThrow();
       this.createTransaction.create(
