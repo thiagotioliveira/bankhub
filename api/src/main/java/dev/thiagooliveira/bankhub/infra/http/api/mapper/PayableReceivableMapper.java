@@ -2,6 +2,7 @@ package dev.thiagooliveira.bankhub.infra.http.api.mapper;
 
 import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableInput;
 import dev.thiagooliveira.bankhub.domain.dto.UpdatePayableReceivableInput;
+import dev.thiagooliveira.bankhub.domain.dto.projection.PayableReceivableEnriched;
 import dev.thiagooliveira.bankhub.domain.model.Frequency;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivableType;
@@ -25,6 +26,8 @@ public interface PayableReceivableMapper {
       PayableReceivableType type,
       UUID organizationId,
       PostPayableReceivableRequestBody postPayableReceivableRequestBody);
+
+  GetPayableReceivableResponseBody map(PayableReceivableEnriched payableReceivableEnriched);
 
   GetPayableReceivableResponseBody map(PayableReceivable payableReceivable);
 

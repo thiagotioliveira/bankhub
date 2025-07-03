@@ -2,6 +2,7 @@ package dev.thiagooliveira.bankhub.infra.persistence.repository;
 
 import dev.thiagooliveira.bankhub.domain.dto.projection.TransactionEnriched;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.TransactionEntity;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ public interface TransactionRepository
         SELECT
             t.id AS id,
             t.account_id as accountId,
+            a.currency AS currency,
             t.date_time AS dateTime,
             t.description AS description,
             c.id AS categoryId,
@@ -49,4 +51,31 @@ public interface TransactionRepository
       @Param("accountIds") List<UUID> accountIds,
       @Param("organizationId") UUID organizationId,
       Pageable pageable);
+
+  @Query(
+      value =
+          """
+    SELECT
+            t.id AS id,
+            t.account_id as accountId,
+            a.currency AS currency,
+            t.date_time AS dateTime,
+            t.description AS description,
+            c.id AS categoryId,
+            c.name AS categoryName,
+            c.type AS categoryType,
+            t.amount AS amount
+        FROM transactions t
+        JOIN categories c ON t.category_id = c.id
+        JOIN accounts a ON a.id = t.account_id
+          AND a.organization_id = :organizationId
+          AND t.date_time >= :from
+          AND t.date_time <= :to
+        ORDER BY t.date_time DESC
+""",
+      nativeQuery = true)
+  List<TransactionEnriched> findByOrganizationIdOrderByDateTime(
+      @Param("organizationId") UUID organizationId,
+      @Param("from") LocalDate from,
+      @Param("to") LocalDate to);
 }

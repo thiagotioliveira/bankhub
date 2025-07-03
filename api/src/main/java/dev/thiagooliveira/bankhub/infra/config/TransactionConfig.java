@@ -19,7 +19,10 @@ public class TransactionConfig {
   }
 
   @Bean
-  public GetTransaction getTransaction(TransactionPort transactionPort, GetAccount getAccount) {
-    return new GetTransaction(transactionPort, getAccount);
+  public GetTransaction getTransaction(
+      TransactionPort transactionPort,
+      GetAccount getAccount,
+      GetPayableReceivable getPayableReceivable) {
+    return new GetTransaction(transactionPort, getAccount, getPayableReceivable);
   }
 }

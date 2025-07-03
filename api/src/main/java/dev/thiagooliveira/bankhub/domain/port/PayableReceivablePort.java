@@ -1,6 +1,7 @@
 package dev.thiagooliveira.bankhub.domain.port;
 
 import dev.thiagooliveira.bankhub.domain.dto.*;
+import dev.thiagooliveira.bankhub.domain.dto.projection.PayableReceivableEnriched;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,7 +21,8 @@ public interface PayableReceivablePort {
 
   Optional<PayableReceivable> findByIdAndOrganizationId(UUID id, UUID organizationId);
 
-  List<PayableReceivable> findByOrganizationId(UUID organizationId, LocalDate from, LocalDate to);
+  List<PayableReceivableEnriched> findByOrganizationId(
+      UUID organizationId, LocalDate from, LocalDate to);
 
   @Deprecated
   List<PayableReceivable> findByTemplateIdInAndDueDateBetween(

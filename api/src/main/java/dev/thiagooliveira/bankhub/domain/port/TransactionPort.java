@@ -5,6 +5,8 @@ import dev.thiagooliveira.bankhub.domain.dto.GetTransactionPageable;
 import dev.thiagooliveira.bankhub.domain.dto.Page;
 import dev.thiagooliveira.bankhub.domain.dto.projection.TransactionEnriched;
 import dev.thiagooliveira.bankhub.domain.model.Transaction;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,4 +17,6 @@ public interface TransactionPort {
   Transaction create(CreateTransactionEnrichedInput input);
 
   Page<TransactionEnriched> findEnrichedByFiltersOrderByDateTime(GetTransactionPageable param);
+
+  List<TransactionEnriched> getByOrganizationId(UUID organizationId, LocalDate from, LocalDate to);
 }

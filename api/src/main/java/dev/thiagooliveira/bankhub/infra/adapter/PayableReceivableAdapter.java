@@ -1,8 +1,10 @@
 package dev.thiagooliveira.bankhub.infra.adapter;
 
 import dev.thiagooliveira.bankhub.domain.dto.*;
+import dev.thiagooliveira.bankhub.domain.dto.projection.PayableReceivableEnriched;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
 import dev.thiagooliveira.bankhub.domain.model.Payment;
+import dev.thiagooliveira.bankhub.domain.port.AccountPort;
 import dev.thiagooliveira.bankhub.domain.port.PayableReceivablePort;
 import dev.thiagooliveira.bankhub.domain.port.PaymentPort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.PayableReceivableEntity;
@@ -21,14 +23,17 @@ public class PayableReceivableAdapter implements PayableReceivablePort {
   private final PayableReceivableRepository payableReceivableRepository;
   private final PayableReceivableTemplateRepository payableReceivableTemplateRepository;
   private final PaymentPort paymentPort;
+  private final AccountPort accountPort;
 
   public PayableReceivableAdapter(
       PayableReceivableRepository payableReceivableRepository,
       PayableReceivableTemplateRepository payableReceivableTemplateRepository,
-      PaymentPort paymentPort) {
+      PaymentPort paymentPort,
+      AccountPort accountPort) {
     this.payableReceivableRepository = payableReceivableRepository;
     this.payableReceivableTemplateRepository = payableReceivableTemplateRepository;
     this.paymentPort = paymentPort;
+    this.accountPort = accountPort;
   }
 
   @Override
@@ -123,24 +128,10 @@ public class PayableReceivableAdapter implements PayableReceivablePort {
   }
 
   @Override
-  public List<PayableReceivable> findByOrganizationId(
+  public List<PayableReceivableEnriched> findByOrganizationId(
       UUID organizationId, LocalDate from, LocalDate to) {
-    return this.payableReceivableRepository
-        .findByOrganizationIdOrderByDueDateAsc(organizationId, from, to)
-        .stream()
-        .map(
-            p -> {
-              var template =
-                  this.payableReceivableTemplateRepository
-                      .findById(p.getTemplateId())
-                      .orElseThrow();
-              var paymentId =
-                  this.paymentPort.findByPayableReceivableId(p.getId()).stream()
-                      .map(Payment::id)
-                      .findFirst();
-              return p.toDomain(template, paymentId);
-            })
-        .toList();
+    return this.payableReceivableRepository.findByOrganizationIdOrderByDueDateAsc(
+        organizationId, from, to);
   }
 
   @Override

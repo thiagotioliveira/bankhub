@@ -5,6 +5,7 @@ import dev.thiagooliveira.bankhub.application.usecase.GetPayableReceivable;
 import dev.thiagooliveira.bankhub.application.usecase.UpdatePayableReceivable;
 import dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableInput;
 import dev.thiagooliveira.bankhub.domain.dto.UpdatePayableReceivableInput;
+import dev.thiagooliveira.bankhub.domain.dto.projection.PayableReceivableEnriched;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
 import java.time.LocalDate;
 import java.util.List;
@@ -40,7 +41,7 @@ public class PayableReceivableService {
   }
 
   @Transactional
-  public List<PayableReceivable> getPayableReceivables(
+  public List<PayableReceivableEnriched> getPayableReceivables(
       UUID organizationId, LocalDate from, LocalDate to) {
     return this.getPayableReceivable.findByOrganizationId(organizationId, from, to);
   }

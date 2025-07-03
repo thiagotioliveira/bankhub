@@ -6,7 +6,11 @@ import dev.thiagooliveira.bankhub.domain.dto.CreateTransactionInput;
 import dev.thiagooliveira.bankhub.domain.dto.GetTransactionPageable;
 import dev.thiagooliveira.bankhub.domain.dto.Page;
 import dev.thiagooliveira.bankhub.domain.dto.projection.TransactionEnriched;
+import dev.thiagooliveira.bankhub.domain.model.IncomeAndExpenses;
 import dev.thiagooliveira.bankhub.domain.model.Transaction;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,10 +19,7 @@ public class TransactionService {
   private final CreateTransaction createTransaction;
   private final GetTransaction getTransaction;
 
-  public TransactionService(
-      CreateTransaction createTransaction,
-      GetTransaction getTransaction,
-      CategoryService categoryService) {
+  public TransactionService(CreateTransaction createTransaction, GetTransaction getTransaction) {
     this.createTransaction = createTransaction;
     this.getTransaction = getTransaction;
   }
@@ -34,5 +35,15 @@ public class TransactionService {
   public Page<TransactionEnriched> findEnrichedByFiltersOrderByDateTime(
       GetTransactionPageable pageable) {
     return this.getTransaction.findEnrichedByFiltersOrderByDateTime(pageable);
+  }
+
+  public List<TransactionEnriched> findEnrichedByFilters(
+      UUID organizationId, LocalDate from, LocalDate to) {
+    return this.getTransaction.getByOrganizationId(organizationId, from, to);
+  }
+
+  public List<IncomeAndExpenses> getIncomeAndExpenses(
+      UUID organizationId, LocalDate from, LocalDate to) {
+    return this.getTransaction.get(organizationId, from, to);
   }
 }

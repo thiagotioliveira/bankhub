@@ -8,6 +8,8 @@ import dev.thiagooliveira.bankhub.domain.model.Transaction;
 import dev.thiagooliveira.bankhub.domain.port.TransactionPort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.TransactionEntity;
 import dev.thiagooliveira.bankhub.infra.persistence.repository.TransactionRepository;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.PageRequest;
@@ -48,5 +50,11 @@ public class TransactionAdapter implements TransactionPort {
         page.getTotalPages(),
         page.isFirst(),
         page.isLast());
+  }
+
+  @Override
+  public List<TransactionEnriched> getByOrganizationId(
+      UUID organizationId, LocalDate from, LocalDate to) {
+    return this.transactionRepository.findByOrganizationIdOrderByDateTime(organizationId, from, to);
   }
 }

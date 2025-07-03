@@ -1,5 +1,6 @@
 package dev.thiagooliveira.bankhub.application.usecase;
 
+import dev.thiagooliveira.bankhub.domain.dto.projection.PayableReceivableEnriched;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivableTemplate;
 import dev.thiagooliveira.bankhub.domain.port.PayableReceivablePort;
@@ -24,7 +25,7 @@ public class GetPayableReceivable {
     this.createPayableReceivable = createPayableReceivable;
   }
 
-  public List<PayableReceivable> findByOrganizationId(
+  public List<PayableReceivableEnriched> findByOrganizationId(
       UUID organizationId, LocalDate from, LocalDate to) {
     var templates =
         this.templatePort

@@ -13,4 +13,12 @@ public enum Currency {
   public String symbol() {
     return this.symbol;
   }
+
+  public String getName() {
+    return this.name();
+  }
+
+  public String getSymbol() {
+    return this.symbol;
+  }
 }
