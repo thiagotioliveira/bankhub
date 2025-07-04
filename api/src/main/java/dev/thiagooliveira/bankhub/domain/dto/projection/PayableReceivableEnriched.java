@@ -26,11 +26,11 @@ public record PayableReceivableEnriched(
     Optional<Integer> installmentTotal,
     Optional<UUID> paymentId) {
   public PayableReceivableEnriched(
-      UUID id,
-      UUID templateId,
-      UUID accountId,
+      String id,
+      String templateId,
+      String accountId,
       String accountName,
-      UUID categoryId,
+      String categoryId,
       String currency,
       String description,
       BigDecimal amount,
@@ -40,12 +40,12 @@ public record PayableReceivableEnriched(
       String frequency,
       Integer installmentNumber,
       Integer installmentTotal,
-      UUID paymentId) {
+      String paymentId) {
     this(
-        id,
-        templateId,
-        accountId,
-        categoryId,
+        UUID.fromString(id),
+        UUID.fromString(templateId),
+        UUID.fromString(accountId),
+        UUID.fromString(categoryId),
         Currency.valueOf(currency),
         description,
         amount,
@@ -55,6 +55,6 @@ public record PayableReceivableEnriched(
         Optional.ofNullable(Frequency.valueOf(frequency)),
         Optional.ofNullable(installmentNumber),
         Optional.ofNullable(installmentTotal),
-        Optional.ofNullable(paymentId));
+        Optional.ofNullable(paymentId == null ? null : UUID.fromString(paymentId)));
   }
 }

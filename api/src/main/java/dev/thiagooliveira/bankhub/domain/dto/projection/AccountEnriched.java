@@ -7,7 +7,12 @@ import java.util.UUID;
 public record AccountEnriched(
     UUID id, String name, BigDecimal balance, Currency currency, BankEnriched bank) {
   public AccountEnriched(
-      UUID id, String name, BigDecimal balance, String currency, UUID bankId, String bankName) {
-    this(id, name, balance, Currency.valueOf(currency), new BankEnriched(bankId, bankName));
+      String id, String name, BigDecimal balance, String currency, String bankId, String bankName) {
+    this(
+        UUID.fromString(id),
+        name,
+        balance,
+        Currency.valueOf(currency),
+        new BankEnriched(UUID.fromString(bankId), bankName));
   }
 }

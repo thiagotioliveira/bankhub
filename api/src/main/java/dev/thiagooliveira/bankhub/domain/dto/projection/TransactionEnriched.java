@@ -16,22 +16,22 @@ public record TransactionEnriched(
     CategoryEnriched category,
     BigDecimal amount) {
   public TransactionEnriched(
-      UUID id,
-      UUID accountId,
+      String id,
+      String accountId,
       String currency,
       Timestamp dateTime,
       String description,
-      UUID categoryId,
+      String categoryId,
       String categoryName,
       String categoryType,
       BigDecimal amount) {
     this(
-        id,
-        accountId,
+        UUID.fromString(id),
+        UUID.fromString(accountId),
         Currency.valueOf(currency),
         dateTime.toInstant().atZone(ZoneId.of("Europe/Lisbon")).toOffsetDateTime(), // TODO
         description,
-        new CategoryEnriched(categoryId, categoryName, categoryType),
+        new CategoryEnriched(UUID.fromString(categoryId), categoryName, categoryType),
         amount);
   }
 }

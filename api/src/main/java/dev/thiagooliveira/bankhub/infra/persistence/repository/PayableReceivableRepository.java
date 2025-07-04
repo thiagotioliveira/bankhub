@@ -14,11 +14,11 @@ public interface PayableReceivableRepository extends JpaRepository<PayableReceiv
   @Query(
       value =
           """
-    SELECT pr.id as id,
-           pr.template_id as template_id,
-           prt.account_id as account_id,
+    SELECT CAST(pr.id AS VARCHAR) as id,
+           CAST(pr.template_id AS VARCHAR) as template_id,
+           CAST(prt.account_id AS VARCHAR) as account_id,
            a.name as account_name,
-           prt.category_id as category_id,
+           CAST(prt.category_id AS VARCHAR) as category_id,
            a.currency as currency,
            prt.description as description,
            pr.amount as amount,
@@ -28,7 +28,7 @@ public interface PayableReceivableRepository extends JpaRepository<PayableReceiv
            prt.frequency as frequency,
            pr.installment_number as installment_number,
            prt.installment_total as installment_total,
-           p.id as payment_id
+           CAST(p.id AS VARCHAR) as payment_id
                FROM payables_receivables pr
                INNER JOIN payable_receivable_templates prt ON pr.template_id = prt.id
                INNER JOIN accounts a ON prt.account_id = a.id

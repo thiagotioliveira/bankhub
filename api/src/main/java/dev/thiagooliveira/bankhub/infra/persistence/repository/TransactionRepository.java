@@ -20,12 +20,12 @@ public interface TransactionRepository
       value =
           """
         SELECT
-            t.id AS id,
-            t.account_id as accountId,
+            CAST(t.id AS VARCHAR) AS id,
+            CAST(t.account_id AS VARCHAR) as accountId,
             a.currency AS currency,
             t.date_time AS dateTime,
             t.description AS description,
-            c.id AS categoryId,
+            CAST(c.id AS VARCHAR) AS categoryId,
             c.name AS categoryName,
             c.type AS categoryType,
             t.amount AS amount
@@ -56,12 +56,12 @@ public interface TransactionRepository
       value =
           """
     SELECT
-            t.id AS id,
-            t.account_id as accountId,
+            CAST(t.id AS VARCHAR) AS id,
+            CAST(t.account_id AS VARCHAR) as accountId,
             a.currency AS currency,
             t.date_time AS dateTime,
             t.description AS description,
-            c.id AS categoryId,
+            CAST(c.id AS VARCHAR) AS categoryId,
             c.name AS categoryName,
             c.type AS categoryType,
             t.amount AS amount

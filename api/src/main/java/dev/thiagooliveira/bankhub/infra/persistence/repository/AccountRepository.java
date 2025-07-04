@@ -18,11 +18,11 @@ public interface AccountRepository extends JpaRepository<AccountEntity, UUID> {
       value =
           """
   SELECT
-    a.id AS id,
+    CAST(a.id AS VARCHAR) AS id,
     a.name AS name,
     a.balance AS balance,
     a.currency AS currency,
-    b.id AS bankId,
+    CAST(b.id AS VARCHAR) AS bankId,
     b.name AS bankName
   FROM accounts a
   JOIN banks b ON a.bank_id = b.id
