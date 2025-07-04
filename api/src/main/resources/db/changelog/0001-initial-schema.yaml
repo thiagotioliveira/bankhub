@@ -47,6 +47,16 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: enabled
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
                   name: organization_id
                   type: uuid
                   constraints:

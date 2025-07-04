@@ -21,10 +21,17 @@
                 <ion-icon class="icon" name="notifications-outline"></ion-icon>
                 <span class="badge badge-danger">4</span>
             </a>
-            <a href="app-settings.html" class="headerButton" th:if="false">
+            <a href="#"  class="headerButton dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="imaged w32">
                 <span class="badge badge-danger">6</span>
             </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <li>
+                    <form th:action="@{/logout}" method="post" style="display:inline;">
+                        <button type="submit" class="dropdown-item">Logout</button>
+                    </form>
+                </li>
+            </ul>
         </div>
     </div>
     <!-- * App Header -->

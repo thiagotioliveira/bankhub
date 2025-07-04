@@ -2,13 +2,14 @@ package dev.thiagooliveira.bankhub.infra.http.mvc;
 
 import dev.thiagooliveira.bankhub.domain.model.Frequency;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivableType;
-import dev.thiagooliveira.bankhub.infra.config.support.AppProperties;
 import dev.thiagooliveira.bankhub.infra.http.mvc.dto.CreatePayableReceivableInput;
+import dev.thiagooliveira.bankhub.infra.security.UserPrincipal;
 import dev.thiagooliveira.bankhub.infra.service.AccountService;
 import dev.thiagooliveira.bankhub.infra.service.CategoryService;
 import dev.thiagooliveira.bankhub.infra.service.PayableReceivableService;
 import java.time.LocalDate;
 import java.util.Optional;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,33 +18,32 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class PayableReceivableView {
 
-  private final AppProperties appProps;
   private final AccountService accountService;
   private final CategoryService categoryService;
   private final PayableReceivableService payableReceivableService;
 
   public PayableReceivableView(
-      AppProperties appProps,
       AccountService accountService,
       CategoryService categoryService,
       PayableReceivableService payableReceivableService) {
-    this.appProps = appProps;
     this.accountService = accountService;
     this.categoryService = categoryService;
     this.payableReceivableService = payableReceivableService;
   }
 
   @PostMapping("/payable-verification")
-  public ModelAndView payablePayable(@ModelAttribute CreatePayableReceivableInput input) {
+  public ModelAndView payablePayable(
+      @AuthenticationPrincipal UserPrincipal userPrincipal,
+      @ModelAttribute CreatePayableReceivableInput input) {
     input.setType("payable");
     var account =
         this.accountService
             .findByIdAndOrganizationIdEnriched(
-                input.getAccountId(), this.appProps.getOrganizationId())
+                input.getAccountId(), userPrincipal.getOrganizationId())
             .orElseThrow();
     var category =
         this.categoryService
-            .findById(input.getCategoryId(), this.appProps.getOrganizationId())
+            .findById(input.getCategoryId(), userPrincipal.getOrganizationId())
             .orElseThrow();
     ModelAndView modelAndView = new ModelAndView("payable-receivable-verification");
     modelAndView.addObject("icon", "alert-outline");
@@ -55,16 +55,18 @@ public class PayableReceivableView {
   }
 
   @PostMapping("/receivable-verification")
-  public ModelAndView payableReceivable(@ModelAttribute CreatePayableReceivableInput input) {
+  public ModelAndView payableReceivable(
+      @AuthenticationPrincipal UserPrincipal userPrincipal,
+      @ModelAttribute CreatePayableReceivableInput input) {
     input.setType("Receivable");
     var account =
         this.accountService
             .findByIdAndOrganizationIdEnriched(
-                input.getAccountId(), this.appProps.getOrganizationId())
+                input.getAccountId(), userPrincipal.getOrganizationId())
             .orElseThrow();
     var category =
         this.categoryService
-            .findById(input.getCategoryId(), this.appProps.getOrganizationId())
+            .findById(input.getCategoryId(), userPrincipal.getOrganizationId())
             .orElseThrow();
     ModelAndView modelAndView = new ModelAndView("payable-receivable-verification");
     modelAndView.addObject("type", "Receivable");
@@ -76,15 +78,17 @@ public class PayableReceivableView {
   }
 
   @PostMapping("/payable-receivable-detail")
-  public ModelAndView payableReceivableSubmit(@ModelAttribute CreatePayableReceivableInput input) {
+  public ModelAndView payableReceivableSubmit(
+      @AuthenticationPrincipal UserPrincipal userPrincipal,
+      @ModelAttribute CreatePayableReceivableInput input) {
     var account =
         this.accountService
             .findByIdAndOrganizationIdEnriched(
-                input.getAccountId(), this.appProps.getOrganizationId())
+                input.getAccountId(), userPrincipal.getOrganizationId())
             .orElseThrow();
     var category =
         this.categoryService
-            .findById(input.getCategoryId(), this.appProps.getOrganizationId())
+            .findById(input.getCategoryId(), userPrincipal.getOrganizationId())
             .orElseThrow();
 
     ModelAndView modelAndView = new ModelAndView("payable-receivable-detail");
@@ -93,7 +97,7 @@ public class PayableReceivableView {
           this.payableReceivableService.create(
               new dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableInput(
                   PayableReceivableType.RECEIVABLE,
-                  this.appProps.getOrganizationId(),
+                  userPrincipal.getOrganizationId(),
                   input.getAccountId(),
                   input.getCategoryId(),
                   input.getDescription(),
@@ -109,7 +113,7 @@ public class PayableReceivableView {
           this.payableReceivableService.create(
               new dev.thiagooliveira.bankhub.domain.dto.CreatePayableReceivableInput(
                   PayableReceivableType.PAYABLE,
-                  this.appProps.getOrganizationId(),
+                  userPrincipal.getOrganizationId(),
                   input.getAccountId(),
                   input.getCategoryId(),
                   input.getDescription(),

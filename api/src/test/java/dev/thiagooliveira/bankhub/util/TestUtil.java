@@ -11,7 +11,7 @@ import java.util.UUID;
 public class TestUtil {
 
   public static CreateOrganizationInput createOrganizationInput() {
-    return new CreateOrganizationInput("Jack Bauer", "j.bauer@bankhub.app");
+    return new CreateOrganizationInput("Jack Bauer", "j.bauer@bankhub.app", "test");
   }
 
   public static CreateCategoryInput createCategoryInput(

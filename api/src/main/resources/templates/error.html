@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:insert="~{fragments/head :: head}"></div>
+
+<body>
+
+<div th:insert="~{fragments/loader :: loader}"></div>
+
+<!-- App Header -->
+<div class="appHeader no-border">
+    <div class="left">
+        <a href="/" class="headerButton goBack">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+        </a>
+    </div>
+    <div class="pageTitle">
+        Error Page
+    </div>
+    <div class="right">
+    </div>
+</div>
+<!-- * App Header -->
+
+<!-- App Capsule -->
+<div id="appCapsule">
+
+    <div class="section">
+        <div class="splash-page mt-5 mb-5">
+            <h1>Error</h1>
+            <h2 class="mb-2">Something unexpected happened!</h2>
+            <p>
+                We are working to resolve.
+            </p>
+        </div>
+    </div>
+
+    <div class="fixed-bar" th:if="false">
+        <div class="row">
+            <div class="col-6">
+                <a href="#" class="btn btn-lg btn-outline-secondary btn-block goBack">Go Back</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- * App Capsule -->
+
+<!-- ========= JS Files =========  -->
+<!-- Bootstrap -->
+<script src="assets/js/lib/bootstrap.bundle.min.js"></script>
+<!-- Ionicons -->
+<script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.esm.js"></script>
+<!-- Splide -->
+<script src="assets/js/plugins/splide/splide.min.js"></script>
+<!-- Base Js File -->
+<script src="assets/js/base.js"></script>
+</body>
+</html>

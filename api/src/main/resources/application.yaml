@@ -5,16 +5,50 @@ spring:
     compose:
       enabled: false
   datasource:
-    url:
-    username:
+    url: jdbc:h2:mem:bankhubdb
+    username: sa
     password:
-    driver-class-name:
+    driver-class-name: org.h2.Driver
     hikari:
       maximum-pool-size: 10
       minimum-idle: 5
+  h2:
+    console:
+      enabled: true
   jpa:
     hibernate:
       ddl-auto: none
+server:
+  error:
+    path: /error
 app:
   seed:
-    enabled: false
+    enabled: true
+    users:
+      - email: john@bunkhub.app
+        name: John
+        password: test
+      - email: mary@bunkhub.app
+        name: Mary
+        password: test
+    banks:
+      - name: ActivoBank
+        accounts:
+          - name: ActivoBank Account
+            balance: 1000.00
+            currency: BRL
+    categories:
+      - name: Salary John
+        type: CREDIT
+      - name: Salary Mary
+        type: CREDIT
+      - name: Apartment Rental
+        type: DEBIT
+      - name: Electricity Bill
+        type: DEBIT
+      - name: Water Bill
+        type: DEBIT
+      - name: Food
+        type: DEBIT
+      - name: Leisure
+        type: DEBIT

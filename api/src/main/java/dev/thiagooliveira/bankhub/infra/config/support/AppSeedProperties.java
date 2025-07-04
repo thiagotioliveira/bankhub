@@ -50,6 +50,7 @@ public class AppSeedProperties {
   public static class User {
     private String name;
     private String email;
+    private String password;
 
     public String getName() {
       return name;
@@ -77,6 +78,14 @@ public class AppSeedProperties {
     @Override
     public int hashCode() {
       return Objects.hash(name, email);
+    }
+
+    public String getPassword() {
+      return password;
+    }
+
+    public void setPassword(String password) {
+      this.password = password;
     }
   }
 
