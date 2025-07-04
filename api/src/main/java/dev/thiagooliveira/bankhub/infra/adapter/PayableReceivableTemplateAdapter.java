@@ -29,11 +29,11 @@ public class PayableReceivableTemplateAdapter implements PayableReceivableTempla
 
   @Override
   public List<PayableReceivableTemplate>
-      findByOrganizationIdAndStartDateLessThanEqualOrStartDateBetweenAndRecurringIsTrue(
-          UUID organizationId, LocalDate from, LocalDate to) {
+      findByAccountIdAndStartDateLessThanEqualOrStartDateBetweenAndRecurringIsTrue(
+          UUID accountId, LocalDate from, LocalDate to) {
     return this.payableReceivableTemplateRepository
-        .findByOrganizationIdAndStartDateLessThanEqualOrStartDateBetweenAndRecurringIsTrue(
-            organizationId, from, to)
+        .findByAccountIdAndStartDateLessThanEqualOrStartDateBetweenAndRecurringIsTrue(
+            accountId, from, to)
         .stream()
         .map(PayableReceivableTemplateEntity::toDomain)
         .toList();

@@ -53,8 +53,8 @@ public class TransactionAdapter implements TransactionPort {
   }
 
   @Override
-  public List<TransactionEnriched> getByOrganizationId(
-      UUID organizationId, LocalDate from, LocalDate to) {
-    return this.transactionRepository.findByOrganizationIdOrderByDateTime(organizationId, from, to);
+  public List<TransactionEnriched> getByAccountIdOrderByDateTime(
+      UUID accountId, LocalDate from, LocalDate to) {
+    return this.transactionRepository.findByAccountIdOrderByDateTime(accountId, from, to);
   }
 }

@@ -44,8 +44,7 @@ public class AccountService {
     return this.getAccount.findByOrganizationId(organizationId);
   }
 
-  public List<MonthlyAccountSummary> getMonthlyAccountSummary(
-      UUID organizationId, YearMonth month) {
-    return this.getMonthlyAccountSummary.get(organizationId, month);
+  public Optional<MonthlyAccountSummary> getMonthlyAccountSummary(UUID accountId, YearMonth month) {
+    return this.getMonthlyAccountSummary.get(accountId, month);
   }
 }

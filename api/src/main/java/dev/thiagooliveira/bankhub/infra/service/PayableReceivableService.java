@@ -41,17 +41,12 @@ public class PayableReceivableService {
   }
 
   @Transactional
-  public List<PayableReceivableEnriched> getPayableReceivables(
-      UUID organizationId, LocalDate from, LocalDate to) {
-    return this.getPayableReceivable.findByOrganizationId(organizationId, from, to);
+  public List<PayableReceivableEnriched> getByAccountIdOrderByDueDateAsc(
+      UUID accountId, LocalDate from, LocalDate to) {
+    return this.getPayableReceivable.getByAccountIdOrderByDueDateAsc(accountId, from, to);
   }
 
-  public Optional<PayableReceivable> getPayableReceivable(UUID id, UUID organizationId) {
+  public Optional<PayableReceivable> getById(UUID id, UUID organizationId) {
     return this.getPayableReceivable.findByIdAndOrganizationId(id, organizationId);
-  }
-
-  public List<PayableReceivableEnriched> findByOrganizationId(
-      UUID organizationId, LocalDate from, LocalDate to) {
-    return this.getPayableReceivable.findByOrganizationId(organizationId, from, to);
   }
 }

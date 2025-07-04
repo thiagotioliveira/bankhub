@@ -23,6 +23,10 @@ public class GetCategory {
     return this.categoryPort.findByIdAndOrganizationIdOrOrganizationIdIsNull(id, organisationId);
   }
 
+  public Optional<Category> findById(UUID id) {
+    return this.categoryPort.findById(id);
+  }
+
   public List<Category> findAll(UUID organisationId) {
     return this.categoryPort.findByOrganizationIdOrOrganizationIdIsNull(organisationId);
   }

@@ -35,8 +35,8 @@ public class GetTransaction {
     }
   }
 
-  public List<TransactionEnriched> getByOrganizationId(
-      UUID organizationId, LocalDate from, LocalDate to) {
-    return this.transactionPort.getByOrganizationId(organizationId, from, to);
+  public List<TransactionEnriched> getByAccountIdOrderByDateTime(
+      UUID accountId, LocalDate from, LocalDate to) {
+    return this.transactionPort.getByAccountIdOrderByDateTime(accountId, from, to);
   }
 }

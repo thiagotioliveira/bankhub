@@ -18,5 +18,6 @@ public interface TransactionPort {
 
   Page<TransactionEnriched> findEnrichedByFiltersOrderByDateTime(GetTransactionPageable param);
 
-  List<TransactionEnriched> getByOrganizationId(UUID organizationId, LocalDate from, LocalDate to);
+  List<TransactionEnriched> getByAccountIdOrderByDateTime(
+      UUID accountId, LocalDate from, LocalDate to);
 }

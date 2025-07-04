@@ -14,14 +14,13 @@ public interface PayableReceivableTemplateRepository
   @Query(
       """
     SELECT prt FROM PayableReceivableTemplateEntity prt
-  JOIN AccountEntity a ON prt.accountId = a.id
-  WHERE a.organizationId = :organizationId
+  WHERE prt.accountId = :accountId
   AND (prt.startDate <= :startDate OR (prt.startDate >= :startDate AND prt.startDate <= :endDate))
   AND prt.recurring is true
 """)
   List<PayableReceivableTemplateEntity>
-      findByOrganizationIdAndStartDateLessThanEqualOrStartDateBetweenAndRecurringIsTrue(
-          @Param("organizationId") UUID organizationId,
+      findByAccountIdAndStartDateLessThanEqualOrStartDateBetweenAndRecurringIsTrue(
+          @Param("accountId") UUID accountId,
           @Param("startDate") LocalDate startDate,
           @Param("endDate") LocalDate endDate);
 }

@@ -2,99 +2,152 @@ package dev.thiagooliveira.bankhub.application.usecase;
 
 import dev.thiagooliveira.bankhub.domain.dto.projection.PayableReceivableEnriched;
 import dev.thiagooliveira.bankhub.domain.dto.projection.TransactionEnriched;
+import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.domain.model.*;
+import dev.thiagooliveira.bankhub.domain.port.AccountPort;
 import dev.thiagooliveira.bankhub.infra.service.PayableReceivableService;
 import dev.thiagooliveira.bankhub.infra.service.TransactionService;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class GetMonthlyAccountSummary {
 
   private final TransactionService transactionService;
   private final PayableReceivableService payableReceivableService;
+  private final AccountPort accountPort;
 
   public GetMonthlyAccountSummary(
-      TransactionService transactionService, PayableReceivableService payableReceivableService) {
+      TransactionService transactionService,
+      PayableReceivableService payableReceivableService,
+      AccountPort accountPort) {
     this.transactionService = transactionService;
     this.payableReceivableService = payableReceivableService;
+    this.accountPort = accountPort;
   }
 
-  public List<MonthlyAccountSummary> get(UUID organizationId, YearMonth month) {
+  public Optional<MonthlyAccountSummary> get(UUID accountId, YearMonth month) {
+    Account account =
+        accountPort
+            .findById(accountId)
+            .orElseThrow(() -> BusinessLogicException.notFound("account not found"));
+
+    YearMonth createdAt = YearMonth.from(account.createdAt());
+    if (month.isBefore(createdAt)) return Optional.empty();
+
+    if (month.equals(createdAt)) {
+      return calculateMonthlySummary(accountId, month, null);
+    }
+
+    Optional<MonthlyAccountSummary> lastSummaryOpt = accountPort.getLastAccountSummary(accountId);
+    if (lastSummaryOpt.isEmpty()) throw new RuntimeException("need to check");
+
+    MonthlyAccountSummary lastSummary = lastSummaryOpt.get();
+    List<YearMonth> monthsToCalculate =
+        generateMonths(lastSummary.yearMonth().plusMonths(1), month);
+
+    BigDecimal balance = lastSummary.balance();
+    for (YearMonth currentMonth : monthsToCalculate) {
+      MonthlySummaryData data = fetchSummaryData(accountId, currentMonth);
+      balance =
+          balance.add(
+              data.income
+                  .subtract(data.expenses)
+                  .add(data.receivablePending.subtract(data.payablePending)));
+
+      if (currentMonth.equals(month)) {
+        return Optional.of(
+            new MonthlyAccountSummary(
+                accountId,
+                month,
+                balance,
+                data.income,
+                data.expenses,
+                data.receivablePending,
+                data.payablePending));
+      }
+    }
+
+    return Optional.empty();
+  }
+
+  private Optional<MonthlyAccountSummary> calculateMonthlySummary(
+      UUID accountId, YearMonth month, BigDecimal previousBalance) {
+    MonthlySummaryData data = fetchSummaryData(accountId, month);
+
+    boolean isEmpty = data.transactions.isEmpty() && data.expectedTransactions.isEmpty();
+    if (previousBalance == null && isEmpty) return Optional.empty();
+
+    BigDecimal balance =
+        previousBalance != null
+            ? previousBalance.add(
+                data.income
+                    .subtract(data.expenses)
+                    .add(data.receivablePending.subtract(data.payablePending)))
+            : data.income.subtract(data.expenses);
+
+    return Optional.of(
+        new MonthlyAccountSummary(
+            accountId,
+            month,
+            balance,
+            data.income,
+            data.expenses,
+            data.receivablePending,
+            data.payablePending));
+  }
+
+  private MonthlySummaryData fetchSummaryData(UUID accountId, YearMonth month) {
     var from = month.atDay(1);
     var to = month.atEndOfMonth();
-    var payablesReceivables =
-        payableReceivableService.findByOrganizationId(organizationId, from, to);
-    var transactions = getByOrganizationId(organizationId, from, to);
 
-    var receivables =
-        sumByCurrency(
-            payablesReceivables, PayableReceivableType.RECEIVABLE, PayableReceivableStatus.PENDING);
-    var payables =
-        sumByCurrency(
-            payablesReceivables, PayableReceivableType.PAYABLE, PayableReceivableStatus.PENDING);
-    var creditTransactions = sumByCurrency(transactions, CategoryType.CREDIT);
-    var debitTransactions = sumByCurrency(transactions, CategoryType.DEBIT);
+    List<PayableReceivableEnriched> expectedTransactions =
+        payableReceivableService.getByAccountIdOrderByDueDateAsc(accountId, from, to);
+    List<TransactionEnriched> transactions =
+        transactionService.getByAccountIdOrderByDateTime(accountId, from, to);
 
-    Set<Currency> currencies =
-        Stream.of(receivables, payables, creditTransactions, debitTransactions)
-            .flatMap(map -> map.keySet().stream())
-            .collect(Collectors.toSet());
+    BigDecimal receivablePending =
+        sumByTypeAndStatus(
+            expectedTransactions,
+            PayableReceivableType.RECEIVABLE,
+            PayableReceivableStatus.PENDING);
+    BigDecimal payablePending =
+        sumByTypeAndStatus(
+            expectedTransactions, PayableReceivableType.PAYABLE, PayableReceivableStatus.PENDING);
+    BigDecimal income = sumByCategoryType(transactions, CategoryType.CREDIT);
+    BigDecimal expenses = sumByCategoryType(transactions, CategoryType.DEBIT);
 
-    return currencies.stream()
-        .map(
-            currency -> {
-              BigDecimal receivablePending = receivables.getOrDefault(currency, BigDecimal.ZERO);
-              BigDecimal income =
-                  receivablePending.add(creditTransactions.getOrDefault(currency, BigDecimal.ZERO));
-              BigDecimal payablePending = payables.getOrDefault(currency, BigDecimal.ZERO);
-              BigDecimal expenses =
-                  payablePending.add(debitTransactions.getOrDefault(currency, BigDecimal.ZERO));
-              return new MonthlyAccountSummary(
-                  UUID.randomUUID(), // TODO
-                  month,
-                  currency,
-                  BigDecimal.ZERO,
-                  income,
-                  expenses,
-                  receivablePending,
-                  payablePending);
-            })
-        .collect(Collectors.toList());
+    return new MonthlySummaryData(
+        transactions, expectedTransactions, income, expenses, receivablePending, payablePending);
   }
 
-  public List<TransactionEnriched> getByOrganizationId(
-      UUID organizationId, LocalDate from, LocalDate to) {
-    return this.transactionService.getByOrganizationId(organizationId, from, to);
-  }
-
-  private Map<Currency, BigDecimal> sumByCurrency(
+  private BigDecimal sumByTypeAndStatus(
       List<PayableReceivableEnriched> list,
       PayableReceivableType type,
       PayableReceivableStatus status) {
     return list.stream()
         .filter(p -> type.equals(p.type()) && status.equals(p.status()))
-        .collect(
-            Collectors.groupingBy(
-                PayableReceivableEnriched::currency,
-                Collectors.reducing(
-                    BigDecimal.ZERO, PayableReceivableEnriched::amount, BigDecimal::add)));
+        .map(PayableReceivableEnriched::amount)
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 
-  private Map<Currency, BigDecimal> sumByCurrency(
-      List<TransactionEnriched> list, CategoryType categoryType) {
+  private BigDecimal sumByCategoryType(List<TransactionEnriched> list, CategoryType categoryType) {
     return list.stream()
         .filter(t -> categoryType.equals(t.category().type()))
-        .collect(
-            Collectors.groupingBy(
-                TransactionEnriched::currency,
-                Collectors.reducing(
-                    BigDecimal.ZERO, TransactionEnriched::amount, BigDecimal::add)));
+        .map(TransactionEnriched::amount)
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
+
+  private List<YearMonth> generateMonths(YearMonth start, YearMonth end) {
+    return Stream.iterate(start, ym -> !ym.isAfter(end), ym -> ym.plusMonths(1)).toList();
+  }
+
+  private record MonthlySummaryData(
+      List<TransactionEnriched> transactions,
+      List<PayableReceivableEnriched> expectedTransactions,
+      BigDecimal income,
+      BigDecimal expenses,
+      BigDecimal receivablePending,
+      BigDecimal payablePending) {}
 }

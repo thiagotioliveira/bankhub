@@ -33,9 +33,10 @@ public class PayableReceivableController implements PayableReceivableApi {
   @Override
   public ResponseEntity<List<GetPayableReceivableResponseBody>> getPayableReceivable(
       LocalDate start, LocalDate end) {
+    // TODO
     return ResponseEntity.ok(
         this.payableReceivableService
-            .getPayableReceivables(this.appProps.getOrganizationId(), start, end)
+            .getByAccountIdOrderByDueDateAsc(this.appProps.getOrganizationId(), start, end)
             .stream()
             .map(this.payableReceivableMapper::map)
             .toList());
@@ -46,7 +47,7 @@ public class PayableReceivableController implements PayableReceivableApi {
     return ResponseEntity.ok(
         this.payableReceivableMapper.map(
             this.payableReceivableService
-                .getPayableReceivable(id, this.appProps.getOrganizationId())
+                .getById(id, this.appProps.getOrganizationId())
                 .orElseThrow(
                     () -> BusinessLogicException.notFound("payable/receivable not found"))));
   }

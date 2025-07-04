@@ -1,5 +1,6 @@
 package dev.thiagooliveira.bankhub.infra.persistence.entity;
 
+import dev.thiagooliveira.bankhub.domain.model.MonthlyAccountSummary;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.YearMonth;
@@ -50,6 +51,17 @@ public class MonthlyAccountSummaryEntity {
     this.expenses = expenses;
     this.receivablesPending = receivablesPending;
     this.payablePending = payablePending;
+  }
+
+  public MonthlyAccountSummary toDomain() {
+    return new MonthlyAccountSummary(
+        this.accountId,
+        this.yearMonth,
+        this.balance,
+        this.income,
+        this.expenses,
+        this.receivablesPending,
+        this.payablePending);
   }
 
   public UUID getId() {

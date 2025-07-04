@@ -33,13 +33,13 @@ public interface PayableReceivableRepository extends JpaRepository<PayableReceiv
                INNER JOIN payable_receivable_templates prt ON pr.template_id = prt.id
                INNER JOIN accounts a ON prt.account_id = a.id
                LEFT JOIN payments p ON p.payable_receivable_id = pr.id
-               WHERE a.organization_id = :organizationId
+               WHERE a.id = :accountId
                AND pr.due_date >= :startDate AND pr.due_date <= :endDate
             ORDER BY pr.due_date ASC
 """,
       nativeQuery = true)
-  List<PayableReceivableEnriched> findByOrganizationIdOrderByDueDateAsc(
-      @Param("organizationId") UUID organizationId,
+  List<PayableReceivableEnriched> findByAccountIdOrderByDueDateAsc(
+      @Param("accountId") UUID accountId,
       @Param("startDate") LocalDate startDate,
       @Param("endDate") LocalDate endDate);
 

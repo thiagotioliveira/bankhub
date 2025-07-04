@@ -7,7 +7,6 @@ import java.util.UUID;
 public record MonthlyAccountSummary(
     UUID accountId,
     YearMonth yearMonth,
-    Currency currency,
     BigDecimal balance,
     BigDecimal income,
     BigDecimal expenses,

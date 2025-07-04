@@ -50,13 +50,6 @@ public class IndexView {
     model.addObject("accounts", accounts);
     var account = accounts.get(0);
     model.addObject("account", account);
-    /*
-    var transactions =
-        this.transactionService.findEnrichedByFiltersOrderByDateTime(
-            new GetTransactionPageable(
-                List.of(account.id()), this.appProps.getOrganizationId(), 0, 5));
-    model.addObject("transactions", transactions.content());
-    */
     var categories = this.categoryService.findAll(this.appProps.getOrganizationId());
     var credCategories = categories.stream().filter(Category::isCredit).toList();
     if (!credCategories.isEmpty()) {
@@ -68,26 +61,22 @@ public class IndexView {
     }
     model.addObject("withdrawalInput", new CreateTransactionInput("withdrawal"));
     model.addObject("depositInput", new CreateTransactionInput("deposit"));
-    model.addObject("payableInput", new CreatePayableReceivableInput());
     model.addObject("receivableInput", new CreatePayableReceivableInput());
+    model.addObject("payableInput", new CreatePayableReceivableInput());
 
     var monthlyAccountSummary =
-        accountService.getMonthlyAccountSummary(appProps.getOrganizationId(), targetMonth);
-    var accountSummary =
-        monthlyAccountSummary.stream()
-            .filter(i -> i.currency().equals(account.currency()))
-            .findFirst()
+        accountService
+            .getMonthlyAccountSummary(account.id(), targetMonth)
             .orElse(
                 new MonthlyAccountSummary(
                     account.id(),
                     month,
-                    account.currency(),
                     BigDecimal.ZERO,
                     BigDecimal.ZERO,
                     BigDecimal.ZERO,
                     BigDecimal.ZERO,
-                    BigDecimal.ZERO)); // TODO
-    model.addObject("accountSummary", accountSummary);
+                    BigDecimal.ZERO));
+    model.addObject("accountSummary", monthlyAccountSummary);
     return model;
   }
 }

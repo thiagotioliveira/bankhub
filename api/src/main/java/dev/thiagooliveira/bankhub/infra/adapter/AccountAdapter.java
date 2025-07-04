@@ -7,9 +7,10 @@ import dev.thiagooliveira.bankhub.domain.model.MonthlyAccountSummary;
 import dev.thiagooliveira.bankhub.domain.port.AccountPort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.AccountEntity;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.MonthlyAccountSummaryEntity;
-import dev.thiagooliveira.bankhub.infra.persistence.repository.AccountBalanceSnapshotRepository;
 import dev.thiagooliveira.bankhub.infra.persistence.repository.AccountRepository;
+import dev.thiagooliveira.bankhub.infra.persistence.repository.MonthlyAccountSummaryRepository;
 import java.math.BigDecimal;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,13 +20,13 @@ import org.springframework.stereotype.Component;
 public class AccountAdapter implements AccountPort {
 
   private final AccountRepository accountRepository;
-  private final AccountBalanceSnapshotRepository accountBalanceSnapshotRepository;
+  private final MonthlyAccountSummaryRepository monthlyAccountSummaryRepository;
 
   public AccountAdapter(
       AccountRepository accountRepository,
-      AccountBalanceSnapshotRepository accountBalanceSnapshotRepository) {
+      MonthlyAccountSummaryRepository monthlyAccountSummaryRepository) {
     this.accountRepository = accountRepository;
-    this.accountBalanceSnapshotRepository = accountBalanceSnapshotRepository;
+    this.monthlyAccountSummaryRepository = monthlyAccountSummaryRepository;
   }
 
   @Override
@@ -40,6 +41,11 @@ public class AccountAdapter implements AccountPort {
     return this.accountRepository
         .findByIdAndOrganizationId(id, organizationId)
         .map(AccountEntity::toDomain);
+  }
+
+  @Override
+  public Optional<Account> findById(UUID id) {
+    return this.accountRepository.findById(id).map(AccountEntity::toDomain);
   }
 
   @Override
@@ -76,6 +82,20 @@ public class AccountAdapter implements AccountPort {
             input.expenses(),
             input.receivablesPending(),
             input.payablePending());
-    this.accountBalanceSnapshotRepository.save(snapshot);
+    this.monthlyAccountSummaryRepository.save(snapshot);
+  }
+
+  @Override
+  public Optional<MonthlyAccountSummary> getAccountSummary(UUID accountId, YearMonth targetMonth) {
+    return this.monthlyAccountSummaryRepository
+        .findByAccountIdAndYearMonth(accountId, targetMonth)
+        .map(MonthlyAccountSummaryEntity::toDomain);
+  }
+
+  @Override
+  public Optional<MonthlyAccountSummary> getLastAccountSummary(UUID accountId) {
+    return this.monthlyAccountSummaryRepository
+        .findTopByAccountIdOrderByYearMonthDesc(accountId)
+        .map(MonthlyAccountSummaryEntity::toDomain);
   }
 }

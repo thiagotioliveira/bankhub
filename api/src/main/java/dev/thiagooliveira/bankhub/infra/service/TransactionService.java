@@ -37,12 +37,12 @@ public class TransactionService {
   }
 
   public List<TransactionEnriched> findEnrichedByFilters(
-      UUID organizationId, LocalDate from, LocalDate to) {
-    return this.getTransaction.getByOrganizationId(organizationId, from, to);
+      UUID accountId, LocalDate from, LocalDate to) {
+    return this.getTransaction.getByAccountIdOrderByDateTime(accountId, from, to);
   }
 
-  public List<TransactionEnriched> getByOrganizationId(
-      UUID organizationId, LocalDate from, LocalDate to) {
-    return this.getTransaction.getByOrganizationId(organizationId, from, to);
+  public List<TransactionEnriched> getByAccountIdOrderByDateTime(
+      UUID accountId, LocalDate from, LocalDate to) {
+    return this.getTransaction.getByAccountIdOrderByDateTime(accountId, from, to);
   }
 }

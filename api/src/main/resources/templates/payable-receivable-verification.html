@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:insert="~{fragments/head :: head}"></div>
+
+    <body>
+
+        <div th:insert="~{fragments/loader :: loader}"></div>
+
+        <!-- App Header -->
+        <div class="appHeader">
+            <div class="left">
+                <a href="/" class="headerButton">
+                    <ion-icon name="chevron-back-outline"></ion-icon>
+                </a>
+            </div>
+            <div class="pageTitle" th:text="${type}">
+                Detail
+            </div>
+            <div class="right" th:if="false">
+                <a href="#" class="headerButton" data-bs-toggle="modal" data-bs-target="#DialogBasic">
+                    <ion-icon name="trash-outline"></ion-icon>
+                </a>
+            </div>
+        </div>
+        <!-- * App Header -->
+
+        <!-- Dialog Basic -->
+        <div class="modal fade dialogbox" id="DialogBasic" data-bs-backdrop="static" tabindex="-1" role="dialog" th:if="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete</h5>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure?
+                    </div>
+                    <div class="modal-footer">
+                        <div class="btn-inline">
+                            <a href="#" class="btn btn-text-secondary" data-bs-dismiss="modal">CANCEL</a>
+                            <a href="#" class="btn btn-text-primary" data-bs-dismiss="modal">DELETE</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- * Dialog Basic -->
+
+        <!-- App Capsule -->
+        <div id="appCapsule" class="full-height">
+
+            <div class="section mt-2 mb-2">
+
+
+                <div class="listed-detail mt-3">
+                    <div class="icon-wrapper">
+                        <div class="iconbox">
+                            <ion-icon name="arrow-forward-outline"></ion-icon>
+                        </div>
+                    </div>
+                    <h3 class="text-center mt-2" th:text="${type + ' ' + 'Detail'}">Detail</h3>
+                </div>
+
+                <ul class="listview flush transparent simple-listview no-space mt-3">
+                    <li>
+                        <strong>Account</strong>
+                        <span th:text="${account.name()}"></span>
+                    </li>
+                    <li>
+                        <strong>Category</strong>
+                        <span th:text="${category.name()}"></span>
+                    </li>
+                    <li>
+                        <strong>Amount</strong>
+                        <h3 class="m-0" th:text="${account.currency().symbol() + '' + input.getAmount()}"></h3>
+                    </li>
+                    <li>
+                        <strong>Description</strong>
+                        <span th:text="${input.getDescription()}"></span>
+                    </li>
+                    <li>
+                        <strong>Recurring?</strong>
+                        <span th:text="${input.isRecurring() ? 'Yes' : 'No'}">Yes</span>
+                    </li>
+                    <li>
+                        <strong>Frequency</strong>
+                        <span th:text="${input.getFrequence()}"></span>
+                    </li>
+                    <li>
+                        <strong>Installment Total</strong>
+                        <span th:text="${input.getInstallmentTotal()}">24</span>
+                    </li>
+                </ul>
+
+                <form action="#" th:action="@{/payable-receivable-detail}" method="post" th:object="${input}">
+                    <input type="hidden" th:field="*{type}" />
+                    <input type="hidden" th:field="*{accountId}" />
+                    <input type="hidden" th:field="*{categoryId}" />
+                    <input type="hidden" th:field="*{amount}" />
+                    <input type="hidden" th:field="*{description}" />
+                    <input type="hidden" th:field="*{recurring}" />
+                    <input type="hidden" th:field="*{frequence}" />
+                    <input type="hidden" th:field="*{installmentTotal}" />
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-lg btn-primary btn-block">Confirm</button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+        <!-- * App Capsule -->
+
+        <!-- ========= JS Files =========  -->
+        <!-- Bootstrap -->
+        <script src="assets/js/lib/bootstrap.bundle.min.js"></script>
+        <!-- Ionicons -->
+        <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.esm.js"></script>
+        <!-- Splide -->
+        <script src="assets/js/plugins/splide/splide.min.js"></script>
+        <!-- Base Js File -->
+        <script src="assets/js/base.js"></script>
+    </body>
+</html>

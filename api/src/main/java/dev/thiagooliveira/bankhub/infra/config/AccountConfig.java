@@ -33,7 +33,9 @@ public class AccountConfig {
 
   @Bean
   public GetMonthlyAccountSummary getMonthlyAccountSummary(
-      TransactionService transactionService, PayableReceivableService payableReceivableService) {
-    return new GetMonthlyAccountSummary(transactionService, payableReceivableService);
+      TransactionService transactionService,
+      PayableReceivableService payableReceivableService,
+      AccountPort accountPort) {
+    return new GetMonthlyAccountSummary(transactionService, payableReceivableService, accountPort);
   }
 }

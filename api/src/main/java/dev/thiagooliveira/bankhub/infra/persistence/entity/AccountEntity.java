@@ -5,6 +5,7 @@ import dev.thiagooliveira.bankhub.domain.model.Account;
 import dev.thiagooliveira.bankhub.domain.model.Currency;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
@@ -12,6 +13,9 @@ import java.util.UUID;
 public class AccountEntity {
 
   @Id private UUID id;
+
+  @Column(name = "created_at", nullable = false)
+  private OffsetDateTime createdAt;
 
   @Column(nullable = false)
   private UUID organizationId;
@@ -33,13 +37,16 @@ public class AccountEntity {
 
   public AccountEntity(
       UUID id,
+      OffsetDateTime createdAt,
       UUID organizationId,
       String name,
       UUID bankId,
       BigDecimal balance,
       Currency currency) {
     this.id = id;
+    this.createdAt = createdAt;
     this.organizationId = organizationId;
+    this.createdAt = createdAt;
     this.name = name;
     this.bankId = bankId;
     this.balance = balance;
@@ -49,6 +56,7 @@ public class AccountEntity {
   public static AccountEntity from(CreateAccountInput input) {
     AccountEntity entity = new AccountEntity();
     entity.id = UUID.randomUUID();
+    entity.createdAt = OffsetDateTime.now();
     entity.organizationId = input.organizationId();
     entity.name = input.name();
     entity.bankId = input.bankId();
@@ -58,7 +66,15 @@ public class AccountEntity {
   }
 
   public Account toDomain() {
-    return new Account(id, name, bankId, organizationId, balance, currency);
+    return new Account(id, name, bankId, organizationId, balance, currency, createdAt);
+  }
+
+  public OffsetDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(OffsetDateTime createdAt) {
+    this.createdAt = createdAt;
   }
 
   public UUID getId() {

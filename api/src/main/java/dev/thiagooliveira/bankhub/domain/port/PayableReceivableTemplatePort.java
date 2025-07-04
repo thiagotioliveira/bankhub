@@ -10,6 +10,6 @@ public interface PayableReceivableTemplatePort {
   PayableReceivableTemplate create(CreatePayableReceivableTemplateInput input);
 
   List<PayableReceivableTemplate>
-      findByOrganizationIdAndStartDateLessThanEqualOrStartDateBetweenAndRecurringIsTrue(
-          UUID organizationId, LocalDate from, LocalDate to);
+      findByAccountIdAndStartDateLessThanEqualOrStartDateBetweenAndRecurringIsTrue(
+          UUID accountId, LocalDate from, LocalDate to);
 }

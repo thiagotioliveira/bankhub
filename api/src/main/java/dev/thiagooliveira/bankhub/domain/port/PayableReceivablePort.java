@@ -21,8 +21,8 @@ public interface PayableReceivablePort {
 
   Optional<PayableReceivable> findByIdAndOrganizationId(UUID id, UUID organizationId);
 
-  List<PayableReceivableEnriched> findByOrganizationId(
-      UUID organizationId, LocalDate from, LocalDate to);
+  List<PayableReceivableEnriched> findByAccountIdOrderByDueDateAsc(
+      UUID accountId, LocalDate from, LocalDate to);
 
   @Deprecated
   List<PayableReceivable> findByTemplateIdInAndDueDateBetween(

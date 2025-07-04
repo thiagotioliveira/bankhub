@@ -25,25 +25,25 @@ public class GetPayableReceivable {
     this.createPayableReceivable = createPayableReceivable;
   }
 
-  public List<PayableReceivableEnriched> findByOrganizationId(
-      UUID organizationId, LocalDate from, LocalDate to) {
+  public List<PayableReceivableEnriched> getByAccountIdOrderByDueDateAsc(
+      UUID accountId, LocalDate from, LocalDate to) {
     var templates =
         this.templatePort
-            .findByOrganizationIdAndStartDateLessThanEqualOrStartDateBetweenAndRecurringIsTrue(
-                organizationId, from, to);
+            .findByAccountIdAndStartDateLessThanEqualOrStartDateBetweenAndRecurringIsTrue(
+                accountId, from, to);
     for (PayableReceivableTemplate template : templates) {
       var dayBase = template.startDate().getDayOfMonth();
       switch (template.frequency().get()) {
         case MONTHLY -> {
           var dueDate = from.withDayOfMonth(dayBase);
           if (!this.port.existsByTemplateIdAndDueDate(template.id(), dueDate)) {
-            this.createPayableReceivable.createWithTemplate(template, organizationId, dueDate);
+            this.createPayableReceivable.createWithTemplate(template, dueDate);
           }
         }
       }
     }
 
-    return port.findByOrganizationId(organizationId, from, to);
+    return port.findByAccountIdOrderByDueDateAsc(accountId, from, to);
   }
 
   public Optional<PayableReceivable> findByIdAndOrganizationId(UUID id, UUID organizationId) {

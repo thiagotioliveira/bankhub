@@ -15,6 +15,8 @@ public interface CategoryPort {
 
   Optional<Category> findByIdAndOrganizationIdOrOrganizationIdIsNull(UUID id, UUID organizationId);
 
+  Optional<Category> findById(UUID id);
+
   List<Category> findByOrganizationIdOrOrganizationIdIsNull(UUID organizationId);
 
   boolean existsByNameIgnoreCaseAndOrganizationIdAndType(

@@ -46,7 +46,6 @@ public class CreateAccount {
         new MonthlyAccountSummary(
             account.id(),
             YearMonth.now().minusMonths(1),
-            account.currency(),
             BigDecimal.ZERO,
             BigDecimal.ZERO,
             BigDecimal.ZERO,

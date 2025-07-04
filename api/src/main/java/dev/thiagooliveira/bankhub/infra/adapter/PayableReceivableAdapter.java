@@ -128,10 +128,9 @@ public class PayableReceivableAdapter implements PayableReceivablePort {
   }
 
   @Override
-  public List<PayableReceivableEnriched> findByOrganizationId(
-      UUID organizationId, LocalDate from, LocalDate to) {
-    return this.payableReceivableRepository.findByOrganizationIdOrderByDueDateAsc(
-        organizationId, from, to);
+  public List<PayableReceivableEnriched> findByAccountIdOrderByDueDateAsc(
+      UUID accountId, LocalDate from, LocalDate to) {
+    return this.payableReceivableRepository.findByAccountIdOrderByDueDateAsc(accountId, from, to);
   }
 
   @Override

@@ -67,15 +67,13 @@ public interface TransactionRepository
             t.amount AS amount
         FROM transactions t
         JOIN categories c ON t.category_id = c.id
-        JOIN accounts a ON a.id = t.account_id
-          AND a.organization_id = :organizationId
+         JOIN accounts a ON a.id = t.account_id
+          AND t.account_id = :accountId
           AND t.date_time >= :from
           AND t.date_time <= :to
         ORDER BY t.date_time DESC
 """,
       nativeQuery = true)
-  List<TransactionEnriched> findByOrganizationIdOrderByDateTime(
-      @Param("organizationId") UUID organizationId,
-      @Param("from") LocalDate from,
-      @Param("to") LocalDate to);
+  List<TransactionEnriched> findByAccountIdOrderByDateTime(
+      @Param("accountId") UUID accountId, @Param("from") LocalDate from, @Param("to") LocalDate to);
 }

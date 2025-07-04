@@ -14,7 +14,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public class CreatePayableReceivable {
 
@@ -35,10 +34,10 @@ public class CreatePayableReceivable {
   }
 
   public PayableReceivable createWithTemplate(
-      PayableReceivableTemplate template, UUID organizationId, LocalDate dueDate) {
+      PayableReceivableTemplate template, LocalDate dueDate) {
     var category =
         this.getCategory
-            .findById(template.categoryId(), organizationId)
+            .findById(template.categoryId())
             .orElseThrow(() -> BusinessLogicException.notFound("category not found"));
     return this.payableReceivablePort.create(
         new CreatePayableReceivableEnrichedInput(template, category, dueDate));
