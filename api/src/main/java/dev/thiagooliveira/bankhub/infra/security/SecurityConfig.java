@@ -28,6 +28,7 @@ public class SecurityConfig {
     var permitAllMatchers = new java.util.ArrayList<String>();
     permitAllMatchers.add("/login");
     permitAllMatchers.add("/assets/**");
+    permitAllMatchers.add("/favicon.ico");
     permitAllMatchers.add("/swagger-ui/**");
     permitAllMatchers.add("/v3/api-docs/**");
     permitAllMatchers.add("/swagger-ui/index.html");

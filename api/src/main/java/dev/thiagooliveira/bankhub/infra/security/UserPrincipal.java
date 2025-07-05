@@ -23,6 +23,10 @@ public class UserPrincipal implements UserDetails {
     return user.getId();
   }
 
+  public String getName() {
+    return user.getName();
+  }
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return Collections.emptyList();

@@ -13,8 +13,7 @@ import java.time.YearMonth;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -28,21 +27,14 @@ public class IndexView {
     this.categoryService = categoryService;
   }
 
-  @PostMapping({"/"})
-  public ModelAndView changeMonth(
-      @AuthenticationPrincipal UserPrincipal userPrincipal,
-      @RequestParam(name = "month", required = false) YearMonth month) {
-    return index(userPrincipal, month);
-  }
-
-  @GetMapping({"/"})
+  @GetMapping({"/", "/{month:\\d{4}-\\d{2}}"})
   public ModelAndView index(
       @AuthenticationPrincipal UserPrincipal userPrincipal,
-      @RequestParam(name = "month", required = false) YearMonth month) {
-    YearMonth targetMonth = (month != null) ? month : YearMonth.now();
+      @PathVariable(name = "month", required = false) YearMonth month) {
+    YearMonth selectedMonth = (month != null) ? month : YearMonth.now();
 
-    AppModelAndView model = new AppModelAndView("index");
-    model.updateYearMonth(targetMonth);
+    AppModelAndView model = new AppModelAndView("index", userPrincipal);
+    model.updateYearMonth(selectedMonth);
 
     var accounts = this.accountService.findByOrganizationId(userPrincipal.getOrganizationId());
     model.addObject("accounts", accounts);
@@ -64,7 +56,7 @@ public class IndexView {
 
     var monthlyAccountSummary =
         accountService
-            .getMonthlyAccountSummary(account.id(), targetMonth)
+            .getMonthlyAccountSummary(account.id(), selectedMonth)
             .orElse(
                 new MonthlyAccountSummary(
                     account.id(),
