@@ -903,10 +903,6 @@ components:
         payableReceivableId:
           type: string
           format: uuid
-        amount:
-          type: number
-          format: double
-          nullable: true
         dateTime:
           type: string
           format: date-time

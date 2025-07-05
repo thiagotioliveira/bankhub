@@ -3,7 +3,6 @@ package dev.thiagooliveira.bankhub.infra.config;
 import dev.thiagooliveira.bankhub.application.usecase.*;
 import dev.thiagooliveira.bankhub.domain.port.PayableReceivablePort;
 import dev.thiagooliveira.bankhub.domain.port.PayableReceivableTemplatePort;
-import dev.thiagooliveira.bankhub.domain.port.PaymentPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,9 +22,8 @@ public class PayableReceivableConfig {
   public CreatePayment confirmPayment(
       PayableReceivablePort payableReceivablePort,
       GetAccount getAccount,
-      CreateTransaction createTransaction,
-      PaymentPort paymentPort) {
-    return new CreatePayment(payableReceivablePort, getAccount, createTransaction, paymentPort);
+      CreateTransaction createTransaction) {
+    return new CreatePayment(payableReceivablePort, getAccount, createTransaction);
   }
 
   @Bean

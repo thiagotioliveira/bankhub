@@ -3,10 +3,7 @@ package dev.thiagooliveira.bankhub.infra.adapter;
 import dev.thiagooliveira.bankhub.domain.dto.*;
 import dev.thiagooliveira.bankhub.domain.dto.projection.PayableReceivableEnriched;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivable;
-import dev.thiagooliveira.bankhub.domain.model.Payment;
-import dev.thiagooliveira.bankhub.domain.port.AccountPort;
 import dev.thiagooliveira.bankhub.domain.port.PayableReceivablePort;
-import dev.thiagooliveira.bankhub.domain.port.PaymentPort;
 import dev.thiagooliveira.bankhub.infra.persistence.entity.PayableReceivableEntity;
 import dev.thiagooliveira.bankhub.infra.persistence.repository.PayableReceivableRepository;
 import dev.thiagooliveira.bankhub.infra.persistence.repository.PayableReceivableTemplateRepository;
@@ -22,18 +19,12 @@ public class PayableReceivableAdapter implements PayableReceivablePort {
 
   private final PayableReceivableRepository payableReceivableRepository;
   private final PayableReceivableTemplateRepository payableReceivableTemplateRepository;
-  private final PaymentPort paymentPort;
-  private final AccountPort accountPort;
 
   public PayableReceivableAdapter(
       PayableReceivableRepository payableReceivableRepository,
-      PayableReceivableTemplateRepository payableReceivableTemplateRepository,
-      PaymentPort paymentPort,
-      AccountPort accountPort) {
+      PayableReceivableTemplateRepository payableReceivableTemplateRepository) {
     this.payableReceivableRepository = payableReceivableRepository;
     this.payableReceivableTemplateRepository = payableReceivableTemplateRepository;
-    this.paymentPort = paymentPort;
-    this.accountPort = accountPort;
   }
 
   @Override
@@ -48,11 +39,7 @@ public class PayableReceivableAdapter implements PayableReceivablePort {
                   this.payableReceivableTemplateRepository
                       .findById(p.getTemplateId())
                       .orElseThrow();
-              var paymentId =
-                  this.paymentPort.findByPayableReceivableId(p.getId()).stream()
-                      .map(Payment::id)
-                      .findFirst();
-              return p.toDomain(template, paymentId);
+              return p.toDomain(template);
             })
         .orElseThrow();
   }
@@ -67,11 +54,7 @@ public class PayableReceivableAdapter implements PayableReceivablePort {
                   this.payableReceivableTemplateRepository
                       .findById(p.getTemplateId())
                       .orElseThrow();
-              var paymentId =
-                  this.paymentPort.findByPayableReceivableId(p.getId()).stream()
-                      .map(Payment::id)
-                      .findFirst();
-              return p.toDomain(template, paymentId);
+              return p.toDomain(template);
             })
         .orElseThrow();
   }
@@ -86,11 +69,7 @@ public class PayableReceivableAdapter implements PayableReceivablePort {
                   this.payableReceivableTemplateRepository
                       .findById(p.getTemplateId())
                       .orElseThrow();
-              var paymentId =
-                  this.paymentPort.findByPayableReceivableId(p.getId()).stream()
-                      .map(Payment::id)
-                      .findFirst();
-              return p.toDomain(template, paymentId);
+              return p.toDomain(template);
             });
   }
 
@@ -104,7 +83,7 @@ public class PayableReceivableAdapter implements PayableReceivablePort {
                   this.payableReceivableTemplateRepository
                       .findById(p.getTemplateId())
                       .orElseThrow();
-              return p.toDomain(template, Optional.empty());
+              return p.toDomain(template);
             })
         .orElseThrow();
   }
@@ -119,11 +98,7 @@ public class PayableReceivableAdapter implements PayableReceivablePort {
                   this.payableReceivableTemplateRepository
                       .findById(p.getTemplateId())
                       .orElseThrow();
-              var paymentId =
-                  this.paymentPort.findByPayableReceivableId(p.getId()).stream()
-                      .map(Payment::id)
-                      .findFirst();
-              return p.toDomain(template, paymentId);
+              return p.toDomain(template);
             });
   }
 
@@ -145,11 +120,7 @@ public class PayableReceivableAdapter implements PayableReceivablePort {
                   this.payableReceivableTemplateRepository
                       .findById(p.getTemplateId())
                       .orElseThrow();
-              var paymentId =
-                  this.paymentPort.findByPayableReceivableId(p.getId()).stream()
-                      .map(Payment::id)
-                      .findFirst();
-              return p.toDomain(template, paymentId);
+              return p.toDomain(template);
             })
         .toList();
   }
@@ -165,11 +136,7 @@ public class PayableReceivableAdapter implements PayableReceivablePort {
                   this.payableReceivableTemplateRepository
                       .findById(p.getTemplateId())
                       .orElseThrow();
-              var paymentId =
-                  this.paymentPort.findByPayableReceivableId(p.getId()).stream()
-                      .map(Payment::id)
-                      .findFirst();
-              return p.toDomain(template, paymentId);
+              return p.toDomain(template);
             });
   }
 

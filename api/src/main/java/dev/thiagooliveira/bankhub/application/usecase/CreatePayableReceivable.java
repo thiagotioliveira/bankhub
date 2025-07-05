@@ -59,10 +59,9 @@ public class CreatePayableReceivable {
 
   private static List<CreatePayableReceivableEnrichedInput> splitIntoMultiple(
       CreatePayableReceivableEnrichedInput input) {
-    boolean hasFrequency = input.frequency().isPresent();
     boolean isRecurring = input.recurring();
 
-    if (!hasFrequency || isRecurring) {
+    if (isRecurring) {
       CreatePayableReceivableEnrichedInput item =
           split(input, input.dueDate(), Optional.empty(), input.amount());
       return List.of(item);
@@ -76,7 +75,7 @@ public class CreatePayableReceivable {
 
     List<CreatePayableReceivableEnrichedInput> items = new ArrayList<>();
     LocalDate dueDate = input.dueDate();
-    Frequency frequency = input.frequency().get();
+    Frequency frequency = input.frequency().orElse(Frequency.MONTHLY);
 
     for (int i = 1; i <= totalInstallments; i++) {
       BigDecimal amount = baseAmount;

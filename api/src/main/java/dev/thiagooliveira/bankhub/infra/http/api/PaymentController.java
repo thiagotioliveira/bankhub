@@ -26,10 +26,11 @@ public class PaymentController implements PaymentsApi {
   @Override
   public ResponseEntity<PostPaymentResponseBody> pay(
       PostPaymentRequestBody postPaymentRequestBody) {
-    var payment =
+    var payableReceivable =
         this.paymentService.create(
             this.paymentMapper.map(this.appProps.getOrganizationId(), postPaymentRequestBody));
-    return ResponseEntity.created(URI.create(String.format("/api/payments/%s", payment.id())))
-        .body(this.paymentMapper.map(payment));
+    return ResponseEntity.created(
+            URI.create(String.format("/api/transactions/%s", payableReceivable.paymentId())))
+        .body(this.paymentMapper.map(payableReceivable));
   }
 }

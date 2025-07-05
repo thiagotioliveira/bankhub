@@ -28,11 +28,10 @@ public interface PayableReceivableRepository extends JpaRepository<PayableReceiv
            prt.frequency as frequency,
            pr.installment_number as installment_number,
            prt.installment_total as installment_total,
-           CAST(p.id AS VARCHAR) as payment_id
+           CAST(pr.transaction_id AS VARCHAR) as payment_id
                FROM payables_receivables pr
                INNER JOIN payable_receivable_templates prt ON pr.template_id = prt.id
                INNER JOIN accounts a ON prt.account_id = a.id
-               LEFT JOIN payments p ON p.payable_receivable_id = pr.id
                WHERE a.id = :accountId
                AND pr.due_date >= :startDate AND pr.due_date <= :endDate
             ORDER BY pr.due_date ASC

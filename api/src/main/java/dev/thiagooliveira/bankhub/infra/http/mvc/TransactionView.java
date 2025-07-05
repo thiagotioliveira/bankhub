@@ -1,14 +1,17 @@
 package dev.thiagooliveira.bankhub.infra.http.mvc;
 
+import dev.thiagooliveira.bankhub.domain.dto.GetTransactionPageable;
 import dev.thiagooliveira.bankhub.domain.model.Transaction;
 import dev.thiagooliveira.bankhub.infra.http.mvc.dto.CreateTransactionInput;
 import dev.thiagooliveira.bankhub.infra.security.UserPrincipal;
 import dev.thiagooliveira.bankhub.infra.service.AccountService;
 import dev.thiagooliveira.bankhub.infra.service.TransactionService;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,6 +25,20 @@ public class TransactionView {
   public TransactionView(AccountService accountService, TransactionService transactionService) {
     this.accountService = accountService;
     this.transactionService = transactionService;
+  }
+
+  @GetMapping("/transactions")
+  public ModelAndView list(@AuthenticationPrincipal UserPrincipal user) {
+    var account =
+        this.accountService.findByOrganizationId(user.getOrganizationId()).stream()
+            .findFirst()
+            .orElseThrow();
+    var transactions =
+        this.transactionService.findEnrichedByFiltersOrderByDateTime(
+            new GetTransactionPageable(List.of(account.id()), user.getOrganizationId(), 0, 10));
+    ModelAndView modelAndView = new ModelAndView("transaction-list");
+    modelAndView.addObject("transactions", transactions);
+    return modelAndView;
   }
 
   @PostMapping("/withdrawal-verification")

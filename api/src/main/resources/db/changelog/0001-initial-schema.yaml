@@ -382,12 +382,23 @@ databaseChangeLog:
                   type: int
                   constraints:
                     nullable: true
+              - column:
+                  name: transaction_id
+                  type: uuid
+                  constraints:
+                    nullable: true
         - addForeignKeyConstraint:
             baseTableName: payables_receivables
             baseColumnNames: template_id
             referencedTableName: payable_receivable_templates
             referencedColumnNames: id
             constraintName: fk_payables_receivables_templates
+        - addForeignKeyConstraint:
+            baseTableName: payables_receivables
+            baseColumnNames: transaction_id
+            referencedTableName: transactions
+            referencedColumnNames: id
+            constraintName: fk_payables_receivables_transactions
 
   - changeSet:
       id: 010-monthly_account_summary
@@ -443,44 +454,3 @@ databaseChangeLog:
             referencedTableName: accounts
             referencedColumnNames: id
             constraintName: fk_monthly_account_summary_accounts
-
-  - changeSet:
-      id: 011-create-payments
-      author: thiago
-      changes:
-        - createTable:
-            tableName: payments
-            columns:
-              - column:
-                  name: id
-                  type: uuid
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: payable_receivable_id
-                  type: uuid
-                  constraints:
-                    nullable: false
-              - column:
-                  name: transaction_id
-                  type: uuid
-                  constraints:
-                    nullable: false
-              - column:
-                  name: payment_date
-                  type: date
-                  constraints:
-                    nullable: false
-        - addForeignKeyConstraint:
-            baseTableName: payments
-            baseColumnNames: payable_receivable_id
-            referencedTableName: payables_receivables
-            referencedColumnNames: id
-            constraintName: fk_payments_payable_receivable
-        - addForeignKeyConstraint:
-            baseTableName: payments
-            baseColumnNames: transaction_id
-            referencedTableName: transactions
-            referencedColumnNames: id
-            constraintName: fk_payments_transaction

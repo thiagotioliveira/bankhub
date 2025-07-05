@@ -18,8 +18,10 @@
                 <!-- Balance -->
                 <div class="balance">
                     <div class="left">
-                        <span class="title" th:text="${account.name()}">Total Balance</span>
-                        <h1 class="total" th:text="${account.currency().symbol() + ' ' + accountSummary.balance()}">$ 0.00</h1>
+                        <a th:href="@{/transactions}" style="text-decoration: none;">
+                            <span class="title" th:text="${account.name()}">Total Balance</span>
+                            <h1 class="total" th:text="${account.currency().symbol() + ' ' + accountSummary.balance()}">$ 0.00</h1>
+                        </a>
                     </div>
                     <div class="right">
                         <a href="#" class="button" data-bs-toggle="modal" data-bs-target="#depositActionSheet" th:if="${false}">
@@ -962,9 +964,9 @@
 
                 if (isChecked) {
                     frequencyInput.value = "MONTHLY";
-                    installmentInput.value = "";
+                    installmentInput.value = null;
                 } else {
-                    frequencyInput.value = "";
+                    frequencyInput.value = null;
                     installmentInput.value = "3";
                 }
             }

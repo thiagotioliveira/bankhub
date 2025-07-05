@@ -11,6 +11,7 @@ import dev.thiagooliveira.bankhub.infra.service.PayableReceivableService;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Optional;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -33,9 +34,10 @@ public class PayableReceivableView {
   }
 
   @GetMapping({"/payable-receivable-list", "/payable-receivable-list/{month:\\d{4}-\\d{2}}"})
-  public ModelAndView list(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                           @RequestParam(defaultValue = "payables") String tab,
-                           @PathVariable(name = "month", required = false) YearMonth month) {
+  public ModelAndView list(
+      @AuthenticationPrincipal UserPrincipal userPrincipal,
+      @RequestParam(defaultValue = "payables") String tab,
+      @PathVariable(name = "month", required = false) YearMonth month) {
     YearMonth selectedMonth = (month != null) ? month : YearMonth.now();
     var from = selectedMonth.atDay(1);
     var to = selectedMonth.atEndOfMonth();
@@ -43,15 +45,10 @@ public class PayableReceivableView {
     var accounts = this.accountService.findByOrganizationId(userPrincipal.getOrganizationId());
     var account = accounts.get(0);
 
-    var items = payableReceivableService.getByAccountIdOrderByDueDateAsc(
-            account.id(),
-            from,
-            to
-    );
-    var payables = items.stream().filter(i -> i.type() == PayableReceivableType.PAYABLE)
-            .toList();
-    var receivables = items.stream().filter(i -> i.type() == PayableReceivableType.RECEIVABLE)
-            .toList();
+    var items = payableReceivableService.getByAccountIdOrderByDueDateAsc(account.id(), from, to);
+    var payables = items.stream().filter(i -> i.type() == PayableReceivableType.PAYABLE).toList();
+    var receivables =
+        items.stream().filter(i -> i.type() == PayableReceivableType.RECEIVABLE).toList();
 
     AppModelAndView modelAndView = new AppModelAndView("payable-receivable-list", userPrincipal);
     modelAndView.updateYearMonth(selectedMonth);
@@ -150,7 +147,10 @@ public class PayableReceivableView {
                   input.getAmount(),
                   LocalDate.now(),
                   input.isRecurring(),
-                  Optional.ofNullable(Frequency.valueOf(input.getFrequence())),
+                  Optional.ofNullable(
+                      Strings.isBlank(input.getFrequence())
+                          ? null
+                          : Frequency.valueOf(input.getFrequence())),
                   Optional.ofNullable(input.getInstallmentTotal())));
       modelAndView.addObject("type", "Payable");
       modelAndView.addObject("saved", pr);

@@ -11,7 +11,7 @@ public class CreatePayableReceivableInput {
   private String description;
   private BigDecimal amount = BigDecimal.TEN;
   private LocalDate startDate;
-  private boolean recurring;
+  private boolean recurring = true;
   private String frequence;
   private Integer installmentTotal;
 

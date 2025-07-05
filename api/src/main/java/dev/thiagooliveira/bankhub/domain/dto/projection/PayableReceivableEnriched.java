@@ -52,7 +52,7 @@ public record PayableReceivableEnriched(
         dueDate.toLocalDate(),
         PayableReceivableType.valueOf(type),
         PayableReceivableStatus.valueOf(status),
-        Optional.ofNullable(Frequency.valueOf(frequency)),
+        Optional.ofNullable(frequency != null ? Frequency.valueOf(frequency) : null),
         Optional.ofNullable(installmentNumber),
         Optional.ofNullable(installmentTotal),
         Optional.ofNullable(paymentId == null ? null : UUID.fromString(paymentId)));

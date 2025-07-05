@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:insert="~{fragments/head :: head}"></div>
+
+<body>
+
+<div th:insert="~{fragments/loader :: loader}"></div>
+
+<!-- App Capsule -->
+<div id="appCapsule">
+    <!-- App Header -->
+    <div class="appHeader">
+        <div class="left">
+            <a href="/" class="headerButton">
+                <ion-icon name="chevron-back-outline"></ion-icon>
+            </a>
+        </div>
+        <div class="pageTitle">
+            Transactions
+        </div>
+    </div>
+    <div class="transactions">
+        <a href="app-transaction-detail.html" class="item mt-1 ms-3 me-3" th:each="i : ${transactions.content()}">
+            <div class="detail">
+                <img th:src="@{/assets/img/sample/brand/1.jpg}" alt="img" class="image-block imaged w48">
+                <div>
+                    <strong th:text="${i.description()}"></strong>
+                    <p th:text="${#temporals.format(i.dateTime(), 'dd MMM yyyy')}"></p>
+                </div>
+            </div>
+            <div class="right">
+                <div th:class="${'price ' + (i.category().type().name() == 'CREDIT' ? 'text-success' : 'text-danger')}"
+                     th:text="${(i.category().type().name() == 'CREDIT' ? '' : '-') + i.amount()}"></div>
+            </div>
+        </a>
+    </div>
+</div>
+<div th:insert="~{fragments/bottom :: bottom}"></div>
+
+<div th:insert="~{fragments/scripts :: scripts}"></div>
+<!-- * App Header -->

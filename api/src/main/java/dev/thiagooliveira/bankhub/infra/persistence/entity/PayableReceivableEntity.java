@@ -32,6 +32,8 @@ public class PayableReceivableEntity {
 
   @Column private Integer installmentNumber;
 
+  @Column private UUID transactionId;
+
   public PayableReceivableEntity() {}
 
   public PayableReceivableEntity(
@@ -41,7 +43,8 @@ public class PayableReceivableEntity {
       LocalDate dueDateOriginal,
       BigDecimal amount,
       PayableReceivableStatus status,
-      Integer installmentNumber) {
+      Integer installmentNumber,
+      UUID transactionId) {
     this.id = id;
     this.templateId = templateId;
     this.dueDate = dueDate;
@@ -49,6 +52,7 @@ public class PayableReceivableEntity {
     this.amount = amount;
     this.status = status;
     this.installmentNumber = installmentNumber;
+    this.transactionId = transactionId;
   }
 
   public static PayableReceivableEntity from(CreatePayableReceivableEnrichedInput input) {
@@ -71,11 +75,11 @@ public class PayableReceivableEntity {
     entity.dueDate = payableReceivable.dueDate();
     entity.installmentNumber = payableReceivable.installmentNumber().orElse(null);
     entity.status = payableReceivable.status();
+    entity.transactionId = payableReceivable.paymentId().orElse(null);
     return entity;
   }
 
-  public PayableReceivable toDomain(
-      PayableReceivableTemplateEntity templateEntity, Optional<UUID> transactionId) {
+  public PayableReceivable toDomain(PayableReceivableTemplateEntity templateEntity) {
     return new PayableReceivable(
         this.id,
         this.templateId,
@@ -89,13 +93,21 @@ public class PayableReceivableEntity {
         Optional.ofNullable(templateEntity.getFrequency()),
         Optional.ofNullable(this.installmentNumber),
         Optional.ofNullable(templateEntity.getInstallmentTotal()),
-        transactionId);
+        Optional.ofNullable(this.transactionId));
   }
 
   public PayableReceivableEntity update(Optional<BigDecimal> amount, Optional<LocalDate> dueDate) {
     amount.ifPresent(a -> this.amount = a);
     dueDate.ifPresent(d -> this.dueDate = d);
     return this;
+  }
+
+  public UUID getTransactionId() {
+    return transactionId;
+  }
+
+  public void setTransactionId(UUID transactionId) {
+    this.transactionId = transactionId;
   }
 
   public UUID getId() {
