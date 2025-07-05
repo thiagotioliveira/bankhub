@@ -8,7 +8,6 @@ import dev.thiagooliveira.bankhub.infra.security.UserPrincipal;
 import dev.thiagooliveira.bankhub.infra.service.AccountService;
 import dev.thiagooliveira.bankhub.infra.service.CategoryService;
 import dev.thiagooliveira.bankhub.infra.service.PayableReceivableService;
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Optional;
 import org.apache.logging.log4j.util.Strings;
@@ -129,7 +128,7 @@ public class PayableReceivableView {
                   input.getCategoryId(),
                   input.getDescription(),
                   input.getAmount(),
-                  LocalDate.now(),
+                  input.getStartDate(),
                   input.isRecurring(),
                   Optional.ofNullable(Frequency.valueOf(input.getFrequence())),
                   Optional.ofNullable(input.getInstallmentTotal())));
@@ -145,7 +144,7 @@ public class PayableReceivableView {
                   input.getCategoryId(),
                   input.getDescription(),
                   input.getAmount(),
-                  LocalDate.now(),
+                  input.getStartDate(),
                   input.isRecurring(),
                   Optional.ofNullable(
                       Strings.isBlank(input.getFrequence())

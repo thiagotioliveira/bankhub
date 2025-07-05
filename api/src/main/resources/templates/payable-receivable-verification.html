@@ -79,6 +79,10 @@
                         <span th:text="${input.getDescription()}"></span>
                     </li>
                     <li class="ms-3 me-3">
+                        <strong>Due Date</strong>
+                        <span th:text="${input.getStartDate()}"></span>
+                    </li>
+                    <li class="ms-3 me-3">
                         <strong>Recurring?</strong>
                         <span th:text="${input.isRecurring() ? 'Yes' : 'No'}">Yes</span>
                     </li>
@@ -97,6 +101,7 @@
                     <input type="hidden" th:field="*{accountId}" />
                     <input type="hidden" th:field="*{categoryId}" />
                     <input type="hidden" th:field="*{amount}" />
+                    <input type="hidden" th:field="*{startDate}" />
                     <input type="hidden" th:field="*{description}" />
                     <input type="hidden" th:field="*{recurring}" />
                     <input type="hidden" th:field="*{frequence}" />
