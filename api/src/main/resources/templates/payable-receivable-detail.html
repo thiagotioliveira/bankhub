@@ -55,50 +55,50 @@
                 <div class="listed-detail mt-3">
                     <div class="icon-wrapper">
                         <div class="iconbox">
-                            <ion-icon name="arrow-forward-outline"></ion-icon>
+                            <ion-icon name="checkmark-circle"></ion-icon>
                         </div>
                     </div>
-                    <h3 class="text-center mt-2" th:text="${type + ' ' + 'Detail'}">Detail</h3>
+                    <h3 class="text-center mt-2" th:text="${type + ' ' + 'has been created'}"></h3>
                 </div>
 
                 <ul class="listview flush transparent simple-listview no-space mt-3">
-                    <li>
+                    <li class="ms-3 me-3">
                         <strong>ID</strong>
                         <span th:text="${saved.id()}"></span>
                     </li>
-                    <li>
+                    <li class="ms-3 me-3">
                         <strong>Account</strong>
                         <span th:text="${account.name()}"></span>
                     </li>
-                    <li>
+                    <li class="ms-3 me-3">
                         <strong>Category</strong>
                         <span th:text="${category.name()}"></span>
                     </li>
-                    <li>
+                    <li class="ms-3 me-3">
                         <strong>Amount</strong>
                         <h3 class="m-0" th:text="${account.currency().symbol() + '' + saved.amount()}"></h3>
                     </li>
-                    <li>
+                    <li class="ms-3 me-3">
                         <strong>Description</strong>
                         <span th:text="${saved.description()}"></span>
                     </li>
-                    <li>
+                    <li class="ms-3 me-3">
                         <strong>Status</strong>
                         <span th:text="${saved.status()}">Yes</span>
                     </li>
-                    <li>
+                    <li class="ms-3 me-3">
                         <strong>Due Date</strong>
                         <span th:text="${#temporals.format(saved.dueDate(), 'dd/MM/yyyy')}"></span>
                     </li>
-                    <li>
+                    <li class="ms-3 me-3" th:if="${saved.frequency().isPresent()}">
                         <strong>Frequency</strong>
-                        <span th:text="${saved.frequency()}"></span>
+                        <span th:text="${saved.frequency().get()}"></span>
                     </li>
-                    <li>
+                    <li class="ms-3 me-3" th:if="${saved.installmentNumber().isPresent()}">
                         <strong>Installment Number</strong>
                         <span th:text="${saved.installmentNumber()}">24</span>
                     </li>
-                    <li>
+                    <li class="ms-3 me-3" th:if="${saved.installmentTotal().isPresent()}">
                         <strong>Installment Total</strong>
                         <span th:text="${saved.installmentTotal()}">24</span>
                     </li>
@@ -108,6 +108,8 @@
 
         </div>
         <!-- * App Capsule -->
+
+        <div th:insert="~{fragments/bottom :: bottom}"></div>
 
         <!-- ========= JS Files =========  -->
         <!-- Bootstrap -->

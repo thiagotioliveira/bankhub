@@ -62,11 +62,11 @@
                 </div>
 
                 <ul class="listview flush transparent simple-listview no-space mt-3">
-                    <li>
+                    <li class="ms-3 me-3">
                         <strong>Status</strong>
                         <span class="text-success">Success</span>
                     </li>
-                    <li>
+                    <li class="ms-3 me-3">
                         <strong>ID</strong>
                         <span th:text="${transaction.id()}"></span>
                     </li>
@@ -82,7 +82,7 @@
                         <strong>Receipt</strong>
                         <span>Yes</span>
                     </li>
-                    <li>
+                    <li class="ms-3 me-3">
                         <strong>Date</strong>
                         <span th:text="${#temporals.format(transaction.dateTime(), 'dd/MM/yyyy HH:mm')}"></span>
                     </li>

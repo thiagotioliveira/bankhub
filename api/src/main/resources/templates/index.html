@@ -92,8 +92,10 @@
                                 <div class="form-group basic">
                                     <div class="input-wrapper">
                                         <label class="label" for="category2d">Category</label>
-                                        <select class="form-control custom-select" id="category2d" th:field="*{categoryId}">
-                                            <option th:each="a : ${debitCategories}" th:text="${a.name()}" th:value="${a.id()}">
+                                        <select class="form-control custom-select" id="category2d" th:field="*{categoryId}"
+                                                onchange="updateDescriptionFromCategory('category2d', 'withdraw-description-input')">
+                                            <option th:each="a : ${debitCategories}" th:text="${a.name()}" th:value="${a.id()}"
+                                                    th:attr="data-name=${a.name()}">
                                         </select>
                                     </div>
                                 </div>
@@ -101,7 +103,8 @@
                                 <div class="form-group basic">
                                     <label class="label">Description</label>
                                     <div class="input-group mb-2">
-                                        <input type="text" class="form-control" placeholder="Enter an description" th:field="*{description}">
+                                        <input type="text" class="form-control" id="withdraw-description-input"
+                                               placeholder="Enter an description" th:field="*{description}">
                                     </div>
                                 </div>
 
@@ -157,8 +160,10 @@
                                 <div class="form-group basic">
                                     <div class="input-wrapper">
                                         <label class="label" for="categoryCredit2d">Category</label>
-                                        <select class="form-control custom-select" id="categoryCredit2d" th:field="*{categoryId}">
-                                            <option th:each="a : ${credCategories}" th:text="${a.name()}" th:value="${a.id()}">
+                                        <select class="form-control custom-select" id="categoryCredit2d" th:field="*{categoryId}"
+                                                onchange="updateDescriptionFromCategory('categoryCredit2d', 'deposit-description-input')">
+                                            <option th:each="a : ${credCategories}" th:text="${a.name()}" th:value="${a.id()}"
+                                                    th:attr="data-name=${a.name()}">
                                         </select>
                                     </div>
                                 </div>
@@ -166,7 +171,8 @@
                                 <div class="form-group basic">
                                     <label class="label">Description</label>
                                     <div class="input-group mb-2">
-                                        <input type="text" class="form-control" placeholder="Enter an description" th:field="*{description}">
+                                        <input type="text" class="form-control" placeholder="Enter an description" id="deposit-description-input"
+                                               th:field="*{description}">
                                     </div>
                                 </div>
 
@@ -223,11 +229,21 @@
                                 <div class="form-group basic">
                                     <div class="input-wrapper">
                                         <label class="label" for="categoryCredit13d">Category</label>
-                                        <select class="form-control custom-select" id="categoryCredit13d" th:field="*{categoryId}">
-                                            <option th:each="a : ${credCategories}" th:text="${a.name()}" th:value="${a.id()}">
+                                        <select class="form-control custom-select" id="categoryCredit13d" th:field="*{categoryId}"
+                                                onchange="updateDescriptionFromCategory('categoryCredit13d', 'receivable-description-input')">
+                                            <option th:each="a : ${credCategories}" th:text="${a.name()}" th:value="${a.id()}"
+                                                    th:attr="data-name=${a.name()}">
                                         </select>
                                     </div>
                                 </div>
+                                <div class="form-group basic">
+                                    <label class="label">Description</label>
+                                    <div class="input-group mb-2">
+                                        <input type="text" class="form-control" placeholder="Enter an description" th:field="*{description}"
+                                            id="receivable-description-input">
+                                    </div>
+                                </div>
+
                                 <div class="form-group basic">
                                     <label class="label">Enter Amount</label>
                                     <div class="input-group mb-2">
@@ -236,22 +252,17 @@
                                                value="100">
                                     </div>
                                 </div>
-                                <div class="form-group basic">
-                                    <label class="label">Description</label>
-                                    <div class="input-group mb-2">
-                                        <input type="text" class="form-control" placeholder="Enter an description" th:field="*{description}">
-                                    </div>
-                                </div>
 
                                 <div class="form-group basic">
                                     <label class="label">Recurring?</label>
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="SwitchCheckDefault13" th:field="*{recurring}">
+                                        <input class="form-check-input" type="checkbox" id="SwitchCheckDefault13" th:field="*{recurring}"
+                                               onchange="toggleFieldsBySwitchId('SwitchCheckDefault13', 'receivable-frequence-group', 'frequency11', 'receivable-installment-total-group', 'receivable-installment-total-input')">
                                         <label class="form-check-label" for="SwitchCheckDefault13"></label>
                                     </div>
                                 </div>
 
-                                <div class="form-group basic">
+                                <div class="form-group basic" id="receivable-frequence-group">
                                     <label class="label">Frequence</label>
                                     <div class="input-group mb-2">
                                         <select class="form-control custom-select" id="frequency11" th:field="*{frequence}">
@@ -260,10 +271,10 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group basic">
+                                <div class="form-group basic" id="receivable-installment-total-group">
                                     <label class="label">Installment Total</label>
                                     <div class="input-group mb-2">
-                                        <input type="text" class="form-control" th:field="*{installmentTotal}">
+                                        <input type="text" class="form-control" th:field="*{installmentTotal}" id="receivable-installment-total-input">
                                     </div>
                                 </div>
 
@@ -299,11 +310,22 @@
                                 <div class="form-group basic">
                                     <div class="input-wrapper">
                                         <label class="label" for="categoryCredit3d">Category</label>
-                                        <select class="form-control custom-select" id="categoryCredit3d" th:field="*{categoryId}">
-                                            <option th:each="a : ${debitCategories}" th:text="${a.name()}" th:value="${a.id()}">
+                                        <select class="form-control custom-select" id="categoryCredit3d" th:field="*{categoryId}"
+                                                onchange="updateDescriptionFromCategory('categoryCredit3d', 'payable-description-input')">
+                                            <option th:each="a : ${debitCategories}" th:text="${a.name()}" th:value="${a.id()}"
+                                                    th:attr="data-name=${a.name()}">
                                         </select>
                                     </div>
                                 </div>
+
+                                <div class="form-group basic">
+                                    <label class="label">Description</label>
+                                    <div class="input-group mb-2">
+                                        <input type="text" class="form-control" placeholder="Enter an description" th:field="*{description}"
+                                            id="payable-description-input">
+                                    </div>
+                                </div>
+
                                 <div class="form-group basic">
                                     <label class="label">Enter Amount</label>
                                     <div class="input-group mb-2">
@@ -312,22 +334,17 @@
                                                value="100">
                                     </div>
                                 </div>
-                                <div class="form-group basic">
-                                    <label class="label">Description</label>
-                                    <div class="input-group mb-2">
-                                        <input type="text" class="form-control" placeholder="Enter an description" th:field="*{description}">
-                                    </div>
-                                </div>
 
                                 <div class="form-group basic">
                                     <label class="label">Recurring?</label>
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="SwitchCheckDefault3" th:field="*{recurring}">
+                                        <input class="form-check-input" type="checkbox" id="SwitchCheckDefault3" th:field="*{recurring}"
+                                               onchange="toggleFieldsBySwitchId('SwitchCheckDefault3', 'payable-frequence-group', 'frequency1', 'payable-installment-total-group', 'payable-installment-total-input')">
                                         <label class="form-check-label" for="SwitchCheckDefault3"></label>
                                     </div>
                                 </div>
 
-                                <div class="form-group basic">
+                                <div class="form-group basic" id="payable-frequence-group">
                                     <label class="label">Frequence</label>
                                     <div class="input-group mb-2">
                                         <select class="form-control custom-select" id="frequency1" th:field="*{frequence}">
@@ -336,10 +353,10 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group basic">
+                                <div class="form-group basic" id="payable-installment-total-group">
                                     <label class="label">Installment Total</label>
                                     <div class="input-group mb-2">
-                                        <input type="text" class="form-control" th:field="*{installmentTotal}">
+                                        <input type="text" class="form-control" th:field="*{installmentTotal}" id="payable-installment-total-input">
                                     </div>
                                 </div>
 
@@ -958,6 +975,46 @@
     <script src="assets/js/plugins/apexcharts/apexcharts.min.js"></script>
     <!-- Base Js File -->
     <script src="assets/js/base.js"></script>
+
+    <script>
+        function toggleFieldsBySwitchId(switchId, frequenceGroupId, frequencyInputId, installmentGroupId, installmentInputId) {
+            const switchInput = document.getElementById(switchId);
+            const isChecked = switchInput.checked;
+
+            const frequenceGroup = document.getElementById(frequenceGroupId);
+            const frequencyInput = document.getElementById(frequencyInputId);
+            const installmentGroup = document.getElementById(installmentGroupId);
+            const installmentInput = document.getElementById(installmentInputId);
+
+            if (frequenceGroup && installmentGroup && frequencyInput && installmentInput) {
+                frequenceGroup.style.display = isChecked ? "block" : "none";
+                installmentGroup.style.display = isChecked ? "none" : "block";
+
+                if (isChecked) {
+                    frequencyInput.value = "MONTHLY";
+                    installmentInput.value = "";
+                } else {
+                    frequencyInput.value = "";
+                    installmentInput.value = "3";
+                }
+            }
+        }
+
+        function updateDescriptionFromCategory(selectCategoryId, inputDescriptionId) {
+            const select = document.getElementById(selectCategoryId);
+            const selectedOption = select.options[select.selectedIndex];
+            const categoryName = selectedOption.getAttribute("data-name");
+
+            if (categoryName) {
+                document.getElementById(inputDescriptionId).value = categoryName;
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", function () {
+            toggleFieldsBySwitchId('SwitchCheckDefault13', 'receivable-frequence-group', 'frequency11', 'receivable-installment-total-group', 'receivable-installment-total-input')
+            toggleFieldsBySwitchId('SwitchCheckDefault3', 'payable-frequence-group', 'frequency1', 'payable-installment-total-group', 'payable-installment-total-input')
+        });
+    </script>
 
     <script>
         // Add to Home with 2 seconds delay.

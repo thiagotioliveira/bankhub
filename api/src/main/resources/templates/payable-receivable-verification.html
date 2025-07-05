@@ -62,31 +62,31 @@
                 </div>
 
                 <ul class="listview flush transparent simple-listview no-space mt-3">
-                    <li>
+                    <li class="ms-3 me-3">
                         <strong>Account</strong>
                         <span th:text="${account.name()}"></span>
                     </li>
-                    <li>
+                    <li class="ms-3 me-3">
                         <strong>Category</strong>
                         <span th:text="${category.name()}"></span>
                     </li>
-                    <li>
+                    <li class="ms-3 me-3">
                         <strong>Amount</strong>
                         <h3 class="m-0" th:text="${account.currency().symbol() + '' + input.getAmount()}"></h3>
                     </li>
-                    <li>
+                    <li class="ms-3 me-3">
                         <strong>Description</strong>
                         <span th:text="${input.getDescription()}"></span>
                     </li>
-                    <li>
+                    <li class="ms-3 me-3">
                         <strong>Recurring?</strong>
                         <span th:text="${input.isRecurring() ? 'Yes' : 'No'}">Yes</span>
                     </li>
-                    <li>
+                    <li class="ms-3 me-3" th:if="${input.isRecurring()}">
                         <strong>Frequency</strong>
                         <span th:text="${input.getFrequence()}"></span>
                     </li>
-                    <li>
+                    <li class="ms-3 me-3" th:unless="${input.isRecurring()}">
                         <strong>Installment Total</strong>
                         <span th:text="${input.getInstallmentTotal()}">24</span>
                     </li>
@@ -101,7 +101,7 @@
                     <input type="hidden" th:field="*{recurring}" />
                     <input type="hidden" th:field="*{frequence}" />
                     <input type="hidden" th:field="*{installmentTotal}" />
-                    <div class="col-12">
+                    <div class="col-12 mt-3">
                         <button type="submit" class="btn btn-lg btn-primary btn-block">Confirm</button>
                     </div>
                 </form>
