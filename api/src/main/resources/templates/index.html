@@ -390,45 +390,25 @@
             </div>
             <div class="row mt-2">
                 <div class="col-6">
-                    <div class="stat-box">
-                        <div class="title">Receivable pending</div>
-                        <div class="value text-success" th:text="${account.currency().symbol() + ' ' + accountSummary.receivablesPending()}">$ 86.45</div>
-                    </div>
+                    <a th:href="@{/payable-receivable-list/{month}(month=${selectedMonth}, tab='receivables')}" style="text-decoration: none;">
+                        <div class="stat-box">
+                            <div class="title">Receivable pending</div>
+                            <div class="value text-success" th:text="${account.currency().symbol() + ' ' + accountSummary.receivablesPending()}">$ 86.45</div>
+                        </div>
+                    </a>
                 </div>
+
                 <div class="col-6">
-                    <div class="stat-box">
-                        <div class="title">Payable pending</div>
-                        <div class="value text-danger" th:text="${account.currency().symbol() + ' ' + accountSummary.payablePending()}">$ 86.45</div>
-                    </div>
+                    <a th:href="@{/payable-receivable-list/{month}(month=${selectedMonth}, tab='payables')}" style="text-decoration: none;">
+                        <div class="stat-box">
+                            <div class="title">Payable pending</div>
+                            <div class="value text-danger" th:text="${account.currency().symbol() + ' ' + accountSummary.payablePending()}">$ 86.45</div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
         <!-- * Stats -->
-
-        <!-- Transactions -->
-        <div class="section mt-4" th:if="false">
-            <div class="section-heading">
-                <h2 class="title">Transactions</h2>
-                <a href="app-transactions.html" class="link">View All</a>
-            </div>
-            <div class="transactions">
-                <a href="app-transaction-detail.html" class="item" th:each="t : ${transactions}">
-                    <div class="detail">
-                        <img src="assets/img/sample/brand/1.jpg" alt="img" class="image-block imaged w48">
-                        <div>
-                            <strong th:text="${t.description()}"></strong>
-                            <p th:text="${#temporals.format(t.dateTime(), 'dd MMM HH:mm')}"></p>
-                        </div>
-                    </div>
-                    <div class="right">
-                        <div class="price" th:class="${'CREDIT' == t.category().type().name() ? 'text-success' : 'text-danger'}"
-                             th:text="${t.amount()}"></div>
-                    </div>
-                </a>
-                <!-- * item -->
-            </div>
-        </div>
-        <!-- * Transactions -->
 
         <div class="section mt-2 mb-3" th:if="false">
             <div class="section-title">Weekly History Balance</div>
@@ -872,8 +852,6 @@
         </div>
         <!-- * News -->
 
-        <div th:insert="~{fragments/app-footer :: app-footer}"></div>
-
     </div>
     <!-- * App Capsule -->
 
@@ -964,17 +942,9 @@
         </div>
     </div>
 
-    <!-- ========= JS Files =========  -->
-    <!-- Bootstrap -->
-    <script src="assets/js/lib/bootstrap.bundle.min.js"></script>
-    <!-- Ionicons -->
-    <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.esm.js"></script>
-    <!-- Splide -->
-    <script src="assets/js/plugins/splide/splide.min.js"></script>
+    <div th:insert="~{fragments/scripts :: scripts}"></div>
     <!-- Apex Charts -->
     <script src="assets/js/plugins/apexcharts/apexcharts.min.js"></script>
-    <!-- Base Js File -->
-    <script src="assets/js/base.js"></script>
 
     <script>
         function toggleFieldsBySwitchId(switchId, frequenceGroupId, frequencyInputId, installmentGroupId, installmentInputId) {

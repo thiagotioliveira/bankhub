@@ -27,7 +27,7 @@ public class IndexView {
     this.categoryService = categoryService;
   }
 
-  @GetMapping({"/", "/{month:\\d{4}-\\d{2}}"})
+  @GetMapping({"/", "/index", "/index.html", "/{month:\\d{4}-\\d{2}}"})
   public ModelAndView index(
       @AuthenticationPrincipal UserPrincipal userPrincipal,
       @PathVariable(name = "month", required = false) YearMonth month) {

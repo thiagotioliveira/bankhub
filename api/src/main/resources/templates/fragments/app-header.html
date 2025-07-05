@@ -10,7 +10,7 @@
         </div>
         <div class="pageTitle input-wrapper">
             <form id="monthForm">
-                <img src="assets/img/logo.png" alt="logo" class="logo" th:if="false">
+                <img th:src="@{/assets/img/logo.png}" alt="logo" class="logo" th:if="false">
                 <input type="month" id="month" name="month" class="form-control custom-select bg-secondary"
                        onchange="redirectToSelectedMonth()"
                        th:value="${selectedMonth}">
@@ -18,10 +18,15 @@
             <script>
                 function redirectToSelectedMonth() {
                     const monthValue = document.getElementById('month').value;
+                    const currentUrl = window.location.origin + window.location.pathname;
+
+                    let baseUrl = currentUrl.replace(/\/\d{4}-\d{2}\/?$/, '');
+
+                    baseUrl = baseUrl.replace(/\/$/, '');
                     if (monthValue) {
-                        window.location.href = '/' + monthValue;
+                        window.location.href = baseUrl + '/' + monthValue;
                     } else {
-                        window.location.href = '/';
+                        window.location.href = baseUrl;
                     }
                 }
             </script>
@@ -32,7 +37,7 @@
                 <span class="badge badge-danger">4</span>
             </a>
             <a href="#"  class="headerButton dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="imaged w32">
+                <img th:src="@{/assets/img/sample/avatar/avatar1.jpg}" alt="image" class="imaged w32">
                 <span class="badge badge-danger" th:if="false">6</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">

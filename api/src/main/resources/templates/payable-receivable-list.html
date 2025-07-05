@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:insert="~{fragments/head :: head}"></div>
+
+    <body>
+
+        <div th:insert="~{fragments/loader :: loader}"></div>
+
+        <div th:insert="~{fragments/app-header :: app-header}"></div>
+
+            <!-- App Capsule -->
+            <div id="appCapsule">
+                <!-- Payables Receivables -->
+                <div class="section mt-1">
+                    <div class="card">
+                        <div class="card-body pt-0">
+
+                            <ul class="nav nav-tabs lined" role="tablist">
+                                <li class="nav-item">
+                                    <a th:class="${'nav-link ' + (tab == 'receivables' ? 'active' : '')}" data-bs-toggle="tab" href="#receivables" role="tab">
+                                        Receivables
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a th:class="${'nav-link ' + (tab == 'payables' ? 'active' : '')}" data-bs-toggle="tab" href="#payables" role="tab">
+                                        Payables
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content mt-2">
+                                <div th:class="${'tab-pane fade ' +(tab == 'payables' ? 'show active' : '')}" id="payables" role="tabpanel">
+                                    <div class="transactions">
+                                        <a href="app-transaction-detail.html" class="item" th:each="i : ${payables}">
+                                            <div class="detail">
+                                                <img th:src="@{/assets/img/sample/brand/1.jpg}" alt="img" class="image-block imaged w48">
+                                                <div>
+                                                    <strong th:text="${i.description()}"></strong>
+                                                    <p th:text="${#temporals.format(i.dueDate(), 'dd MMM')}"></p>
+                                                </div>
+                                            </div>
+                                            <div class="right">
+                                                <div class="price text-danger"
+                                                     th:text="${-i.amount()}"></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div th:class="${'tab-pane fade ' +(tab == 'receivables' ? 'show active' : '')}" id="receivables" role="tabpanel">
+                                    <div class="transactions">
+                                        <a href="app-transaction-detail.html" class="item" th:each="i : ${receivables}">
+                                            <div class="detail">
+                                                <img th:src="@{/assets/img/sample/brand/1.jpg}" alt="img" class="image-block imaged w48">
+                                                <div>
+                                                    <strong th:text="${i.description()}"></strong>
+                                                    <p th:text="${#temporals.format(i.dueDate(), 'dd MMM')}"></p>
+                                                </div>
+                                            </div>
+                                            <div class="right">
+                                                <div class="price text-success"
+                                                     th:text="${i.amount()}"></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- * Transactions -->
+            </div>
+
+        <div th:insert="~{fragments/bottom :: bottom}"></div>
+        <div th:insert="~{fragments/scripts :: scripts}"></div>
+    </body>
+</html>

@@ -2,17 +2,18 @@ package dev.thiagooliveira.bankhub.infra.http.mvc;
 
 import dev.thiagooliveira.bankhub.domain.model.Frequency;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivableType;
+import dev.thiagooliveira.bankhub.infra.http.mvc.dto.AppModelAndView;
 import dev.thiagooliveira.bankhub.infra.http.mvc.dto.CreatePayableReceivableInput;
 import dev.thiagooliveira.bankhub.infra.security.UserPrincipal;
 import dev.thiagooliveira.bankhub.infra.service.AccountService;
 import dev.thiagooliveira.bankhub.infra.service.CategoryService;
 import dev.thiagooliveira.bankhub.infra.service.PayableReceivableService;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Optional;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -29,6 +30,35 @@ public class PayableReceivableView {
     this.accountService = accountService;
     this.categoryService = categoryService;
     this.payableReceivableService = payableReceivableService;
+  }
+
+  @GetMapping({"/payable-receivable-list", "/payable-receivable-list/{month:\\d{4}-\\d{2}}"})
+  public ModelAndView list(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                           @RequestParam(defaultValue = "payables") String tab,
+                           @PathVariable(name = "month", required = false) YearMonth month) {
+    YearMonth selectedMonth = (month != null) ? month : YearMonth.now();
+    var from = selectedMonth.atDay(1);
+    var to = selectedMonth.atEndOfMonth();
+
+    var accounts = this.accountService.findByOrganizationId(userPrincipal.getOrganizationId());
+    var account = accounts.get(0);
+
+    var items = payableReceivableService.getByAccountIdOrderByDueDateAsc(
+            account.id(),
+            from,
+            to
+    );
+    var payables = items.stream().filter(i -> i.type() == PayableReceivableType.PAYABLE)
+            .toList();
+    var receivables = items.stream().filter(i -> i.type() == PayableReceivableType.RECEIVABLE)
+            .toList();
+
+    AppModelAndView modelAndView = new AppModelAndView("payable-receivable-list", userPrincipal);
+    modelAndView.updateYearMonth(selectedMonth);
+    modelAndView.addObject("tab", tab);
+    modelAndView.addObject("payables", payables);
+    modelAndView.addObject("receivables", receivables);
+    return modelAndView;
   }
 
   @PostMapping("/payable-verification")
