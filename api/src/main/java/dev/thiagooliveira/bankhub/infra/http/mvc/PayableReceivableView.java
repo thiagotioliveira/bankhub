@@ -1,13 +1,16 @@
 package dev.thiagooliveira.bankhub.infra.http.mvc;
 
+import dev.thiagooliveira.bankhub.domain.dto.CreatePaymentInput;
 import dev.thiagooliveira.bankhub.domain.model.Frequency;
 import dev.thiagooliveira.bankhub.domain.model.PayableReceivableType;
 import dev.thiagooliveira.bankhub.infra.http.mvc.dto.AppModelAndView;
 import dev.thiagooliveira.bankhub.infra.http.mvc.dto.CreatePayableReceivableInput;
+import dev.thiagooliveira.bankhub.infra.http.mvc.dto.UpdatePayableReceivableInput;
 import dev.thiagooliveira.bankhub.infra.security.UserPrincipal;
 import dev.thiagooliveira.bankhub.infra.service.AccountService;
 import dev.thiagooliveira.bankhub.infra.service.CategoryService;
 import dev.thiagooliveira.bankhub.infra.service.PayableReceivableService;
+import dev.thiagooliveira.bankhub.infra.service.PaymentService;
 import java.time.YearMonth;
 import java.util.Optional;
 import org.apache.logging.log4j.util.Strings;
@@ -22,14 +25,17 @@ public class PayableReceivableView {
   private final AccountService accountService;
   private final CategoryService categoryService;
   private final PayableReceivableService payableReceivableService;
+  private final PaymentService paymentService;
 
   public PayableReceivableView(
       AccountService accountService,
       CategoryService categoryService,
-      PayableReceivableService payableReceivableService) {
+      PayableReceivableService payableReceivableService,
+      PaymentService paymentService) {
     this.accountService = accountService;
     this.categoryService = categoryService;
     this.payableReceivableService = payableReceivableService;
+    this.paymentService = paymentService;
   }
 
   @GetMapping({"/payable-receivable-list", "/payable-receivable-list/{month:\\d{4}-\\d{2}}"})
@@ -78,6 +84,30 @@ public class PayableReceivableView {
     modelAndView.addObject("account", account);
     modelAndView.addObject("category", category);
     return modelAndView;
+  }
+
+  @PostMapping("/payable-receivable-edit/{month:\\d{4}-\\d{2}}")
+  public String updatePayableReceivable(
+      @AuthenticationPrincipal UserPrincipal userPrincipal,
+      @RequestParam(defaultValue = "payables") String tab,
+      @PathVariable(name = "month", required = false) YearMonth month,
+      @ModelAttribute UpdatePayableReceivableInput input) {
+    if (input.isPaid()) {
+      this.paymentService.create(
+          new CreatePaymentInput(
+              input.getId(),
+              userPrincipal.getOrganizationId(),
+              Optional.empty(),
+              Optional.empty()));
+    } else {
+      this.payableReceivableService.update(
+          new dev.thiagooliveira.bankhub.domain.dto.UpdatePayableReceivableInput(
+              input.getId(),
+              userPrincipal.getOrganizationId(),
+              Optional.of(input.getAmount()),
+              Optional.of(input.getDueDate())));
+    }
+    return "redirect:/payable-receivable-list/" + month.toString() + "?tab=" + tab;
   }
 
   @PostMapping("/receivable-verification")

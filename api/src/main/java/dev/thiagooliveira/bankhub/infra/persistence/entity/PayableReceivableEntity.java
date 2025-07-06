@@ -73,6 +73,7 @@ public class PayableReceivableEntity {
     entity.templateId = payableReceivable.templateId();
     entity.amount = payableReceivable.amount();
     entity.dueDate = payableReceivable.dueDate();
+    entity.dueDateOriginal = payableReceivable.dueDate();
     entity.installmentNumber = payableReceivable.installmentNumber().orElse(null);
     entity.status = payableReceivable.status();
     entity.transactionId = payableReceivable.paymentId().orElse(null);

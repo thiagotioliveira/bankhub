@@ -32,8 +32,8 @@ public class IndexView {
 
   @GetMapping({"/", "/index", "/index.html", "/{month:\\d{4}-\\d{2}}"})
   public ModelAndView index(
-          @AuthenticationPrincipal UserPrincipal userPrincipal,
-          @PathVariable(name = "month", required = false) YearMonth month) {
+      @AuthenticationPrincipal UserPrincipal userPrincipal,
+      @PathVariable(name = "month", required = false) YearMonth month) {
 
     YearMonth selectedMonth = (month != null) ? month : YearMonth.now();
 
@@ -63,8 +63,11 @@ public class IndexView {
     addFilteredCategories(model, "debitCategories", categories, Category::isDebit);
   }
 
-  private void addFilteredCategories(AppModelAndView model, String attributeName,
-                                     List<Category> categories, Predicate<Category> filter) {
+  private void addFilteredCategories(
+      AppModelAndView model,
+      String attributeName,
+      List<Category> categories,
+      Predicate<Category> filter) {
     var filtered = categories.stream().filter(filter).toList();
     if (!filtered.isEmpty()) {
       model.addObject(attributeName, filtered);
@@ -79,13 +82,18 @@ public class IndexView {
   }
 
   private void addMonthlySummaryToModel(AppModelAndView model, UUID accountId, YearMonth month) {
-    var summary = accountService.getMonthlyAccountSummary(accountId, month)
-            .orElse(new MonthlyAccountSummary(
-                    accountId, month,
-                    BigDecimal.ZERO, BigDecimal.ZERO,
-                    BigDecimal.ZERO, BigDecimal.ZERO,
-                    BigDecimal.ZERO
-            ));
+    var summary =
+        accountService
+            .getMonthlyAccountSummary(accountId, month)
+            .orElse(
+                new MonthlyAccountSummary(
+                    accountId,
+                    month,
+                    BigDecimal.ZERO,
+                    BigDecimal.ZERO,
+                    BigDecimal.ZERO,
+                    BigDecimal.ZERO,
+                    BigDecimal.ZERO));
     model.addObject("accountSummary", summary);
   }
 }

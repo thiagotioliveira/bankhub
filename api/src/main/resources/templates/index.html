@@ -211,183 +211,27 @@
         </div>
         <!-- * Send Action Sheet -->
 
-        <!-- Receivable Action Sheet -->
-        <div class="modal fade action-sheet" id="receivableActionSheet" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Receivable</h5>
-                    </div>
-                    <div class="modal-body">
-                        <div class="action-sheet-content">
-                            <form action="#" th:action="@{/receivable-verification}" method="post" th:object="${receivableInput}">
-                                <div class="form-group basic">
-                                    <div class="input-wrapper">
-                                        <label class="label" for="account13">Account</label>
-                                        <select class="form-control custom-select" id="account13" th:field="*{accountId}">
-                                            <option th:each="a : ${accounts}" th:text="${a.name()}" th:value="${a.id()}">
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group basic">
-                                    <div class="input-wrapper">
-                                        <label class="label" for="categoryCredit13d">Category</label>
-                                        <select class="form-control custom-select" id="categoryCredit13d" th:field="*{categoryId}"
-                                                onchange="updateDescriptionFromCategory('categoryCredit13d', 'receivable-description-input')">
-                                            <option th:each="a : ${credCategories}" th:text="${a.name()}" th:value="${a.id()}"
-                                                    th:attr="data-name=${a.name()}">
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group basic">
-                                    <label class="label">Description</label>
-                                    <div class="input-group mb-2">
-                                        <input type="text" class="form-control" placeholder="Enter an description" th:field="*{description}"
-                                            id="receivable-description-input">
-                                    </div>
-                                </div>
-
-                                <div class="form-group basic">
-                                    <label class="label">Enter Amount</label>
-                                    <div class="input-group mb-2">
-                                        <span class="input-group-text" id="basic-addon12" th:text="${account.currency().symbol()}">$</span>
-                                        <input type="text" class="form-control" placeholder="Enter an amount" th:field="*{amount}"
-                                               value="100">
-                                    </div>
-                                </div>
-
-                                <div class="form-group basic">
-                                    <label class="label">Due Date</label>
-                                    <div class="input-group mb-2">
-                                        <input type="date"  class="form-control" th:field="*{startDate}">
-                                    </div>
-                                </div>
-
-                                <div class="form-group basic">
-                                    <label class="label">Recurring?</label>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="SwitchCheckDefault13" th:field="*{recurring}"
-                                               onchange="toggleFieldsBySwitchId('SwitchCheckDefault13', 'receivable-frequence-group', 'frequency11', 'receivable-installment-total-group', 'receivable-installment-total-input')">
-                                        <label class="form-check-label" for="SwitchCheckDefault13"></label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group basic" id="receivable-frequence-group">
-                                    <label class="label">Frequence</label>
-                                    <div class="input-group mb-2">
-                                        <select class="form-control custom-select" id="frequency11" th:field="*{frequence}">
-                                            <option value="MONTHLY" >Monthly</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group basic" id="receivable-installment-total-group">
-                                    <label class="label">Installment Total</label>
-                                    <div class="input-group mb-2">
-                                        <input type="text" class="form-control" th:field="*{installmentTotal}" id="receivable-installment-total-input">
-                                    </div>
-                                </div>
-
-                                <div class="form-group basic">
-                                    <button type="submit" class="btn btn-primary btn-block btn-lg"
-                                            data-bs-dismiss="modal">Save</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div th:object="${receivableInput}">
+            <div th:insert="fragments/modal-payable-receivable-action-sheet :: paymentReceivableModal(
+            'receivableActionSheet',
+            'Receivable',
+            @{/receivable-verification},
+            ${accounts},
+            ${credCategories},
+            ${account}
+        )"></div>
         </div>
 
-        <!-- Payable Action Sheet -->
-        <div class="modal fade action-sheet" id="payableActionSheet" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Payable</h5>
-                    </div>
-                    <div class="modal-body">
-                        <div class="action-sheet-content">
-                            <form action="#" th:action="@{/payable-verification}" method="post" th:object="${payableInput}">
-                                <div class="form-group basic">
-                                    <div class="input-wrapper">
-                                        <label class="label" for="account3">Account</label>
-                                        <select class="form-control custom-select" id="account3" th:field="*{accountId}">
-                                            <option th:each="a : ${accounts}" th:text="${a.name()}" th:value="${a.id()}">
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group basic">
-                                    <div class="input-wrapper">
-                                        <label class="label" for="categoryCredit3d">Category</label>
-                                        <select class="form-control custom-select" id="categoryCredit3d" th:field="*{categoryId}"
-                                                onchange="updateDescriptionFromCategory('categoryCredit3d', 'payable-description-input')">
-                                            <option th:each="a : ${debitCategories}" th:text="${a.name()}" th:value="${a.id()}"
-                                                    th:attr="data-name=${a.name()}">
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group basic">
-                                    <label class="label">Description</label>
-                                    <div class="input-group mb-2">
-                                        <input type="text" class="form-control" placeholder="Enter an description" th:field="*{description}"
-                                            id="payable-description-input">
-                                    </div>
-                                </div>
-
-                                <div class="form-group basic">
-                                    <label class="label">Enter Amount</label>
-                                    <div class="input-group mb-2">
-                                        <span class="input-group-text" id="basic-addon2" th:text="${account.currency().symbol()}">$</span>
-                                        <input type="text" class="form-control" placeholder="Enter an amount" th:field="*{amount}"
-                                               value="100">
-                                    </div>
-                                </div>
-
-                                <div class="form-group basic">
-                                    <label class="label">Due Date</label>
-                                    <div class="input-group mb-2">
-                                        <input type="date"  class="form-control" th:field="*{startDate}">
-                                    </div>
-                                </div>
-
-                                <div class="form-group basic">
-                                    <label class="label">Recurring?</label>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="SwitchCheckDefault3" th:field="*{recurring}"
-                                               onchange="toggleFieldsBySwitchId('SwitchCheckDefault3', 'payable-frequence-group', 'frequency1', 'payable-installment-total-group', 'payable-installment-total-input')">
-                                        <label class="form-check-label" for="SwitchCheckDefault3"></label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group basic" id="payable-frequence-group">
-                                    <label class="label">Frequence</label>
-                                    <div class="input-group mb-2">
-                                        <select class="form-control custom-select" id="frequency1" th:field="*{frequence}">
-                                            <option value="MONTHLY" >Monthly</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group basic" id="payable-installment-total-group">
-                                    <label class="label">Installment Total</label>
-                                    <div class="input-group mb-2">
-                                        <input type="text" class="form-control" th:field="*{installmentTotal}" id="payable-installment-total-input">
-                                    </div>
-                                </div>
-
-                                <div class="form-group basic">
-                                    <button type="submit" class="btn btn-primary btn-block btn-lg"
-                                        data-bs-dismiss="modal">Save</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div th:object="${payableInput}">
+            <div th:insert="fragments/modal-payable-receivable-action-sheet :: paymentReceivableModal(
+            'payableActionSheet',
+            'Payable',
+            @{/payable-verification},
+            ${accounts},
+            ${debitCategories},
+            ${account}
+        )"></div>
         </div>
-        <!-- * Exchange Action Sheet -->
 
         <!-- Stats -->
         <div class="section">
@@ -426,15 +270,6 @@
             </div>
         </div>
         <!-- * Stats -->
-
-        <div class="section mt-2 mb-3" th:if="false">
-            <div class="section-title">Weekly History Balance</div>
-            <div class="card">
-                <div class="card-body">
-                    <div id="chart-balance-history"></div>
-                </div>
-            </div>
-        </div>
 
         <!-- my cards -->
         <div class="section full mt-4" th:if="false">
@@ -960,107 +795,29 @@
     </div>
 
     <div th:insert="~{fragments/scripts :: scripts}"></div>
-    <!-- Apex Charts -->
-    <script src="assets/js/plugins/apexcharts/apexcharts.min.js"></script>
+    <script th:src="@{/assets/js/modal-payable-receivable-action-sheet.js}"></script>
 
-    <script>
-        function toggleFieldsBySwitchId(switchId, frequenceGroupId, frequencyInputId, installmentGroupId, installmentInputId) {
-            const switchInput = document.getElementById(switchId);
-            const isChecked = switchInput.checked;
-
-            const frequenceGroup = document.getElementById(frequenceGroupId);
-            const frequencyInput = document.getElementById(frequencyInputId);
-            const installmentGroup = document.getElementById(installmentGroupId);
-            const installmentInput = document.getElementById(installmentInputId);
-
-            if (frequenceGroup && installmentGroup && frequencyInput && installmentInput) {
-                frequenceGroup.style.display = isChecked ? "block" : "none";
-                installmentGroup.style.display = isChecked ? "none" : "block";
-
-                if (isChecked) {
-                    frequencyInput.value = "MONTHLY";
-                    installmentInput.value = null;
-                } else {
-                    frequencyInput.value = null;
-                    installmentInput.value = "3";
-                }
-            }
-        }
-
-        function updateDescriptionFromCategory(selectCategoryId, inputDescriptionId) {
-            const select = document.getElementById(selectCategoryId);
-            const selectedOption = select.options[select.selectedIndex];
-            const categoryName = selectedOption.getAttribute("data-name");
-
-            if (categoryName) {
-                document.getElementById(inputDescriptionId).value = categoryName;
-            }
-        }
-
-        window.addEventListener("DOMContentLoaded", function () {
-            toggleFieldsBySwitchId('SwitchCheckDefault13', 'receivable-frequence-group', 'frequency11', 'receivable-installment-total-group', 'receivable-installment-total-input')
-            toggleFieldsBySwitchId('SwitchCheckDefault3', 'payable-frequence-group', 'frequency1', 'payable-installment-total-group', 'payable-installment-total-input')
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        document.addEventListener("DOMContentLoaded", function () {
+            var receivableActionSheetId = "receivableActionSheet";
+            var payableActionSheetId = "payableActionSheet";
+            toggleFields(
+                "switch-" + receivableActionSheetId,
+                "freq-group-" + receivableActionSheetId,
+                "freq-" + receivableActionSheetId,
+                "installment-group-" + receivableActionSheetId,
+                "installment-input-" + receivableActionSheetId
+            );
+            toggleFields(
+                "switch-" + payableActionSheetId,
+                "freq-group-" + payableActionSheetId,
+                "freq-" + payableActionSheetId,
+                "installment-group-" + payableActionSheetId,
+                "installment-input-" + payableActionSheetId
+            );
         });
-    </script>
-
-    <script>
-        // Add to Home with 2 seconds delay.
-        AddtoHome("2000", "once");
-
-        // Chart Line
-        var optionChartLine = {
-            series: [{
-                name: 'NuBank (Brazil)',
-                data: [555, 1222, 777, 888, 555, 888]
-            }],
-            chart: {
-                type: 'line',
-                width: '100%',
-                height: 300,
-                // Remover ou comentar o sparkline para mostrar os eixos
-                // sparkline: {
-                //     enabled: true
-                // }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                width: 2
-            },
-            colors: ['#6236FF'],
-            grid: {
-                row: {
-                    colors: ['#f3f3f3', 'transparent'],
-                    opacity: 0.5
-                }
-            },
-            xaxis: {
-                categories: ['01/07', '01/08', '01/09', '01/10', '01/11', '01/12'],
-                labels: {
-                    show: true
-                },
-                axisBorder: {
-                    show: true
-                },
-                axisTicks: {
-                    show: true
-                }
-            },
-            yaxis: {
-                labels: {
-                    show: true
-                },
-                axisBorder: {
-                    show: true
-                },
-                axisTicks: {
-                    show: true
-                }
-            }
-        };
-        var chartLine = new ApexCharts(document.querySelector("#chart-balance-history"), optionChartLine);
-        chartLine.render();
+        /*]]>*/
     </script>
 
 </body>

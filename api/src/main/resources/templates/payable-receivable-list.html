@@ -31,12 +31,25 @@
                             <div class="tab-content mt-2">
                                 <div th:class="${'tab-pane fade ' +(tab == 'payables' ? 'show active' : '')}" id="payables" role="tabpanel">
                                     <div class="transactions">
-                                        <a href="app-transaction-detail.html" class="item" th:each="i : ${payables}">
+                                        <a href="#" class="item" th:each="i : ${payables}"
+                                           th:attr="
+                                              data-id=${i.id()},
+                                              data-description=${i.description()},
+                                              data-due-date=${i.dueDate()},
+                                              data-amount=${i.amount()},
+                                              data-status=${i.status()},
+                                              data-type=${i.type()}
+                                           "
+                                            data-bs-toggle="modal" data-bs-target="#actionSheet">
                                             <div class="detail">
                                                 <img th:src="@{/assets/img/sample/brand/1.jpg}" alt="img" class="image-block imaged w48">
                                                 <div>
                                                     <strong th:text="${i.description()}"></strong>
                                                     <p th:text="${#temporals.format(i.dueDate(), 'dd MMM')}"></p>
+                                                    <div class="chip"
+                                                         th:classappend="${i.status().name().equals('PENDING') ? ' chip-warning' : (i.status().name().equals('PAID') ? ' chip-success' : '')}">
+                                                        <span class="chip-label" th:text="${i.status()}"></span>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="right">
@@ -48,12 +61,25 @@
                                 </div>
                                 <div th:class="${'tab-pane fade ' +(tab == 'receivables' ? 'show active' : '')}" id="receivables" role="tabpanel">
                                     <div class="transactions">
-                                        <a href="app-transaction-detail.html" class="item" th:each="i : ${receivables}">
+                                        <a href="#" class="item" th:each="i : ${receivables}"
+                                           th:attr="
+                                              data-id=${i.id()},
+                                              data-description=${i.description()},
+                                              data-due-date=${i.dueDate()},
+                                              data-amount=${i.amount()},
+                                              data-status=${i.status()},
+                                              data-type=${i.type()}
+                                           "
+                                            data-bs-toggle="modal" data-bs-target="#actionSheet">
                                             <div class="detail">
                                                 <img th:src="@{/assets/img/sample/brand/1.jpg}" alt="img" class="image-block imaged w48">
                                                 <div>
                                                     <strong th:text="${i.description()}"></strong>
                                                     <p th:text="${#temporals.format(i.dueDate(), 'dd MMM')}"></p>
+                                                    <div class="chip"
+                                                         th:classappend="${i.status().name().equals('PENDING') ? ' chip-warning' : (i.status().name().equals('PAID') ? ' chip-success' : '')}">
+                                                        <span class="chip-label" th:text="${i.status()}"></span>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="right">
@@ -68,9 +94,89 @@
                     </div>
                 </div>
                 <!-- * Transactions -->
+                <div class="modal fade action-sheet" id="actionSheet" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <form id="modal-form" method="post">
+                                <input type="hidden" name="id" id="modal-id" />
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modal-title">Editar Transação</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="action-sheet-content">
+
+                                        <div class="form-group basic">
+                                            <label class="label">Paid?</label>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="modal-paidcheck" name="paid">
+                                                <label class="form-check-label" for="modal-paidcheck"></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group basic">
+                                            <label class="label">Due Date</label>
+                                            <input type="date" class="form-control" id="modal-duedate" name="dueDate">
+                                        </div>
+
+                                        <div class="form-group basic">
+                                            <label class="label">Amount</label>
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">$</span>
+                                                <input type="number" class="form-control" id="modal-amount" name="amount">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group basic">
+                                            <button type="submit" class="btn btn-primary btn-block btn-lg" data-bs-dismiss="modal">
+                                                Save
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         <div th:insert="~{fragments/bottom :: bottom}"></div>
         <div th:insert="~{fragments/scripts :: scripts}"></div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const actionSheet = document.getElementById("actionSheet");
+
+                actionSheet.addEventListener("show.bs.modal", function (event) {
+                    const trigger = event.relatedTarget;
+
+                    const id = trigger.getAttribute("data-id");
+                    const description = trigger.getAttribute("data-description");
+                    const dueDate = trigger.getAttribute("data-due-date");
+                    const amount = trigger.getAttribute("data-amount");
+                    const status = trigger.getAttribute("data-status");
+                    const type = trigger.getAttribute("data-type"); // "PAYABLE" ou "RECEIVABLE"
+
+                    document.getElementById("modal-id").value = id;
+                    document.getElementById("modal-duedate").value = dueDate;
+                    document.getElementById("modal-amount").value = amount;
+                    document.getElementById("modal-title").textContent = description;
+
+                    const paidCheck = document.getElementById("modal-paidcheck");
+                    paidCheck.checked = status === "PAID";
+
+                    // Atualiza o action do form com o tab dinâmico
+                    const form = document.getElementById("modal-form");
+                    const tabValue = (type === "PAYABLE") ? "payables" : "receivables";
+
+                    // Monta a URL do action dinamicamente
+                    // Se você estiver usando Thymeleaf e quer incluir a variável selectedMonth,
+                    // pode passar isso para o JS via data-attribute ou diretamente hardcoded
+                    const selectedMonth = /* obter de algum lugar, exemplo: */
+                        document.body.getAttribute("data-selected-month") || "2025-07";
+
+                    form.action = `/payable-receivable-edit/${selectedMonth}?tab=${tabValue}`;
+                })
+            });
+        </script>
     </body>
 </html>
