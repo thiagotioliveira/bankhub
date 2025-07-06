@@ -31,18 +31,18 @@ app:
   seed:
     enabled: true
     users:
-      - email: john@bankhub.app
+      - email: john@test.app
         name: John
         password: test
-      - email: mary@bankhub.app
+      - email: mary@test.app
         name: Mary
         password: test
     banks:
       - name: ActivoBank
         accounts:
-          - name: ActivoBank Account
+          - name: ActivoBank
             balance: 1000.00
-            currency: BRL
+            currency: EUR
     categories:
       - name: Salary John
         type: CREDIT

@@ -76,7 +76,7 @@
                     </li>
                     <li class="ms-3 me-3">
                         <strong>Amount</strong>
-                        <h3 class="m-0" th:text="${account.currency().symbol() + '' + saved.amount()}"></h3>
+                        <h3 class="m-0" th:text="${account.currency().symbol() + '' + #numbers.formatDecimal(saved.amount(), 1, 'POINT', 2, 'COMMA')}"></h3>
                     </li>
                     <li class="ms-3 me-3">
                         <strong>Description</strong>

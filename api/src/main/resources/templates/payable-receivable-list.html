@@ -41,7 +41,7 @@
                                             </div>
                                             <div class="right">
                                                 <div class="price text-danger"
-                                                     th:text="${-i.amount()}"></div>
+                                                     th:text="${'-' + #numbers.formatDecimal(i.amount(), 1, 'POINT', 2, 'COMMA')}"></div>
                                             </div>
                                         </a>
                                     </div>
@@ -58,7 +58,7 @@
                                             </div>
                                             <div class="right">
                                                 <div class="price text-success"
-                                                     th:text="${i.amount()}"></div>
+                                                     th:text="${#numbers.formatDecimal(i.amount(), 1, 'POINT', 2, 'COMMA')}"></div>
                                             </div>
                                         </a>
                                     </div>

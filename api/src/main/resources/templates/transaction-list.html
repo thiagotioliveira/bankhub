@@ -31,7 +31,7 @@
             </div>
             <div class="right">
                 <div th:class="${'price ' + (i.category().type().name() == 'CREDIT' ? 'text-success' : 'text-danger')}"
-                     th:text="${(i.category().type().name() == 'CREDIT' ? '' : '-') + i.amount()}"></div>
+                     th:text="${(i.category().type().name() == 'CREDIT' ? '' : '-') + #numbers.formatDecimal(i.amount(), 1, 'POINT', 2, 'COMMA')}"></div>
             </div>
         </a>
     </div>
