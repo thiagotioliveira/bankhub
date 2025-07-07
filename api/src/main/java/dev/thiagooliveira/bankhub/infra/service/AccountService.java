@@ -5,6 +5,7 @@ import dev.thiagooliveira.bankhub.application.usecase.GetAccount;
 import dev.thiagooliveira.bankhub.application.usecase.GetMonthlyAccountSummary;
 import dev.thiagooliveira.bankhub.domain.dto.CreateAccountInput;
 import dev.thiagooliveira.bankhub.domain.dto.projection.AccountEnriched;
+import dev.thiagooliveira.bankhub.domain.dto.projection.RevenueExpenseByCategory;
 import dev.thiagooliveira.bankhub.domain.model.Account;
 import dev.thiagooliveira.bankhub.domain.model.MonthlyAccountSummary;
 import java.math.BigDecimal;
@@ -46,5 +47,10 @@ public class AccountService {
 
   public Optional<MonthlyAccountSummary> getMonthlyAccountSummary(UUID accountId, YearMonth month) {
     return this.getMonthlyAccountSummary.get(accountId, month);
+  }
+
+  public List<RevenueExpenseByCategory> getRevenueExpenseByCategory(
+      UUID accountId, YearMonth month) {
+    return this.getMonthlyAccountSummary.getRevenueExpenseByCategory(accountId, month);
   }
 }

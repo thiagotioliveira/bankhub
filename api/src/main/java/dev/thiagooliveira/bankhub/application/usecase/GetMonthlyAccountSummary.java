@@ -1,6 +1,7 @@
 package dev.thiagooliveira.bankhub.application.usecase;
 
 import dev.thiagooliveira.bankhub.domain.dto.projection.PayableReceivableEnriched;
+import dev.thiagooliveira.bankhub.domain.dto.projection.RevenueExpenseByCategory;
 import dev.thiagooliveira.bankhub.domain.dto.projection.TransactionEnriched;
 import dev.thiagooliveira.bankhub.domain.exception.BusinessLogicException;
 import dev.thiagooliveira.bankhub.domain.model.*;
@@ -10,6 +11,7 @@ import dev.thiagooliveira.bankhub.infra.service.TransactionService;
 import java.math.BigDecimal;
 import java.time.YearMonth;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GetMonthlyAccountSummary {
@@ -25,6 +27,47 @@ public class GetMonthlyAccountSummary {
     this.transactionService = transactionService;
     this.payableReceivableService = payableReceivableService;
     this.accountPort = accountPort;
+  }
+
+  public List<RevenueExpenseByCategory> getRevenueExpenseByCategory(
+      UUID accountId, YearMonth month) {
+    Account account =
+        accountPort
+            .findById(accountId)
+            .orElseThrow(() -> BusinessLogicException.notFound("account not found"));
+
+    YearMonth createdAt = YearMonth.from(account.createdAt());
+    if (month.isBefore(createdAt)) return Collections.emptyList();
+
+    var from = month.atDay(1);
+    var to = month.atEndOfMonth();
+
+    if (month.equals(createdAt)) {
+      List<TransactionEnriched> transactions =
+          transactionService.getByAccountIdOrderByDateTime(accountId, from, to);
+      var test =
+          transactions.stream()
+              .map(
+                  t ->
+                      new RevenueExpenseByCategory(
+                          t.category().id(),
+                          t.category().name(),
+                          t.category().type().name(),
+                          t.amount()))
+              .collect(
+                  Collectors.toMap(
+                      RevenueExpenseByCategory::categoryId,
+                      r -> r,
+                      (r1, r2) ->
+                          new RevenueExpenseByCategory(
+                              r1.categoryId(),
+                              r1.categoryName(),
+                              r1.type(),
+                              r1.amount().add(r2.amount()))));
+      return new ArrayList<>(test.values());
+    } else {
+      return Collections.emptyList();
+    }
   }
 
   public Optional<MonthlyAccountSummary> get(UUID accountId, YearMonth month) {

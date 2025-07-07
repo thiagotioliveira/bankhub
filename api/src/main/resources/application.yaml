@@ -41,7 +41,7 @@ app:
       - name: ActivoBank
         accounts:
           - name: ActivoBank
-            balance: 1000.00
+            balance: 0.00
             currency: EUR
     categories:
       - name: Salary John

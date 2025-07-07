@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:insert="~{fragments/head :: head}"></div>
+
+<body>
+
+<div th:insert="~{fragments/loader :: loader}"></div>
+
+<div th:insert="~{fragments/app-header :: app-header}"></div>
+
+<!-- App Capsule -->
+<div id="appCapsule">
+    <div class="section mt-1">
+        <div class="card">
+            <div class="card-body pt-0">
+
+                <ul class="nav nav-tabs lined" role="tablist">
+                    <li class="nav-item">
+                        <a th:class="${'nav-link active'}" data-bs-toggle="tab" href="#revenue" role="tab">
+                            Revenue by categories
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:class="${'nav-link'}" data-bs-toggle="tab" href="#expenses" role="tab">
+                            Expenses by categories
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content mt-2">
+                    <div th:class="${'tab-pane fade show active'}" id="revenue" role="tabpanel">
+                        <div id="chartRevenue">
+
+                        </div>
+                    </div>
+                    <div th:class="${'tab-pane fade '}" id="expenses" role="tabpanel">
+                        <div id="chartExpense">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:insert="~{fragments/bottom :: bottom}"></div>
+
+<div th:insert="~{fragments/scripts :: scripts}"></div>
+<script src="assets/js/plugins/apexcharts/apexcharts.min.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var optionsChartRevenue = {
+        series: /*[[${revenueSeries}]]*/,
+        chart: {
+            width: '100%',
+            height: '100%',
+            type: 'pie',
+        },
+        labels: /*[[${revenueLabels}]]*/,
+        theme: {
+            monochrome: {
+                enabled: true,
+                color: '#2ecc71',
+                shadeTo: 'light',
+                shadeIntensity: 0.65
+            },
+        },
+        plotOptions: {
+            pie: {
+                dataLabels: {
+                    offset: -5,
+                },
+            },
+        },
+        grid: {
+            padding: {
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+            },
+        },
+        dataLabels: {
+            formatter(val, opts) {
+                const name = opts.w.globals.labels[opts.seriesIndex]
+                return [name, val.toFixed(1) + '%']
+            },
+        },
+        legend: {
+            show: false,
+        },
+    };
+
+    var chartRevenue = new ApexCharts(document.querySelector("#chartRevenue"), optionsChartRevenue);
+    chartRevenue.render();
+
+    var optionsChartExpense = {
+        series: /*[[${expenseSeries}]]*/,
+        chart: {
+            width: '100%',
+            height: '100%',
+            type: 'pie',
+        },
+        labels: /*[[${expenseLabels}]]*/,
+        theme: {
+            monochrome: {
+                enabled: true,
+                color: '#e74c3c',
+                shadeTo: 'light', // ou 'dark'
+                shadeIntensity: 0.65
+            },
+        },
+        plotOptions: {
+            pie: {
+                dataLabels: {
+                    offset: -5,
+                },
+            },
+        },
+        grid: {
+            padding: {
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+            },
+        },
+        dataLabels: {
+            formatter(val, opts) {
+                const name = opts.w.globals.labels[opts.seriesIndex]
+                return [name, val.toFixed(1) + '%']
+            },
+        },
+        legend: {
+            show: false,
+        },
+    };
+
+    var chartExpense;
+    var chartExpenseRendered = false;
+
+    document.querySelector('a[href="#expenses"]').addEventListener('shown.bs.tab', function () {
+        if (!chartExpenseRendered) {
+            chartExpense = new ApexCharts(document.querySelector("#chartExpense"), optionsChartExpense);
+            chartExpense.render();
+            chartExpenseRendered = true;
+        }
+    });
+
+    /*]]>*/
+</script>
+</body>
+
+</html>
